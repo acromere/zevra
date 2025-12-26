@@ -1,4 +1,4 @@
-package com.avereon.product;
+package com.acromere.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -21,18 +21,18 @@ class ProductCardTest {
 	void testCard() {
 		ProductCard card = ProductCard.info( getClass() );
 
-		assertThat( card.getGroup() ).isEqualTo( "com.avereon" );
+		assertThat( card.getGroup() ).isEqualTo( "com.acromere" );
 		assertThat( card.getArtifact() ).isEqualTo( "zevra" );
 		assertThat( card.getVersion() ).isEqualTo( "0.0-SNAPSHOT" );
 		assertThat( card.getTimestamp() ).isEqualTo( "2018-01-01 00:00:00" );
 
 		assertThat( card.getName() ).isEqualTo( "Zevra" );
 		assertThat( card.getIcons() ).contains( "library" );
-		assertThat( card.getProvider() ).isEqualTo( "Avereon" );
+		assertThat( card.getProvider() ).isEqualTo( "Acromere" );
 		assertThat( card.getInception() ).isEqualTo( 2018 );
 
 		assertThat( card.getSummary() ).isEqualTo( "Utility library" );
-		assertThat( card.getDescription() ).isEqualTo( "A utility library for Avereon applications." );
+		assertThat( card.getDescription() ).isEqualTo( "A utility library for Acromere applications." );
 		assertThat( card.getCopyrightSummary() ).isEqualTo( "All rights reserved." );
 		assertThat( card.getLicenseSummary() ).isEqualTo( "Zevra comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions." );
 	}
@@ -40,9 +40,9 @@ class ProductCardTest {
 	@Test
 	void testJsonCard() {
 		ProductCard card = ProductCard.card( getClass() );
-		assertThat( card.getProductKey() ).isEqualTo( "com.avereon.zevra" );
+		assertThat( card.getProductKey() ).isEqualTo( "com.acromere.zevra" );
 
-		assertThat( card.getGroup() ).isEqualTo( "com.avereon" );
+		assertThat( card.getGroup() ).isEqualTo( "com.acromere" );
 		assertThat( card.getArtifact() ).isEqualTo( "zevra" );
 		assertThat( card.getVersion() ).isEqualTo( "0.0-SNAPSHOT" );
 		assertThat( card.getTimestamp() ).isEqualTo( "2018-01-01 00:00:00" );
@@ -51,13 +51,13 @@ class ProductCardTest {
 		assertThat( card.getPackagingVersion() ).isEqualTo( "2.7" );
 
 		assertThat( card.getName() ).isEqualTo( "Zevra" );
-		assertThat( card.getIcons()).contains( "library", "https://avereon.com/download/latest/zevra/product/icon"  );
-		assertThat( card.getProvider() ).isEqualTo( "Avereon" );
-		assertThat( card.getProviderUrl() ).isEqualTo( "https://www.avereon.com" );
+		assertThat( card.getIcons()).contains( "library", "https://acromere.com/download/latest/zevra/product/icon"  );
+		assertThat( card.getProvider() ).isEqualTo( "Acromere" );
+		assertThat( card.getProviderUrl() ).isEqualTo( "https://www.acromere.com" );
 		assertThat( card.getInception() ).isEqualTo( 2018 );
 
 		assertThat( card.getSummary() ).isEqualTo( "Utility library" );
-		assertThat( card.getDescription() ).isEqualTo( "A utility library for Avereon applications." );
+		assertThat( card.getDescription() ).isEqualTo( "A utility library for Acromere applications." );
 		assertThat( card.getCopyrightSummary() ).isEqualTo( "All rights reserved." );
 		assertThat( card.getLicenseSummary()).isEqualTo( "Zevra comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions." );
 
@@ -148,13 +148,13 @@ class ProductCardTest {
 		contributors.add( contributor2 );
 
 		ProductCard card = new ProductCard();
-		card.setGroup( "com.avereon" );
+		card.setGroup( "com.acromere" );
 		card.setArtifact( "zevra" );
 		card.setPackaging( "lib" );
 		card.setPackagingVersion( "2.7" );
 		card.setVersion( "1.0.0" );
 		card.setTimestamp( "2018-01-01 00:00:00" );
-		card.setIcons( List.of( "avereon", "https://avereon.com/download/stable/avereon/provider/icon" ) );
+		card.setIcons( List.of( "avereon", "https://acromere.com/download/stable/avereon/provider/icon" ) );
 		card.setName( "Zevra" );
 		card.setMaintainers( maintainers );
 		card.setContributors( contributors );
@@ -168,13 +168,13 @@ class ProductCardTest {
 		BufferedReader reader = new BufferedReader( new StringReader( store ) );
 		assertThat( reader.readLine() ).isEqualTo( "{" );
 		assertThat( reader.readLine() ).isEqualTo( "  \"internalId\" : \"" + card.getInternalId() + "\"," );
-		assertThat( reader.readLine() ).isEqualTo( "  \"group\" : \"com.avereon\"," );
+		assertThat( reader.readLine() ).isEqualTo( "  \"group\" : \"com.acromere\"," );
 		assertThat( reader.readLine() ).isEqualTo( "  \"artifact\" : \"zevra\"," );
 		assertThat( reader.readLine() ).isEqualTo( "  \"version\" : \"1.0.0\"," );
 		assertThat( reader.readLine() ).isEqualTo( "  \"timestamp\" : \"2018-01-01 00:00:00\"," );
 		assertThat( reader.readLine() ).isEqualTo( "  \"packaging\" : \"lib\"," );
 		assertThat( reader.readLine() ).isEqualTo( "  \"packagingVersion\" : \"2.7\"," );
-		assertThat( reader.readLine() ).isEqualTo( "  \"icons\" : [ \"avereon\", \"https://avereon.com/download/stable/avereon/provider/icon\" ]," );
+		assertThat( reader.readLine() ).isEqualTo( "  \"icons\" : [ \"avereon\", \"https://acromere.com/download/stable/avereon/provider/icon\" ]," );
 		assertThat( reader.readLine() ).isEqualTo( "  \"name\" : \"Zevra\"," );
 		//assertThat( reader.readLine() ).isEqualTo( "  \"provider\" : null," );
 		//assertThat( reader.readLine() ).isEqualTo( "  \"providerUrl\" : null," );

@@ -1,4 +1,4 @@
-package com.avereon.transaction;
+package com.acromere.transaction;
 
 public class TxnException extends Exception {
 

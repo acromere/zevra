@@ -1,4 +1,4 @@
-package com.avereon.log.provider;
+package com.acromere.log.provider;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 

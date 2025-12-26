@@ -1,7 +1,7 @@
-package com.avereon.index;
+package com.acromere.index;
 
-import com.avereon.util.TextUtil;
-import com.avereon.util.TokenReplacingReader;
+import com.acromere.util.TextUtil;
+import com.acromere.util.TokenReplacingReader;
 import lombok.CustomLog;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

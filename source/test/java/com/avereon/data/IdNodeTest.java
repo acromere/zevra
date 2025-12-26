@@ -1,6 +1,6 @@
-package com.avereon.data;
+package com.acromere.data;
 
-import com.avereon.transaction.Txn;
+import com.acromere.transaction.Txn;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

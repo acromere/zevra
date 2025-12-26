@@ -1,9 +1,9 @@
-package com.avereon.settings;
+package com.acromere.settings;
 
-import com.avereon.util.DelayedAction;
-import com.avereon.util.FileUtil;
-import com.avereon.util.PathUtil;
-import com.avereon.util.TypeReference;
+import com.acromere.util.DelayedAction;
+import com.acromere.util.FileUtil;
+import com.acromere.util.PathUtil;
+import com.acromere.util.TypeReference;
 import lombok.CustomLog;
 
 import java.io.FileInputStream;

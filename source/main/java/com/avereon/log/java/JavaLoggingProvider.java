@@ -1,7 +1,7 @@
-package com.avereon.log.java;
+package com.acromere.log.java;
 
-import com.avereon.log.provider.AbstractLoggingProvider;
-import com.avereon.log.provider.LoggerWrapper;
+import com.acromere.log.provider.AbstractLoggingProvider;
+import com.acromere.log.provider.LoggerWrapper;
 
 public class JavaLoggingProvider extends AbstractLoggingProvider {
 

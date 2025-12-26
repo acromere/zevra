@@ -1,6 +1,6 @@
-package com.avereon.settings;
+package com.acromere.settings;
 
-import com.avereon.util.FileUtil;
+import com.acromere.util.FileUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class StoredSettingsTest extends BaseSettingsTest {
 
-	private static final String SETTINGS_NAME = "AvereonSettingsTest";
+	private static final String SETTINGS_NAME = "AcromereSettingsTest";
 
 	private Path path;
 

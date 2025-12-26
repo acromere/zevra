@@ -1,4 +1,4 @@
-package com.avereon.skill;
+package com.acromere.skill;
 
 /**
  * Just like {@link Runnable} except that managed exceptions are allowed.

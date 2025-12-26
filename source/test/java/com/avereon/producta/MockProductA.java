@@ -1,9 +1,9 @@
-package com.avereon.producta;
+package com.acromere.producta;
 
-import com.avereon.product.Product;
-import com.avereon.product.ProductCard;
-import com.avereon.product.Rb;
-import com.avereon.settings.Settings;
+import com.acromere.product.Product;
+import com.acromere.product.ProductCard;
+import com.acromere.product.Rb;
+import com.acromere.settings.Settings;
 
 import java.nio.file.Path;
 

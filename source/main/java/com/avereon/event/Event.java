@@ -1,6 +1,6 @@
-package com.avereon.event;
+package com.acromere.event;
 
-import com.avereon.util.JavaUtil;
+import com.acromere.util.JavaUtil;
 
 import java.util.EventObject;
 

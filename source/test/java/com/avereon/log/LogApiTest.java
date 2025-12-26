@@ -1,9 +1,9 @@
-package com.avereon.log;
+package com.acromere.log;
 
-import com.avereon.log.java.JavaLoggingProvider;
-import com.avereon.log.provider.AbstractLoggerWrapper;
-import com.avereon.log.provider.AbstractLoggingProvider;
-import com.avereon.log.provider.LoggerWrapper;
+import com.acromere.log.java.JavaLoggingProvider;
+import com.acromere.log.provider.AbstractLoggerWrapper;
+import com.acromere.log.provider.AbstractLoggingProvider;
+import com.acromere.log.provider.LoggerWrapper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

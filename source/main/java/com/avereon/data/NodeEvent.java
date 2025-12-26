@@ -1,7 +1,7 @@
-package com.avereon.data;
+package com.acromere.data;
 
-import com.avereon.event.EventType;
-import com.avereon.transaction.TxnEvent;
+import com.acromere.event.EventType;
+import com.acromere.transaction.TxnEvent;
 import lombok.Getter;
 
 import java.util.Objects;

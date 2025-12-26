@@ -1,4 +1,4 @@
-package com.avereon.product;
+package com.acromere.product;
 
 public interface ProgramProduct extends Product {
 

@@ -1,4 +1,4 @@
-package com.avereon.skill;
+package com.acromere.skill;
 
 public interface Pausable {
 

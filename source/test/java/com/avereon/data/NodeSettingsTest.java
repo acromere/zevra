@@ -1,8 +1,8 @@
-package com.avereon.data;
+package com.acromere.data;
 
-import com.avereon.settings.SettingsEvent;
-import com.avereon.settings.SettingsEventAssert;
-import com.avereon.settings.SettingsEventWatcher;
+import com.acromere.settings.SettingsEvent;
+import com.acromere.settings.SettingsEventAssert;
+import com.acromere.settings.SettingsEventWatcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

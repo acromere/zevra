@@ -1,4 +1,4 @@
-package com.avereon.product;
+package com.acromere.product;
 
 import org.junit.jupiter.api.Test;
 

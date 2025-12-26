@@ -1,6 +1,6 @@
-package com.avereon.settings;
+package com.acromere.settings;
 
-import com.avereon.event.EventHandler;
+import com.acromere.event.EventHandler;
 
 import java.util.Collections;
 import java.util.List;

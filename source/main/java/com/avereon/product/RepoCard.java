@@ -1,6 +1,6 @@
-package com.avereon.product;
+package com.acromere.product;
 
-import com.avereon.util.UriUtil;
+import com.acromere.util.UriUtil;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -1,4 +1,4 @@
-package com.avereon.util;
+package com.acromere.util;
 
 import org.junit.jupiter.api.Test;
 
@@ -44,7 +44,7 @@ class JavaUtilTest {
 	@Test
 	void testGetShortClassNameWithString() {
 		assertThat( JavaUtil.getShortClassName( "java.lang.Object" ) ).isEqualTo( "j.l.Object" );
-		assertThat( JavaUtil.getShortClassName( "com.avereon.xenon.Program" ) ).isEqualTo( "c.a.x.Program" );
+		assertThat( JavaUtil.getShortClassName( "com.acromere.xenon.Program" ) ).isEqualTo( "c.a.x.Program" );
 	}
 
 	@Test
@@ -55,12 +55,12 @@ class JavaUtilTest {
 
 	@Test
 	void testGetKeySafeClassNameWithString() {
-		assertThat( JavaUtil.getKeySafeClassName( "com.avereon.util.JavaUtilTest$InternalClass" ) ).isEqualTo( "com.avereon.util.JavaUtilTest.InternalClass" );
+		assertThat( JavaUtil.getKeySafeClassName( "com.acromere.util.JavaUtilTest$InternalClass" ) ).isEqualTo( "com.acromere.util.JavaUtilTest.InternalClass" );
 	}
 
 	@Test
 	void testGetKeySafeClassNameWithClass() {
-		assertThat( JavaUtil.getKeySafeClassName( JavaUtilTest.InternalClass.class ) ).isEqualTo( "com.avereon.util.JavaUtilTest.InternalClass" );
+		assertThat( JavaUtil.getKeySafeClassName( JavaUtilTest.InternalClass.class ) ).isEqualTo( "com.acromere.util.JavaUtilTest.InternalClass" );
 	}
 
 	@Test
@@ -91,22 +91,22 @@ class JavaUtilTest {
 		String separator = ";";
 		String classpath = "test1.jar";
 		classpath += separator + "test2.jar";
-		classpath += separator + URLEncoder.encode( "http://www.avereon.com/software/test3.jar", StandardCharsets.UTF_8 );
+		classpath += separator + URLEncoder.encode( "http://www.acromere.com/software/test3.jar", StandardCharsets.UTF_8 );
 		entries = JavaUtil.parsePropertyPaths( classpath, separator );
 
 		assertThat( entries.get( 0 ) ).isEqualTo( new File( "test1.jar" ).toURI() );
 		assertThat( entries.get( 1 ) ).isEqualTo( new File( "test2.jar" ).toURI() );
-		assertThat( entries.get( 2 ) ).isEqualTo( URI.create( "http://www.avereon.com/software/test3.jar" ) );
+		assertThat( entries.get( 2 ) ).isEqualTo( URI.create( "http://www.acromere.com/software/test3.jar" ) );
 
 		separator = ":";
 		classpath = "test1.jar";
 		classpath += separator + "test2.jar";
-		classpath += separator + URLEncoder.encode( "http://www.avereon.com/software/test3.jar", StandardCharsets.UTF_8 );
+		classpath += separator + URLEncoder.encode( "http://www.acromere.com/software/test3.jar", StandardCharsets.UTF_8 );
 		entries = JavaUtil.parsePropertyPaths( classpath, separator );
 
 		assertThat( entries.get( 0 ) ).isEqualTo( new File( "test1.jar" ).toURI() );
 		assertThat( entries.get( 1 ) ).isEqualTo( new File( "test2.jar" ).toURI() );
-		assertThat( entries.get( 2 ) ).isEqualTo( URI.create( "http://www.avereon.com/software/test3.jar" ) );
+		assertThat( entries.get( 2 ) ).isEqualTo( URI.create( "http://www.acromere.com/software/test3.jar" ) );
 	}
 
 	@Test

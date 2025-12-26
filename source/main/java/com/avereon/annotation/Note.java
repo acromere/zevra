@@ -1,4 +1,4 @@
-package com.avereon.annotation;
+package com.acromere.annotation;
 
 import java.lang.annotation.*;
 

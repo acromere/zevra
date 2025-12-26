@@ -1,4 +1,4 @@
-package com.avereon.util;
+package com.acromere.util;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,30 +32,30 @@ class UriUtilTest {
 		assertThat( uri.getSchemeSpecificPart() ).isEqualTo( "product" );
 
 		// Normal URI with scheme and fragment
-		uri = URI.create( "https://avereon.com/download/xenon/product/card?version=latest&refresh=false#name" );
+		uri = URI.create( "https://acromere.com/download/xenon/product/card?version=latest&refresh=false#name" );
 		assertThat( uri.isOpaque() ).isEqualTo( false );
 		assertThat( uri.isAbsolute() ).isEqualTo( true );
 		assertThat( uri.getScheme() ).isEqualTo( "https" );
 		assertThat( uri.getUserInfo() ).isNull();
-		assertThat( uri.getHost() ).isEqualTo( "avereon.com" );
-		assertThat( uri.getAuthority() ).isEqualTo( "avereon.com" );
+		assertThat( uri.getHost() ).isEqualTo( "acromere.com" );
+		assertThat( uri.getAuthority() ).isEqualTo( "acromere.com" );
 		assertThat( uri.getPath() ).isEqualTo( "/download/xenon/product/card" );
 		assertThat( uri.getQuery() ).isEqualTo( "version=latest&refresh=false" );
 		assertThat( uri.getFragment() ).isEqualTo( "name" );
-		assertThat( uri.getSchemeSpecificPart() ).isEqualTo( "//avereon.com/download/xenon/product/card?version=latest&refresh=false" );
+		assertThat( uri.getSchemeSpecificPart() ).isEqualTo( "//acromere.com/download/xenon/product/card?version=latest&refresh=false" );
 
 		// Normal URI with user info
-		uri = URI.create( "ssh://user@avereon.com/tmp" );
+		uri = URI.create( "ssh://user@acromere.com/tmp" );
 		assertThat( uri.isOpaque() ).isEqualTo( false );
 		assertThat( uri.isAbsolute() ).isEqualTo( true );
 		assertThat( uri.getScheme() ).isEqualTo( "ssh" );
 		assertThat( uri.getUserInfo() ).isEqualTo( "user" );
-		assertThat( uri.getHost() ).isEqualTo( "avereon.com" );
-		assertThat( uri.getAuthority() ).isEqualTo( "user@avereon.com" );
+		assertThat( uri.getHost() ).isEqualTo( "acromere.com" );
+		assertThat( uri.getAuthority() ).isEqualTo( "user@acromere.com" );
 		assertThat( uri.getPath() ).isEqualTo( "/tmp" );
 		assertThat( uri.getQuery() ).isNull();
 		assertThat( uri.getFragment() ).isNull();
-		assertThat( uri.getSchemeSpecificPart() ).isEqualTo( "//user@avereon.com/tmp" );
+		assertThat( uri.getSchemeSpecificPart() ).isEqualTo( "//user@acromere.com/tmp" );
 
 		// Files with spaces
 		Path path = Path.of( "/home/user/My Documents" );
@@ -272,7 +272,7 @@ class UriUtilTest {
 
 	@Test
 	void testGetUriPartsWithHierarchicalUri() {
-		assertThat( UriUtil.getParts( URI.create( "https://avereon.com/download/razor/product/card#latest" ) ) ).contains( "https", "avereon.com", "", "download", "razor", "product", "card", "latest" );
+		assertThat( UriUtil.getParts( URI.create( "https://acromere.com/download/razor/product/card#latest" ) ) ).contains( "https", "acromere.com", "", "download", "razor", "product", "card", "latest" );
 		assertThat( UriUtil.getParts( URI.create( "/" ) ).size() ).isEqualTo( 2 );
 		assertThat( UriUtil.getParts( URI.create( "" ) ) ).contains( "" );
 	}
@@ -310,9 +310,9 @@ class UriUtilTest {
 		URI a = URI.create( "" );
 		URI b = URI.create( "/" );
 		URI c = URI.create( "ssh://user@sshhost.com" );
-		URI d = URI.create( "https://avereon.com/download/xenon" );
-		URI e = URI.create( "https://avereon.com/download/xenon/product/card" );
-		URI f = URI.create( "https://avereon.com/download/xenon/product/card#latest" );
+		URI d = URI.create( "https://acromere.com/download/xenon" );
+		URI e = URI.create( "https://acromere.com/download/xenon/product/card" );
+		URI f = URI.create( "https://acromere.com/download/xenon/product/card#latest" );
 
 		// Same matches
 		assertThat( UriUtil.getMatchScore( a, a ) ).isEqualTo( 0 );

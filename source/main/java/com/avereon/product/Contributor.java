@@ -1,6 +1,6 @@
-package com.avereon.product;
+package com.acromere.product;
 
-import com.avereon.util.Person;
+import com.acromere.util.Person;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;

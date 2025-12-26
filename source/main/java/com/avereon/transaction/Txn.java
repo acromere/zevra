@@ -1,7 +1,7 @@
-package com.avereon.transaction;
+package com.acromere.transaction;
 
-import com.avereon.event.EventType;
-import com.avereon.skill.Actionable;
+import com.acromere.event.EventType;
+import com.acromere.skill.Actionable;
 import lombok.CustomLog;
 
 import java.util.*;

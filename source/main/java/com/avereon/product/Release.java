@@ -1,6 +1,6 @@
-package com.avereon.product;
+package com.acromere.product;
 
-import com.avereon.util.DateUtil;
+import com.acromere.util.DateUtil;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jspecify.annotations.NonNull;

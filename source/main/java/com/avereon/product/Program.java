@@ -1,4 +1,4 @@
-package com.avereon.product;
+package com.acromere.product;
 
 public interface Program extends ProgramProduct {
 
@@ -24,9 +24,9 @@ public interface Program extends ProgramProduct {
 	//
 	//	void setUpdateInProgress( boolean updateInProgress );
 	//
-	//	com.avereon.util.Parameters getProgramParameters();
+	//	com.acromere.util.Parameters getProgramParameters();
 	//
-	//	void setProgramParameters( com.avereon.util.Parameters parameters );
+	//	void setProgramParameters( com.acromere.util.Parameters parameters );
 	//
 	//	String getProfile();
 	//

@@ -1,4 +1,4 @@
-package com.avereon.log;
+package com.acromere.log;
 
 import java.util.Map;
 import java.util.logging.Level;

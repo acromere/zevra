@@ -1,6 +1,6 @@
-package com.avereon.product;
+package com.acromere.product;
 
-import com.avereon.util.DateUtil;
+import com.acromere.util.DateUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

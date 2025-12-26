@@ -1,6 +1,6 @@
-package com.avereon.log;
+package com.acromere.log;
 
-import com.avereon.log.provider.LoggerWrapper;
+import com.acromere.log.provider.LoggerWrapper;
 
 import java.util.Objects;
 import java.util.logging.Level;

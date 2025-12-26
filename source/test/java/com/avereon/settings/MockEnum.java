@@ -1,4 +1,4 @@
-package com.avereon.settings;
+package com.acromere.settings;
 
 public enum MockEnum {
 	A,

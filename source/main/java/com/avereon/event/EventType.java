@@ -1,4 +1,4 @@
-package com.avereon.event;
+package com.acromere.event;
 
 import lombok.Getter;
 

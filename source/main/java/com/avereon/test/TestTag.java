@@ -1,4 +1,4 @@
-package com.avereon.test;
+package com.acromere.test;
 
 public interface TestTag {
 

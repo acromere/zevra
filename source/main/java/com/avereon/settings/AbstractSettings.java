@@ -1,12 +1,12 @@
-package com.avereon.settings;
+package com.acromere.settings;
 
-import com.avereon.event.Event;
-import com.avereon.event.EventHandler;
-import com.avereon.event.EventHub;
-import com.avereon.event.EventType;
-import com.avereon.util.PathUtil;
-import com.avereon.util.TextUtil;
-import com.avereon.util.TypeReference;
+import com.acromere.event.Event;
+import com.acromere.event.EventHandler;
+import com.acromere.event.EventHub;
+import com.acromere.event.EventType;
+import com.acromere.util.PathUtil;
+import com.acromere.util.TextUtil;
+import com.acromere.util.TypeReference;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.CustomLog;

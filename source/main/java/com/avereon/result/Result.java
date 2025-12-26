@@ -1,4 +1,4 @@
-package com.avereon.result;
+package com.acromere.result;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;

@@ -1,7 +1,7 @@
-package com.avereon.settings;
+package com.acromere.settings;
 
-import com.avereon.event.Event;
-import com.avereon.event.EventType;
+import com.acromere.event.Event;
+import com.acromere.event.EventType;
 import lombok.Getter;
 
 @Getter

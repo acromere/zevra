@@ -1,6 +1,6 @@
-package com.avereon.product;
+package com.acromere.product;
 
-import com.avereon.util.LogFlag;
+import com.acromere.util.LogFlag;
 
 public interface ProgramFlag extends LogFlag {
 

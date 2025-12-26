@@ -1,6 +1,6 @@
-package com.avereon.data;
+package com.acromere.data;
 
-import com.avereon.event.Event;
+import com.acromere.event.Event;
 
 import java.util.Collection;
 import java.util.Set;

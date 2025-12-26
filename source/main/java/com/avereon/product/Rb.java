@@ -1,6 +1,6 @@
-package com.avereon.product;
+package com.acromere.product;
 
-import com.avereon.util.JavaUtil;
+import com.acromere.util.JavaUtil;
 import lombok.CustomLog;
 
 import java.text.MessageFormat;

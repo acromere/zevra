@@ -1,6 +1,6 @@
-package com.avereon.transaction;
+package com.acromere.transaction;
 
-import com.avereon.event.EventType;
+import com.acromere.event.EventType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

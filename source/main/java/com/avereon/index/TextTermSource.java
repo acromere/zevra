@@ -1,4 +1,4 @@
-package com.avereon.index;
+package com.acromere.index;
 
 import java.io.BufferedReader;
 import java.io.IOException;

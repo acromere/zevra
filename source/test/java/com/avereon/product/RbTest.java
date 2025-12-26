@@ -1,7 +1,7 @@
-package com.avereon.product;
+package com.acromere.product;
 
-import com.avereon.producta.MockProductA;
-import com.avereon.productb.MockProductB;
+import com.acromere.producta.MockProductA;
+import com.acromere.productb.MockProductB;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,4 +1,4 @@
-package com.avereon.log.provider;
+package com.acromere.log.provider;
 
 import java.util.logging.Level;
 

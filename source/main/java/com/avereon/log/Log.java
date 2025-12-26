@@ -1,8 +1,8 @@
-package com.avereon.log;
+package com.acromere.log;
 
-import com.avereon.util.FileUtil;
-import com.avereon.util.LogFlag;
-import com.avereon.util.ProgramFormatter;
+import com.acromere.util.FileUtil;
+import com.acromere.util.LogFlag;
+import com.acromere.util.ProgramFormatter;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -19,7 +19,7 @@ import java.util.logging.LogManager;
 
 public class Log {
 
-	public static void configureLogging( Object source, com.avereon.util.Parameters parameters ) {
+	public static void configureLogging( Object source, com.acromere.util.Parameters parameters ) {
 		configureLogging( source, parameters, null, null );
 	}
 
@@ -38,7 +38,7 @@ public class Log {
 	 * @param logFile The default log file name pattern
 	 */
 	@SuppressWarnings( "unused" )
-	public static void configureLogging( Object source, com.avereon.util.Parameters parameters, Path logFolder, String logFile ) {
+	public static void configureLogging( Object source, com.acromere.util.Parameters parameters, Path logFolder, String logFile ) {
 		// Logging level conversion
 		//
 		// SLF4J -> Java

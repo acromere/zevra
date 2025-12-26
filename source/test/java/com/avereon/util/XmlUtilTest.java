@@ -1,6 +1,6 @@
-package com.avereon.util;
+package com.acromere.util;
 
-import com.avereon.product.Version;
+import com.acromere.product.Version;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 

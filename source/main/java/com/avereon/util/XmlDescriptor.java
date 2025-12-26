@@ -1,4 +1,4 @@
-package com.avereon.util;
+package com.acromere.util;
 
 import lombok.CustomLog;
 import lombok.Getter;
@@ -274,7 +274,7 @@ public class XmlDescriptor {
 
 	/**
 	 * Return formatted XML, using the descriptor node as the root, as returned
-	 * by {@link com.avereon.util.XmlUtil#toString(Node)}
+	 * by {@link com.acromere.util.XmlUtil#toString(Node)}
 	 *
 	 * @return The formatted XML string
 	 */

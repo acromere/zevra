@@ -1,4 +1,4 @@
-package com.avereon.index;
+package com.acromere.index;
 
 import java.io.IOException;
 import java.util.stream.Stream;

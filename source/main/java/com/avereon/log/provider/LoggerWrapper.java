@@ -1,7 +1,7 @@
-package com.avereon.log.provider;
+package com.acromere.log.provider;
 
-import com.avereon.log.LogData;
-import com.avereon.log.LoggingException;
+import com.acromere.log.LogData;
+import com.acromere.log.LoggingException;
 
 import java.util.logging.Level;
 

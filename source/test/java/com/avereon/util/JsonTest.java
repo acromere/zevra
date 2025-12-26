@@ -1,4 +1,4 @@
-package com.avereon.util;
+package com.acromere.util;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -21,9 +21,9 @@ class JsonTest {
 		InputStream input = getClass().getResourceAsStream( "/json.text.json" );
 		JsonTest.Item item = new ObjectMapper().readerFor( new TypeReference<JsonTest.Item>() {} ).readValue( input );
 
-		assertThat( item.getName() ).isEqualTo( "Avereon" );
+		assertThat( item.getName() ).isEqualTo( "Acromere" );
 		assertThat( item.getTimestamp().getTime() ).isEqualTo( 1296848535284L );
-		assertThat( item.getSite() ).isEqualTo( URI.create( "http://www.avereon.com" ) );
+		assertThat( item.getSite() ).isEqualTo( URI.create( "http://www.acromere.com" ) );
 	}
 
 	@Setter

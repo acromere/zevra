@@ -1,7 +1,7 @@
-package com.avereon.transaction;
+package com.acromere.transaction;
 
-import com.avereon.event.Event;
-import com.avereon.event.EventType;
+import com.acromere.event.Event;
+import com.acromere.event.EventType;
 
 public class TxnEvent extends Event {
 

@@ -1,4 +1,4 @@
-package com.avereon.util;
+package com.acromere.util;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,8 +26,8 @@ class ProcessCommandsTest {
 	void testForModule() {
 		String javaPath = OperatingSystem.getJavaLauncherPath();
 		String modulePath = "/var/tmp/util/modules";
-		String moduleMain = "com.avereon.util";
-		String moduleMainClass = "com.avereon.util.Module";
+		String moduleMain = "com.acromere.util";
+		String moduleMainClass = "com.acromere.util.Module";
 		List<String> commands = ProcessCommands.forModule( javaPath, modulePath, moduleMain, moduleMainClass );
 
 		// Determine the runtime commands
@@ -50,8 +50,8 @@ class ProcessCommandsTest {
 	void testForModuleWithParameters() {
 		String javaPath = OperatingSystem.getJavaLauncherPath();
 		String modulePath = "/var/tmp/util/modules";
-		String moduleMain = "com.avereon.util";
-		String moduleMainClass = "com.avereon.util.Module";
+		String moduleMain = "com.acromere.util";
+		String moduleMainClass = "com.acromere.util.Module";
 		Parameters parameters = Parameters.parse( "-flag", "value" );
 		List<String> commands = ProcessCommands.forModule( javaPath, modulePath, moduleMain, moduleMainClass, parameters );
 
@@ -77,8 +77,8 @@ class ProcessCommandsTest {
 	void testForModuleWithParametersAndExtraCommands() {
 		String javaPath = OperatingSystem.getJavaLauncherPath();
 		String modulePath = "/var/tmp/util/modules";
-		String moduleMain = "com.avereon.util";
-		String moduleMainClass = "com.avereon.util.Module";
+		String moduleMain = "com.acromere.util";
+		String moduleMainClass = "com.acromere.util.Module";
 		Parameters parameters = Parameters.parse( "-flag", "value" );
 		List<String> commands = ProcessCommands.forModule( javaPath, modulePath, moduleMain, moduleMainClass, parameters, "-hello" );
 

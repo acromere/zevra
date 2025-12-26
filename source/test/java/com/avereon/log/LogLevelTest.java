@@ -1,4 +1,4 @@
-package com.avereon.log;
+package com.acromere.log;
 
 import org.junit.jupiter.api.Test;
 

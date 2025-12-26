@@ -1,4 +1,4 @@
-package com.avereon.log;
+package com.acromere.log;
 
 public class LoggingException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package com.avereon.product;
+package com.acromere.product;
 
 import java.util.Comparator;
 

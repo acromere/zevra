@@ -1,4 +1,4 @@
-package com.avereon.util;
+package com.acromere.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

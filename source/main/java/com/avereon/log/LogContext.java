@@ -1,7 +1,7 @@
-package com.avereon.log;
+package com.acromere.log;
 
-import com.avereon.log.provider.LoggingProvider;
-import com.avereon.util.JavaUtil;
+import com.acromere.log.provider.LoggingProvider;
+import com.acromere.util.JavaUtil;
 
 import java.util.Arrays;
 import java.util.Map;

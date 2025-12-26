@@ -1,7 +1,7 @@
-package com.avereon.settings;
+package com.acromere.settings;
 
-import com.avereon.util.PathUtil;
-import com.avereon.util.TextUtil;
+import com.acromere.util.PathUtil;
+import com.acromere.util.TextUtil;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

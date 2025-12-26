@@ -1,4 +1,4 @@
-package com.avereon.transaction;
+package com.acromere.transaction;
 
 /**
  * A single Txn operation that is processed during the commit process and

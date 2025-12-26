@@ -1,6 +1,6 @@
-package com.avereon.index;
+package com.acromere.index;
 
-import com.avereon.result.Result;
+import com.acromere.result.Result;
 
 import java.util.List;
 

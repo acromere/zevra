@@ -1,7 +1,7 @@
-package com.avereon.log.java;
+package com.acromere.log.java;
 
-import com.avereon.log.LogData;
-import com.avereon.log.provider.LoggerWrapper;
+import com.acromere.log.LogData;
+import com.acromere.log.provider.LoggerWrapper;
 
 import java.time.Instant;
 import java.util.Arrays;

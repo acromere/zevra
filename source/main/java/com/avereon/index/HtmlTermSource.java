@@ -1,6 +1,6 @@
-package com.avereon.index;
+package com.acromere.index;
 
-import com.avereon.util.IoUtil;
+import com.acromere.util.IoUtil;
 import lombok.CustomLog;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Node;

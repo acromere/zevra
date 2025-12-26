@@ -1,4 +1,4 @@
-package com.avereon.log;
+package com.acromere.log;
 
 /**
  * The LogApi interface is patterned after the very nice Fluent Logger from

@@ -1,6 +1,6 @@
-package com.avereon.product;
+package com.acromere.product;
 
-import com.avereon.util.IdGenerator;
+import com.acromere.util.IdGenerator;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;

@@ -1,4 +1,4 @@
-package com.avereon.index;
+package com.acromere.index;
 
 import java.util.Collection;
 import java.util.Set;

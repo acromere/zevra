@@ -1,6 +1,6 @@
-package com.avereon.product;
+package com.acromere.product;
 
-import com.avereon.settings.Settings;
+import com.acromere.settings.Settings;
 import lombok.experimental.Accessors;
 
 import java.nio.file.Path;

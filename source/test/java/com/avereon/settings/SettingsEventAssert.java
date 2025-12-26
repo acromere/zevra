@@ -1,6 +1,6 @@
-package com.avereon.settings;
+package com.acromere.settings;
 
-import com.avereon.event.EventType;
+import com.acromere.event.EventType;
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.Objects;

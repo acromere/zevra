@@ -1,7 +1,7 @@
-package com.avereon.log;
+package com.acromere.log;
 
-import com.avereon.log.java.JavaLoggingProvider;
-import com.avereon.log.provider.LoggingProvider;
+import com.acromere.log.java.JavaLoggingProvider;
+import com.acromere.log.provider.LoggingProvider;
 
 public class Logging {
 

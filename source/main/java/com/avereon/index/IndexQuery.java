@@ -1,4 +1,4 @@
-package com.avereon.index;
+package com.acromere.index;
 
 import lombok.Builder;
 import lombok.Data;

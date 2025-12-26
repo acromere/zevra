@@ -1,6 +1,6 @@
-package com.avereon.data;
+package com.acromere.data;
 
-import com.avereon.transaction.TxnEvent;
+import com.acromere.transaction.TxnEvent;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

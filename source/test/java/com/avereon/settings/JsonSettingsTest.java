@@ -1,4 +1,4 @@
-package com.avereon.settings;
+package com.acromere.settings;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;

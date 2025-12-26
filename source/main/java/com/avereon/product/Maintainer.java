@@ -1,4 +1,4 @@
-package com.avereon.product;
+package com.acromere.product;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

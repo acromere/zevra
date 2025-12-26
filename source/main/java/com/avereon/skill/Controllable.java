@@ -1,4 +1,4 @@
-package com.avereon.skill;
+package com.acromere.skill;
 
 /**
  * The Controllable interface provides an API for classes that are "controlled"

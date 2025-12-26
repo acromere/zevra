@@ -1,8 +1,8 @@
-package com.avereon.log;
+package com.acromere.log;
 
-import com.avereon.util.LogFlag;
-import com.avereon.util.OperatingSystem;
-import com.avereon.util.Parameters;
+import com.acromere.util.LogFlag;
+import com.acromere.util.OperatingSystem;
+import com.acromere.util.Parameters;
 import lombok.CustomLog;
 import org.junit.jupiter.api.Test;
 
