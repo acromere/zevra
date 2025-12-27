@@ -7,16 +7,16 @@ on:
   workflow_dispatch:
 
 env:
-  AVN_PRODUCT: "zevra"
+  ACM_PRODUCT: "zevra"
   # The default release, should be overridden in config.sh
-  AVN_RELEASE: "latest"
+  ACM_RELEASE: "latest"
   # The default platform, should be overridden in the platform binaries jobs below
-  AVN_PLATFORM: "linux"
+  ACM_PLATFORM: "linux"
 
-  AVN_GPG_PASSWORD: ${{ secrets.AVN_GPG_PASSWORD }}
-  AVN_KEYSTORE_PASSWORD: ${{ secrets.AVN_KEYSTORE_PASSWORD }}
-  AVN_REPO_USERNAME: ${{ secrets.AVN_REPO_USERNAME }}
-  AVN_REPO_PASSWORD: ${{ secrets.AVN_REPO_PASSWORD }}
+  ACM_GPG_PASSWORD: ${{ secrets.ACM_GPG_PASSWORD }}
+  ACM_KEYSTORE_PASSWORD: ${{ secrets.ACM_KEYSTORE_PASSWORD }}
+  ACM_REPO_USERNAME: ${{ secrets.ACM_REPO_USERNAME }}
+  ACM_REPO_PASSWORD: ${{ secrets.ACM_REPO_PASSWORD }}
 
   DISPLAY: ":99"
   GITHUB_REF: ${{ github.ref }}
@@ -86,13 +86,13 @@ jobs:
 
       - name: Trigger Dependent Builds
         run: |
-          curl -XPOST -u "${{secrets.AVN_CI_USERNAME}}:${{secrets.AVN_CI_PASSWORD}}" -H "Accept: application/vnd.github.v3+json" -H "Content-Type: application/json" https://api.github.com/repos/avereon/zerra/actions/workflows/ci.yml/dispatches --data '{"ref": "main"}'
+          curl -XPOST -u "${{secrets.ACM_CI_USERNAME}}:${{secrets.ACM_CI_PASSWORD}}" -H "Accept: application/vnd.github.v3+json" -H "Content-Type: application/json" https://api.github.com/repos/avereon/zerra/actions/workflows/ci.yml/dispatches --data '{"ref": "main"}'
 
       - name: Deploy JavaDoc
         run: |
-          ssh -t ${{env.AVN_REPO_USERNAME}}@acromere.com "mkdir -p ${{env.JAVADOC_DEPLOY_PATH}};"
+          ssh -t ${{env.ACM_REPO_USERNAME}}@acromere.com "mkdir -p ${{env.JAVADOC_DEPLOY_PATH}};"
           if [ $? -ne 0 ]; then exit 1; fi
-          scp -B target/${AVN_PRODUCT}-*-javadoc.jar ${{env.AVN_REPO_USERNAME}}@acromere.com:${{env.JAVADOC_DEPLOY_PATH}}/javadoc.jar 2>&1
+          scp -B target/${ACM_PRODUCT}-*-javadoc.jar ${{env.ACM_REPO_USERNAME}}@acromere.com:${{env.JAVADOC_DEPLOY_PATH}}/javadoc.jar 2>&1
           if [ $? -ne 0 ]; then exit 1; fi
-          ssh -t ${{env.AVN_REPO_USERNAME}}@acromere.com "mkdir -p ${{env.JAVADOC_TARGET_PATH}};rm -rf ${{env.JAVADOC_TARGET_PATH}}/*;unzip -o ${{env.JAVADOC_DEPLOY_PATH}}/javadoc.jar -d ${{env.JAVADOC_TARGET_PATH}}"
+          ssh -t ${{env.ACM_REPO_USERNAME}}@acromere.com "mkdir -p ${{env.JAVADOC_TARGET_PATH}};rm -rf ${{env.JAVADOC_TARGET_PATH}}/*;unzip -o ${{env.JAVADOC_DEPLOY_PATH}}/javadoc.jar -d ${{env.JAVADOC_TARGET_PATH}}"
           if [ $? -ne 0 ]; then exit 1; fi
