@@ -154,7 +154,7 @@ class ProductCardTest {
 		card.setPackagingVersion( "2.7" );
 		card.setVersion( "1.0.0" );
 		card.setTimestamp( "2018-01-01 00:00:00" );
-		card.setIcons( List.of( "avereon", "https://acromere.com/download/stable/avereon/provider/icon" ) );
+		card.setIcons( List.of( "acromere", "https://acromere.com/download/stable/acromere/provider/icon" ) );
 		card.setName( "Zevra" );
 		card.setMaintainers( maintainers );
 		card.setContributors( contributors );
@@ -174,7 +174,7 @@ class ProductCardTest {
 		assertThat( reader.readLine() ).isEqualTo( "  \"timestamp\" : \"2018-01-01 00:00:00\"," );
 		assertThat( reader.readLine() ).isEqualTo( "  \"packaging\" : \"lib\"," );
 		assertThat( reader.readLine() ).isEqualTo( "  \"packagingVersion\" : \"2.7\"," );
-		assertThat( reader.readLine() ).isEqualTo( "  \"icons\" : [ \"avereon\", \"https://acromere.com/download/stable/avereon/provider/icon\" ]," );
+		assertThat( reader.readLine() ).isEqualTo( "  \"icons\" : [ \"acromere\", \"https://acromere.com/download/stable/acromere/provider/icon\" ]," );
 		assertThat( reader.readLine() ).isEqualTo( "  \"name\" : \"Zevra\"," );
 		//assertThat( reader.readLine() ).isEqualTo( "  \"provider\" : null," );
 		//assertThat( reader.readLine() ).isEqualTo( "  \"providerUrl\" : null," );

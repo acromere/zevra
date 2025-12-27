@@ -1,6 +1,6 @@
-[build-status]: https://github.com/avereon/zevra/workflows/CI/badge.svg "Build status"
+[build-status]: https://github.com/acromere/zevra/actions/workflows/ci.yml/badge.svg "Build status"
 
-# Zevra [![][build-status]](https://github.com/avereon/zevra/actions)
+# Zevra [![][build-status]](https://github.com/acromere/zevra/actions)
 
 A non-UX utility library used in many Acromere projects.
 

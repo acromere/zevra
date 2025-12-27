@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FileUtilTest {
 
-	private static final String PREFIX = "com-avereon-unit-test-";
+	private static final String PREFIX = "com-acromere-unit-test-";
 
 	@BeforeEach
 	void setup() throws Exception {

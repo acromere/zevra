@@ -37,7 +37,7 @@ jobs:
       - name: Fetch CI/CD resources
         uses: actions/checkout@v6
         with:
-          repository: avereon/canoe
+          repository: acromere/canoe
           path: .github
 
       - name: Configuration
@@ -86,7 +86,7 @@ jobs:
 
       - name: Trigger Dependent Builds
         run: |
-          curl -XPOST -u "${{secrets.ACM_CI_USERNAME}}:${{secrets.ACM_CI_PASSWORD}}" -H "Accept: application/vnd.github.v3+json" -H "Content-Type: application/json" https://api.github.com/repos/avereon/zerra/actions/workflows/ci.yml/dispatches --data '{"ref": "main"}'
+          curl -XPOST -u "${{secrets.ACM_CI_USERNAME}}:${{secrets.ACM_CI_PASSWORD}}" -H "Accept: application/vnd.github.v3+json" -H "Content-Type: application/json" https://api.github.com/repos/acromere/zerra/actions/workflows/ci.yml/dispatches --data '{"ref": "main"}'
 
       - name: Deploy JavaDoc
         run: |
