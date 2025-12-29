@@ -72,7 +72,7 @@ jobs:
         run: |
           mvn ${{env.MAVEN_PARMS}} test
 
-      - name: Deploy Arifacts
+      - name: Deploy Artifacts
         run: |
           mvn ${{env.MAVEN_PARMS}} deploy -Dmaven.test.skip=true
 
