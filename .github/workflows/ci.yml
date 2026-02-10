@@ -1,4 +1,4 @@
-name: Acromere Zevra CI
+name: Zevra CI
 
 on:
   push:
