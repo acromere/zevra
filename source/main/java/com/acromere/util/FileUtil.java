@@ -648,7 +648,7 @@ public class FileUtil {
 
 	public static void waitToExist( Path path, long duration, TimeUnit unit ) throws IOException, TimeoutException, InterruptedException {
 		if( Files.exists( path ) ) return;
-		if( !Files.exists( path.getParent() ) ) throw new IOException( "Cannot wait for path without parent" );
+		if( !Files.exists( path.getParent() ) ) throw new IOException( "Cannot wait for path without parent: " + path );
 
 		long maxDuration = unit.toMillis( duration );
 		long checkDelay = 100;
