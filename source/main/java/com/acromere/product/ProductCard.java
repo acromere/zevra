@@ -38,9 +38,13 @@ import java.util.*;
 @Accessors( chain = true )
 public class ProductCard extends BaseCard {
 
-	private static final String CARD = "META-INF/product.card";
+	private static final String PRODUCT_CARD = "META-INF/product.card";
 
-	private static final String INFO = "META-INF/product.info";
+	private static final String PRODUCT_INFO = "META-INF/product.info";
+
+	private static final String REBRAND_CARD = "META-INF/rebrand.card";
+
+	private static final String REBRAND_INFO = "META-INF/rebrand.info";
 
 	@Getter
 	@JsonIgnore
@@ -143,13 +147,13 @@ public class ProductCard extends BaseCard {
 	public ProductCard() {}
 
 	public static ProductCard card( Path path ) throws IOException {
-		try( FileInputStream input = new FileInputStream( path.resolve( CARD ).toFile() ) ) {
+		try( FileInputStream input = new FileInputStream( path.resolve( PRODUCT_CARD ).toFile() ) ) {
 			return new ProductCard().fromJson( input );
 		}
 	}
 
 	public static ProductCard info( Path path ) throws IOException {
-		try( FileInputStream input = new FileInputStream( path.resolve( INFO ).toFile() ) ) {
+		try( FileInputStream input = new FileInputStream( path.resolve( PRODUCT_INFO ).toFile() ) ) {
 			return new ProductCard().fromInfo( input );
 		}
 	}
@@ -171,7 +175,9 @@ public class ProductCard extends BaseCard {
 		 * NOTE Using the class loader instead of the class to find the resource
 		 * does not work as expected when loading products from the classpath.
 		 */
-		return fromInfo( source.getResourceAsStream( "/" + INFO ) );
+		InputStream rebrandStream = source.getResourceAsStream( "/" + REBRAND_INFO );
+		if( rebrandStream != null ) return fromInfo( rebrandStream );
+		return fromInfo( source.getResourceAsStream( "/" + PRODUCT_INFO ) );
 	}
 
 	private ProductCard fromInfo( InputStream input ) throws IOException {
@@ -225,7 +231,9 @@ public class ProductCard extends BaseCard {
 		 * NOTE Using the class loader instead of the class to find the resource
 		 * does not work as expected when loading products from the classpath.
 		 */
-		return fromJson( clazz.getResourceAsStream( "/" + CARD ) );
+		InputStream rebrandStream = clazz.getResourceAsStream( "/" + REBRAND_CARD );
+		if( rebrandStream != null ) return fromJson( rebrandStream );
+		return fromJson( clazz.getResourceAsStream( "/" + PRODUCT_CARD ) );
 	}
 
 	private ProductCard fromJson( InputStream input ) throws IOException {

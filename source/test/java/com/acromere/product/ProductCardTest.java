@@ -2,12 +2,16 @@ package com.acromere.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,8 +21,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductCardTest {
 
+	@BeforeEach
+	void setup() throws Exception {
+		Files.deleteIfExists( Path.of( "target/test/java/META-INF/rebrand.info" ) );
+		Files.deleteIfExists( Path.of( "target/test/java/META-INF/rebrand.card" ) );
+	}
+
 	@Test
-	void testCard() {
+	void testInfo() {
 		ProductCard card = ProductCard.info( getClass() );
 
 		assertThat( card.getGroup() ).isEqualTo( "com.acromere" );
@@ -38,7 +48,7 @@ class ProductCardTest {
 	}
 
 	@Test
-	void testJsonCard() {
+	void testCard() {
 		ProductCard card = ProductCard.card( getClass() );
 		assertThat( card.getProductKey() ).isEqualTo( "com.acromere.zevra" );
 
@@ -51,7 +61,7 @@ class ProductCardTest {
 		assertThat( card.getPackagingVersion() ).isEqualTo( "2.7" );
 
 		assertThat( card.getName() ).isEqualTo( "Zevra" );
-		assertThat( card.getIcons()).contains( "library", "https://acromere.com/download/latest/zevra/product/icon"  );
+		assertThat( card.getIcons() ).contains( "library", "https://acromere.com/download/latest/zevra/product/icon" );
 		assertThat( card.getProvider() ).isEqualTo( "Acromere" );
 		assertThat( card.getProviderUrl() ).isEqualTo( "https://www.acromere.com" );
 		assertThat( card.getInception() ).isEqualTo( 2018 );
@@ -59,10 +69,10 @@ class ProductCardTest {
 		assertThat( card.getSummary() ).isEqualTo( "Utility library" );
 		assertThat( card.getDescription() ).isEqualTo( "A utility library for Acromere applications." );
 		assertThat( card.getCopyrightSummary() ).isEqualTo( "All rights reserved." );
-		assertThat( card.getLicenseSummary()).isEqualTo( "Zevra comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions." );
+		assertThat( card.getLicenseSummary() ).isEqualTo( "Zevra comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions." );
 
 		assertThat( card.getProductUri() ).isNull();
-		assertThat( card.getJavaVersion() ).isEqualTo( "11"  );
+		assertThat( card.getJavaVersion() ).isEqualTo( "11" );
 
 		List<Maintainer> maintainers = card.getMaintainers();
 		assertThat( maintainers.get( 0 ).getName() ).isEqualTo( "Sole Maintainer" );
@@ -91,6 +101,78 @@ class ProductCardTest {
 		assertThat( contributors.get( 1 ).getRoles().get( 0 ) ).isEqualTo( "Just Jane" );
 		assertThat( contributors.get( 1 ).getRoles().size() ).isEqualTo( 1 );
 		assertThat( contributors.size() ).isEqualTo( 2 );
+	}
+
+	@Test
+	void testInfoWithRebrand() throws Exception {
+		// given
+		Files.copy( Path.of( "source/test/resources/rebrand.info" ), Path.of( "target/test/java/META-INF/rebrand.info" ), StandardCopyOption.REPLACE_EXISTING );
+
+		// when
+		ProductCard card = ProductCard.info( getClass() );
+
+		// then
+		assertThat( card.getGroup() ).isEqualTo( "com.example" );
+		assertThat( card.getArtifact() ).isEqualTo( "rebrand" );
+		assertThat( card.getVersion() ).isEqualTo( "0.0" );
+		assertThat( card.getTimestamp() ).isEqualTo( "2026-01-01 00:00:00" );
+
+		assertThat( card.getName() ).isEqualTo( "Rebrand" );
+		assertThat( card.getIcons() ).contains( "rebrand" );
+		assertThat( card.getProvider() ).isEqualTo( "Rebrand Group" );
+		assertThat( card.getInception() ).isEqualTo( 2026 );
+
+		assertThat( card.getSummary() ).isEqualTo( "Rebranded application" );
+		assertThat( card.getDescription() ).isEqualTo( "Rebranded application description" );
+		assertThat( card.getCopyrightSummary() ).isEqualTo( "All rights reserved." );
+		assertThat( card.getLicenseSummary() ).isEqualTo( "Rebrand comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions." );
+	}
+
+	@Test
+	void testCardWithRebrand() throws Exception {
+		// given
+		Files.copy( Path.of( "source/test/resources/rebrand.card" ), Path.of( "target/test/java/META-INF/rebrand.card" ), StandardCopyOption.REPLACE_EXISTING );
+
+		// when
+		ProductCard card = ProductCard.card( getClass() );
+
+		// then
+		assertThat( card.getProductKey() ).isEqualTo( "com.example.rebrand" );
+
+		assertThat( card.getGroup() ).isEqualTo( "com.example" );
+		assertThat( card.getArtifact() ).isEqualTo( "rebrand" );
+		assertThat( card.getVersion() ).isEqualTo( "0.0" );
+		assertThat( card.getTimestamp() ).isEqualTo( "2026-01-01 00:00:00" );
+
+		assertThat( card.getPackaging() ).isNull();
+		assertThat( card.getPackagingVersion() ).isNull();
+
+		assertThat( card.getName() ).isEqualTo( "Rebrand" );
+		assertThat( card.getIcons() ).contains( "rebrand" );
+		assertThat( card.getProvider() ).isEqualTo( "Rebrand Group" );
+		assertThat( card.getInception() ).isEqualTo( 2026 );
+
+		assertThat( card.getSummary() ).isEqualTo( "Rebranded application" );
+		assertThat( card.getDescription() ).isEqualTo( "Rebranded application description" );
+		assertThat( card.getCopyrightSummary() ).isEqualTo( "All rights reserved." );
+		assertThat( card.getLicenseSummary() ).isEqualTo( "Rebrand comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions." );
+
+		assertThat( card.getProductUri() ).isNull();
+		assertThat( card.getJavaVersion() ).isEqualTo( "25" );
+
+		List<Maintainer> maintainers = card.getMaintainers();
+		assertThat( maintainers.get( 0 ).getName() ).isEqualTo( "Rebrand Project Lead" );
+		assertThat( maintainers.get( 0 ).getEmail() ).isEqualTo( "project.lead@example.com" );
+		assertThat( maintainers.get( 0 ).getOrganization() ).isEqualTo( "Rebrand Group" );
+		assertThat( maintainers.get( 0 ).getOrganizationUrl() ).isEqualTo( "https://example.com" );
+		assertThat( maintainers.get( 0 ).getTimezone() ).isNull();
+		assertThat( maintainers.get( 0 ).getRoles().get( 0 ) ).isEqualTo( "Architect" );
+		assertThat( maintainers.get( 0 ).getRoles().get( 1 ) ).isEqualTo( "Developer" );
+		assertThat( maintainers.get( 0 ).getRoles().size() ).isEqualTo( 2 );
+		assertThat( maintainers.size() ).isEqualTo( 1 );
+
+		List<Contributor> contributors = card.getContributors();
+		assertThat( contributors ).isEmpty();
 	}
 
 	@Test
