@@ -11,6 +11,7 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -105,74 +106,90 @@ class ProductCardTest {
 
 	@Test
 	void testInfoWithRebrand() throws Exception {
-		// given
-		Files.copy( Path.of( "source/test/resources/rebrand.info" ), Path.of( "target/test/java/META-INF/rebrand.info" ), StandardCopyOption.REPLACE_EXISTING );
+		Path javaHome = Paths.get( System.getProperty( "java.home" ) );
+		Path testHome = Paths.get( System.getProperty( "user.dir" ) );
+		try {
+			// given
+			System.setProperty( "java.home", testHome.resolve( "target" ).toString() );
+			Files.createDirectories( testHome.resolve( "target/lib/app" ) );
+			Files.copy( testHome.resolve( "source/test/resources/rebrand.info" ), testHome.resolve( "target/lib/app/rebrand.info" ), StandardCopyOption.REPLACE_EXISTING );
 
-		// when
-		ProductCard card = ProductCard.info( getClass() );
+			// when
+			ProductCard card = ProductCard.info( getClass() );
 
-		// then
-		assertThat( card.getGroup() ).isEqualTo( "com.example" );
-		assertThat( card.getArtifact() ).isEqualTo( "rebrand" );
-		assertThat( card.getVersion() ).isEqualTo( "0.0" );
-		assertThat( card.getTimestamp() ).isEqualTo( "2026-01-01 00:00:00" );
+			// then
+			assertThat( card.getGroup() ).isEqualTo( "com.example" );
+			assertThat( card.getArtifact() ).isEqualTo( "rebrand" );
+			assertThat( card.getVersion() ).isEqualTo( "0.0" );
+			assertThat( card.getTimestamp() ).isEqualTo( "2026-01-01 00:00:00" );
 
-		assertThat( card.getName() ).isEqualTo( "Rebrand" );
-		assertThat( card.getIcons() ).contains( "rebrand" );
-		assertThat( card.getProvider() ).isEqualTo( "Rebrand Group" );
-		assertThat( card.getInception() ).isEqualTo( 2026 );
+			assertThat( card.getName() ).isEqualTo( "Rebrand" );
+			assertThat( card.getIcons() ).contains( "rebrand" );
+			assertThat( card.getProvider() ).isEqualTo( "Rebrand Group" );
+			assertThat( card.getInception() ).isEqualTo( 2026 );
 
-		assertThat( card.getSummary() ).isEqualTo( "Rebranded application" );
-		assertThat( card.getDescription() ).isEqualTo( "Rebranded application description" );
-		assertThat( card.getCopyrightSummary() ).isEqualTo( "All rights reserved." );
-		assertThat( card.getLicenseSummary() ).isEqualTo( "Rebrand comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions." );
+			assertThat( card.getSummary() ).isEqualTo( "Rebranded application" );
+			assertThat( card.getDescription() ).isEqualTo( "Rebranded application description" );
+			assertThat( card.getCopyrightSummary() ).isEqualTo( "All rights reserved." );
+			assertThat( card.getLicenseSummary() ).isEqualTo( "Rebrand comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions." );
+		} finally {
+			System.setProperty( "java.home", javaHome.toString() );
+		}
 	}
 
 	@Test
 	void testCardWithRebrand() throws Exception {
-		// given
-		Files.copy( Path.of( "source/test/resources/rebrand.card" ), Path.of( "target/test/java/META-INF/rebrand.card" ), StandardCopyOption.REPLACE_EXISTING );
+		Path javaHome = Paths.get( System.getProperty( "java.home" ) );
+		Path testHome = Paths.get( System.getProperty( "user.dir" ) );
+		try {
+			// given
+			System.setProperty( "java.home", testHome.resolve( "target" ).toString() );
+			Files.createDirectories( testHome.resolve( "target/lib/app" ) );
+			Files.copy( testHome.resolve( "source/test/resources/rebrand.card" ), testHome.resolve( "target/lib/app/rebrand.card" ), StandardCopyOption.REPLACE_EXISTING );
 
-		// when
-		ProductCard card = ProductCard.card( getClass() );
+			// when
+			ProductCard card = ProductCard.card( getClass() );
 
-		// then
-		assertThat( card.getProductKey() ).isEqualTo( "com.example.rebrand" );
+			// then
+			assertThat( card.getProductKey() ).isEqualTo( "com.example.rebrand" );
 
-		assertThat( card.getGroup() ).isEqualTo( "com.example" );
-		assertThat( card.getArtifact() ).isEqualTo( "rebrand" );
-		assertThat( card.getVersion() ).isEqualTo( "0.0" );
-		assertThat( card.getTimestamp() ).isEqualTo( "2026-01-01 00:00:00" );
+			assertThat( card.getGroup() ).isEqualTo( "com.example" );
+			assertThat( card.getArtifact() ).isEqualTo( "rebrand" );
+			assertThat( card.getVersion() ).isEqualTo( "0.0" );
+			assertThat( card.getTimestamp() ).isEqualTo( "2026-01-01 00:00:00" );
 
-		assertThat( card.getPackaging() ).isNull();
-		assertThat( card.getPackagingVersion() ).isNull();
+			assertThat( card.getPackaging() ).isNull();
+			assertThat( card.getPackagingVersion() ).isNull();
 
-		assertThat( card.getName() ).isEqualTo( "Rebrand" );
-		assertThat( card.getIcons() ).contains( "rebrand" );
-		assertThat( card.getProvider() ).isEqualTo( "Rebrand Group" );
-		assertThat( card.getInception() ).isEqualTo( 2026 );
+			assertThat( card.getName() ).isEqualTo( "Rebrand" );
+			assertThat( card.getIcons() ).contains( "rebrand" );
+			assertThat( card.getProvider() ).isEqualTo( "Rebrand Group" );
+			assertThat( card.getInception() ).isEqualTo( 2026 );
 
-		assertThat( card.getSummary() ).isEqualTo( "Rebranded application" );
-		assertThat( card.getDescription() ).isEqualTo( "Rebranded application description" );
-		assertThat( card.getCopyrightSummary() ).isEqualTo( "All rights reserved." );
-		assertThat( card.getLicenseSummary() ).isEqualTo( "Rebrand comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions." );
+			assertThat( card.getSummary() ).isEqualTo( "Rebranded application" );
+			assertThat( card.getDescription() ).isEqualTo( "Rebranded application description" );
+			assertThat( card.getCopyrightSummary() ).isEqualTo( "All rights reserved." );
+			assertThat( card.getLicenseSummary() ).isEqualTo( "Rebrand comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions." );
 
-		assertThat( card.getProductUri() ).isNull();
-		assertThat( card.getJavaVersion() ).isEqualTo( "25" );
+			assertThat( card.getProductUri() ).isNull();
+			assertThat( card.getJavaVersion() ).isEqualTo( "25" );
 
-		List<Maintainer> maintainers = card.getMaintainers();
-		assertThat( maintainers.get( 0 ).getName() ).isEqualTo( "Rebrand Project Lead" );
-		assertThat( maintainers.get( 0 ).getEmail() ).isEqualTo( "project.lead@example.com" );
-		assertThat( maintainers.get( 0 ).getOrganization() ).isEqualTo( "Rebrand Group" );
-		assertThat( maintainers.get( 0 ).getOrganizationUrl() ).isEqualTo( "https://example.com" );
-		assertThat( maintainers.get( 0 ).getTimezone() ).isNull();
-		assertThat( maintainers.get( 0 ).getRoles().get( 0 ) ).isEqualTo( "Architect" );
-		assertThat( maintainers.get( 0 ).getRoles().get( 1 ) ).isEqualTo( "Developer" );
-		assertThat( maintainers.get( 0 ).getRoles().size() ).isEqualTo( 2 );
-		assertThat( maintainers.size() ).isEqualTo( 1 );
+			List<Maintainer> maintainers = card.getMaintainers();
+			assertThat( maintainers.get( 0 ).getName() ).isEqualTo( "Rebrand Project Lead" );
+			assertThat( maintainers.get( 0 ).getEmail() ).isEqualTo( "project.lead@example.com" );
+			assertThat( maintainers.get( 0 ).getOrganization() ).isEqualTo( "Rebrand Group" );
+			assertThat( maintainers.get( 0 ).getOrganizationUrl() ).isEqualTo( "https://example.com" );
+			assertThat( maintainers.get( 0 ).getTimezone() ).isNull();
+			assertThat( maintainers.get( 0 ).getRoles().get( 0 ) ).isEqualTo( "Architect" );
+			assertThat( maintainers.get( 0 ).getRoles().get( 1 ) ).isEqualTo( "Developer" );
+			assertThat( maintainers.get( 0 ).getRoles().size() ).isEqualTo( 2 );
+			assertThat( maintainers.size() ).isEqualTo( 1 );
 
-		List<Contributor> contributors = card.getContributors();
-		assertThat( contributors ).isEmpty();
+			List<Contributor> contributors = card.getContributors();
+			assertThat( contributors ).isEmpty();
+		} finally {
+			System.setProperty( "java.home", javaHome.toString() );
+		}
 	}
 
 	@Test

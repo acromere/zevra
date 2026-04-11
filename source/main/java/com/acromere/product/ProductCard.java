@@ -15,7 +15,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -42,9 +44,9 @@ public class ProductCard extends BaseCard {
 
 	private static final String PRODUCT_INFO = "META-INF/product.info";
 
-	private static final String REBRAND_CARD = "META-INF/rebrand.card";
+	private static final String REBRAND_CARD = "lib/app/rebrand.card";
 
-	private static final String REBRAND_INFO = "META-INF/rebrand.info";
+	private static final String REBRAND_INFO = "lib/app/rebrand.info";
 
 	@Getter
 	@JsonIgnore
@@ -162,22 +164,30 @@ public class ProductCard extends BaseCard {
 		return info( product.getClass() );
 	}
 
-	public static ProductCard info( Class<?> source ) {
+	public static ProductCard info( Class<?> clazz ) {
 		try {
-			return new ProductCard().fromInfo( source );
+			return new ProductCard().fromInfo( clazz );
 		} catch( IOException exception ) {
 			throw new RuntimeException( "Error loading product card", exception );
 		}
 	}
 
-	private ProductCard fromInfo( Class<?> source ) throws IOException {
+	private ProductCard fromInfo( Class<?> clazz ) throws IOException {
 		/*
 		 * NOTE Using the class loader instead of the class to find the resource
 		 * does not work as expected when loading products from the classpath.
 		 */
-		InputStream rebrandStream = source.getResourceAsStream( "/" + REBRAND_INFO );
-		if( rebrandStream != null ) return fromInfo( rebrandStream );
-		return fromInfo( source.getResourceAsStream( "/" + PRODUCT_INFO ) );
+		Path home = Paths.get( System.getProperty( "java.home" ) );
+		Path rebrandInfoFile = home.resolve( home.resolve( REBRAND_INFO ) );
+		if( Files.exists( rebrandInfoFile ) ) {
+			try ( InputStream infoInput = new FileInputStream( rebrandInfoFile.toFile() ) ) {
+				return fromInfo( infoInput );
+			}
+		} else {
+			try ( InputStream infoInput = clazz.getResourceAsStream( "/" + PRODUCT_INFO ) ) {
+				return fromInfo( infoInput );
+			}
+		}
 	}
 
 	private ProductCard fromInfo( InputStream input ) throws IOException {
@@ -231,9 +241,17 @@ public class ProductCard extends BaseCard {
 		 * NOTE Using the class loader instead of the class to find the resource
 		 * does not work as expected when loading products from the classpath.
 		 */
-		InputStream rebrandStream = clazz.getResourceAsStream( "/" + REBRAND_CARD );
-		if( rebrandStream != null ) return fromJson( rebrandStream );
-		return fromJson( clazz.getResourceAsStream( "/" + PRODUCT_CARD ) );
+		Path home = Paths.get( System.getProperty( "java.home" ) );
+		Path rebrandInfoFile = home.resolve( home.resolve( REBRAND_CARD ) );
+		if( Files.exists( rebrandInfoFile ) ) {
+			try ( InputStream infoInput = new FileInputStream( rebrandInfoFile.toFile() ) ) {
+				return fromJson( infoInput );
+			}
+		} else {
+			try ( InputStream infoInput = clazz.getResourceAsStream( "/" + PRODUCT_CARD ) ) {
+				return fromJson( infoInput );
+			}
+		}
 	}
 
 	private ProductCard fromJson( InputStream input ) throws IOException {
