@@ -172,6 +172,17 @@ public class ProductCard extends BaseCard {
 		}
 	}
 
+	/**
+	 * Loads product information as a {@code ProductCard} object using either a
+	 * resource stream associated with the provided class or a "rebrand" info
+	 * file. If using a "rebrand" info file, the <code>rebrand.info</code> file
+	 * is located in <code>${JAVA_HOME}/lib/app</code> when the program is
+	 * packaged with <code>jpackage</code>.
+	 *
+	 * @param clazz the {@code Class<?>} object used to locate the product info resource
+	 * @return a {@code ProductCard} instance populated with product details from the resource
+	 * @throws IOException if an I/O error occurs while accessing or reading the resource
+	 */
 	private ProductCard fromInfo( Class<?> clazz ) throws IOException {
 		/*
 		 * NOTE Using the class loader instead of the class to find the resource
@@ -236,6 +247,17 @@ public class ProductCard extends BaseCard {
 		}
 	}
 
+	/**
+	 * Loads product information as a {@code ProductCard} object using either a
+	 * resource stream associated with the provided class or a "rebrand" card
+	 * file. If using a "rebrand" card file, the <code>rebrand.card</code> file
+	 * is located in <code>${JAVA_HOME}/lib/app</code> when the program is
+	 * packaged with <code>jpackage</code>.
+	 *
+	 * @param clazz the {@code Class<?>} object used to locate the product card resource
+	 * @return a {@code ProductCard} instance populated with product details from the resource
+	 * @throws IOException if an I/O error occurs while accessing or reading the resource
+	 */
 	private ProductCard fromJson( Class<?> clazz ) throws IOException {
 		/*
 		 * NOTE Using the class loader instead of the class to find the resource
