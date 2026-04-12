@@ -148,12 +148,6 @@ public class ProductCard extends BaseCard {
 
 	public ProductCard() {}
 
-	public static ProductCard card( Path path ) throws IOException {
-		try( FileInputStream input = new FileInputStream( path.resolve( PRODUCT_CARD ).toFile() ) ) {
-			return new ProductCard().fromJson( input );
-		}
-	}
-
 	public static ProductCard info( Path path ) throws IOException {
 		try( FileInputStream input = new FileInputStream( path.resolve( PRODUCT_INFO ).toFile() ) ) {
 			return new ProductCard().fromInfo( input );
@@ -169,6 +163,12 @@ public class ProductCard extends BaseCard {
 			return new ProductCard().fromInfo( clazz );
 		} catch( IOException exception ) {
 			throw new RuntimeException( "Error loading product card", exception );
+		}
+	}
+
+	public static ProductCard card( Path path ) throws IOException {
+		try( FileInputStream input = new FileInputStream( path.resolve( PRODUCT_CARD ).toFile() ) ) {
+			return new ProductCard().fromJson( input );
 		}
 	}
 
@@ -188,8 +188,7 @@ public class ProductCard extends BaseCard {
 		 * NOTE Using the class loader instead of the class to find the resource
 		 * does not work as expected when loading products from the classpath.
 		 */
-		Path home = Paths.get( System.getProperty( "java.home" ) );
-		Path rebrandInfoFile = home.resolve( home.resolve( REBRAND_INFO ) );
+		Path rebrandInfoFile = getProgramHome().resolve( REBRAND_INFO );
 		if( Files.exists( rebrandInfoFile ) ) {
 			try ( InputStream infoInput = new FileInputStream( rebrandInfoFile.toFile() ) ) {
 				return fromInfo( infoInput );
@@ -248,6 +247,29 @@ public class ProductCard extends BaseCard {
 	}
 
 	/**
+	 * Determines whether the application is running in a JDK-linked environment.
+	 * <p>
+	 * A JDK-linked environment is identified by the absence of the "jdk.module.path" system property.
+	 *
+	 * @return {@code true} if running in a JDK-linked environment
+	 *         {@code false} otherwise.
+	 */
+	public static boolean isJLinked() {
+		return System.getProperty( "jdk.module.path" ) == null;
+	}
+
+	/**
+	 * Retrieves the program's home directory by resolving the parent directory
+	 * two levels above the Java installation directory (retrieved from the
+	 * "java.home" system property).
+	 *
+	 * @return the resolved {@code Path} representing the program's home directory
+	 */
+	public static Path getProgramHome() {
+		return Paths.get( System.getProperty( "java.home" ) ).resolve("../..");
+	}
+
+	/**
 	 * Loads product information as a {@code ProductCard} object using either a
 	 * resource stream associated with the provided class or a "rebrand" card
 	 * file. If using a "rebrand" card file, the <code>rebrand.card</code> file
@@ -263,8 +285,7 @@ public class ProductCard extends BaseCard {
 		 * NOTE Using the class loader instead of the class to find the resource
 		 * does not work as expected when loading products from the classpath.
 		 */
-		Path home = Paths.get( System.getProperty( "java.home" ) );
-		Path rebrandInfoFile = home.resolve( home.resolve( REBRAND_CARD ) );
+		Path rebrandInfoFile = getProgramHome().resolve( REBRAND_CARD );
 		if( Files.exists( rebrandInfoFile ) ) {
 			try ( InputStream infoInput = new FileInputStream( rebrandInfoFile.toFile() ) ) {
 				return fromJson( infoInput );
