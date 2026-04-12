@@ -110,7 +110,7 @@ class ProductCardTest {
 		Path testHome = Paths.get( System.getProperty( "user.dir" ) );
 		try {
 			// given
-			System.setProperty( "java.home", testHome.resolve( "target" ).toString() );
+			System.setProperty( "java.home", testHome.resolve( "target/lib/runtime" ).toString() );
 			Files.createDirectories( testHome.resolve( "target/lib/app" ) );
 			Files.copy( testHome.resolve( "source/test/resources/rebrand.info" ), testHome.resolve( "target/lib/app/rebrand.info" ), StandardCopyOption.REPLACE_EXISTING );
 
@@ -143,7 +143,7 @@ class ProductCardTest {
 		Path testHome = Paths.get( System.getProperty( "user.dir" ) );
 		try {
 			// given
-			System.setProperty( "java.home", testHome.resolve( "target" ).toString() );
+			System.setProperty( "java.home", testHome.resolve( "target/lib/runtime" ).toString() );
 			Files.createDirectories( testHome.resolve( "target/lib/app" ) );
 			Files.copy( testHome.resolve( "source/test/resources/rebrand.card" ), testHome.resolve( "target/lib/app/rebrand.card" ), StandardCopyOption.REPLACE_EXISTING );
 

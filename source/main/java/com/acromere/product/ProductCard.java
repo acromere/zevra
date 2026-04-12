@@ -265,8 +265,8 @@ public class ProductCard extends BaseCard {
 	 *
 	 * @return the resolved {@code Path} representing the program's home directory
 	 */
-	public static Path getProgramHome() {
-		return Paths.get( System.getProperty( "java.home" ) ).resolve("../..");
+	public static Path getProgramHome() throws IOException {
+		return Paths.get( System.getProperty( "java.home" ) ).getParent().getParent();
 	}
 
 	/**
