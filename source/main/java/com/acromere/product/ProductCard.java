@@ -42,11 +42,7 @@ public class ProductCard extends BaseCard {
 
 	private static final String PRODUCT_CARD = "META-INF/product.card";
 
-	private static final String PRODUCT_INFO = "META-INF/product.info";
-
 	private static final String REBRAND_CARD = "lib/app/rebrand.card";
-
-	private static final String REBRAND_INFO = "lib/app/rebrand.info";
 
 	@Getter
 	@JsonIgnore
@@ -148,90 +144,10 @@ public class ProductCard extends BaseCard {
 
 	public ProductCard() {}
 
-	public static ProductCard info( Path path ) throws IOException {
-		try( FileInputStream input = new FileInputStream( path.resolve( PRODUCT_INFO ).toFile() ) ) {
-			return new ProductCard().fromInfo( input );
-		}
-	}
-
-	public static ProductCard info( Product product ) {
-		return info( product.getClass() );
-	}
-
-	public static ProductCard info( Class<?> clazz ) {
-		try {
-			return new ProductCard().fromInfo( clazz );
-		} catch( IOException exception ) {
-			throw new RuntimeException( "Error loading product card", exception );
-		}
-	}
-
 	public static ProductCard card( Path path ) throws IOException {
 		try( FileInputStream input = new FileInputStream( path.resolve( PRODUCT_CARD ).toFile() ) ) {
 			return new ProductCard().fromJson( input );
 		}
-	}
-
-	/**
-	 * Loads product information as a {@code ProductCard} object using either a
-	 * resource stream associated with the provided class or a "rebrand" info
-	 * file. If using a "rebrand" info file, the <code>rebrand.info</code> file
-	 * is located in <code>${JAVA_HOME}/lib/app</code> when the program is
-	 * packaged with <code>jpackage</code>.
-	 *
-	 * @param clazz the {@code Class<?>} object used to locate the product info resource
-	 * @return a {@code ProductCard} instance populated with product details from the resource
-	 * @throws IOException if an I/O error occurs while accessing or reading the resource
-	 */
-	private ProductCard fromInfo( Class<?> clazz ) throws IOException {
-		/*
-		 * NOTE Using the class loader instead of the class to find the resource
-		 * does not work as expected when loading products from the classpath.
-		 */
-		Path rebrandInfoFile = getProgramHome().resolve( REBRAND_INFO );
-		if( Files.exists( rebrandInfoFile ) ) {
-			try ( InputStream infoInput = new FileInputStream( rebrandInfoFile.toFile() ) ) {
-				return fromInfo( infoInput );
-			}
-		} else {
-			try ( InputStream infoInput = clazz.getResourceAsStream( "/" + PRODUCT_INFO ) ) {
-				return fromInfo( infoInput );
-			}
-		}
-	}
-
-	private ProductCard fromInfo( InputStream input ) throws IOException {
-		if( input == null ) throw new NullPointerException( "InputStream cannot be null" );
-
-		Properties values = new Properties();
-		values.load( input );
-
-		this.group = values.getProperty( "group" );
-		this.artifact = values.getProperty( "artifact" );
-		this.packaging = values.getProperty( "packaging" );
-		this.version = values.getProperty( "version" );
-		this.timestamp = values.getProperty( "timestamp" );
-
-		this.icons = List.of( values.getProperty( "icon" ) );
-		this.name = values.getProperty( "name" );
-		this.provider = values.getProperty( "provider" );
-		this.providerUrl = values.getProperty( "providerUri" );
-
-		try {
-			this.inception = Integer.parseInt( values.getProperty( "inception" ) );
-		} catch( NumberFormatException exception ) {
-			throw new IllegalArgumentException( "The product card has not been processed by Maven" );
-		}
-
-		this.summary = values.getProperty( "summary" );
-		this.description = values.getProperty( "description" );
-		this.copyrightSummary = values.getProperty( "copyright" );
-		this.licenseSummary = values.getProperty( "license" );
-
-		this.updateKey();
-		this.updateRelease();
-
-		return this;
 	}
 
 	public static ProductCard card( Product product ) {
