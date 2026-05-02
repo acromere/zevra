@@ -14,12 +14,12 @@ import java.util.List;
 @JsonIgnoreProperties( ignoreUnknown = true )
 public class Rebrand implements Serializable {
 
-	private Class<?> splashScreenBackgroundClass;
+	private String splashScreenBackgroundClass;
 
 	private Double splashScreenTitleFontSize;
 
-	private Class<?> productIconClass;
+	private String productIconClass;
 
-	private List<Class<?>> moduleClasses;
+	private List<String> moduleClasses;
 
 }

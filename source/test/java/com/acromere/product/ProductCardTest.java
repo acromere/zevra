@@ -206,9 +206,9 @@ class ProductCardTest {
 		card.setContributors( contributors );
 
 		Rebrand rebrand = new Rebrand();
-		rebrand.setSplashScreenBackgroundClass( String.class );
+		rebrand.setSplashScreenBackgroundClass( String.class.getName() );
 		rebrand.setSplashScreenTitleFontSize( 0.0 );
-		rebrand.setModuleClasses( List.of( String.class, Integer.class ) );
+		rebrand.setModuleClasses( List.of( String.class.getName(), Integer.class.getName() ) );
 		card.setRebrand( rebrand );
 
 		ObjectMapper mapper = new ObjectMapper();
