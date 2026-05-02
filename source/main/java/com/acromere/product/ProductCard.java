@@ -34,10 +34,12 @@ import java.util.*;
  * can load more slowly.
  * </p>
  */
+@Getter
+@Setter
+@Accessors( chain = true )
 @CustomLog
 @JsonInclude( JsonInclude.Include.NON_NULL )
 @JsonIgnoreProperties( ignoreUnknown = true )
-@Accessors( chain = true )
 public class ProductCard extends BaseCard {
 
 	private static final String PRODUCT_CARD = "META-INF/product.card";
@@ -46,96 +48,61 @@ public class ProductCard extends BaseCard {
 
 	@Getter
 	@JsonIgnore
+	@Accessors( chain = true )
 	private String productKey;
 
-	@Getter
 	private String group;
 
-	@Getter
 	private String artifact;
 
-	@Getter
 	private String version;
 
-	@Getter
 	private String timestamp;
 
-	@Getter
 	private String packaging;
 
-	@Getter
 	private String packagingVersion;
 
-	@Getter
 	@JsonIgnore
 	private Release release;
 
-	@Getter
 	private List<String> icons;
 
-	@Getter
-	@Setter
 	private String name;
 
-	@Getter
-	@Setter
 	private String provider;
 
-	@Getter
-	@Setter
 	private String providerUrl;
 
-	@Getter
-	@Setter
 	private int inception;
 
-	@Getter
-	@Setter
 	private String summary;
 
-	@Getter
-	@Setter
 	private String description;
 
-	@Getter
-	@Setter
 	private String copyrightSummary;
 
-	@Getter
-	@Setter
 	private String licenseSummary;
 
-	@Getter
-	@Setter
 	@JsonIgnore
 	private String productUri;
 
-	@Getter
-	@Setter
 	private String javaVersion;
 
-	@Getter
-	@Setter
 	private Path installFolder;
 
-	@Getter
-	@Setter
 	private List<Maintainer> maintainers;
 
-	@Getter
-	@Setter
 	private List<Contributor> contributors;
 
-	@Getter
-	@Setter
+	private Rebrand rebrand;
+
+	// --- For program use only ---
+
 	private boolean enabled;
 
-	@Getter
-	@Setter
 	private boolean removable;
 
-	@Getter
-	@Setter
 	@JsonIgnore
 	private RepoCard repo;
 
@@ -168,7 +135,7 @@ public class ProductCard extends BaseCard {
 	 * A JDK-linked environment is identified by the absence of the "jdk.module.path" system property.
 	 *
 	 * @return {@code true} if running in a JDK-linked environment
-	 *         {@code false} otherwise.
+	 * {@code false} otherwise.
 	 */
 	public static boolean isJLinked() {
 		return System.getProperty( "jdk.module.path" ) == null;
@@ -203,11 +170,11 @@ public class ProductCard extends BaseCard {
 		 */
 		Path rebrandInfoFile = getProgramHome().resolve( REBRAND_CARD );
 		if( Files.exists( rebrandInfoFile ) ) {
-			try ( InputStream infoInput = new FileInputStream( rebrandInfoFile.toFile() ) ) {
+			try( InputStream infoInput = new FileInputStream( rebrandInfoFile.toFile() ) ) {
 				return fromJson( infoInput );
 			}
 		} else {
-			try ( InputStream infoInput = clazz.getResourceAsStream( "/" + PRODUCT_CARD ) ) {
+			try( InputStream infoInput = clazz.getResourceAsStream( "/" + PRODUCT_CARD ) ) {
 				return fromJson( infoInput );
 			}
 		}
@@ -246,13 +213,15 @@ public class ProductCard extends BaseCard {
 
 		this.javaVersion = card.javaVersion;
 
-		this.maintainers = card.maintainers;
-		this.contributors = card.contributors;
+		if( card.maintainers != null ) this.maintainers = new ArrayList<>( card.maintainers );
+		if( card.contributors != null ) this.contributors = new ArrayList<>( card.contributors );
+
+		this.rebrand = card.rebrand;
 
 		this.enabled = card.enabled;
 		this.removable = card.removable;
 
-		this.resources = card.resources;
+		if( card.resources != null ) this.resources = new HashMap<>( card.resources );
 
 		this.updateKey();
 		this.updateRelease();

@@ -205,6 +205,12 @@ class ProductCardTest {
 		card.setMaintainers( maintainers );
 		card.setContributors( contributors );
 
+		Rebrand rebrand = new Rebrand();
+		rebrand.setSplashScreenBackgroundClass( String.class );
+		rebrand.setSplashScreenTitleFontSize( 0.0 );
+		rebrand.setModuleClasses( List.of( String.class, Integer.class ) );
+		card.setRebrand( rebrand );
+
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure( SerializationFeature.INDENT_OUTPUT, true );
 		String store = mapper.writeValueAsString( card );
@@ -254,6 +260,13 @@ class ProductCardTest {
 		//assertThat( reader.readLine() ).isEqualTo( "    \"organizationUrl\" : null," );
 		assertThat( reader.readLine() ).isEqualTo( "    \"roles\" : [ \"Philosopher\" ]" );
 		assertThat( reader.readLine() ).isEqualTo( "  } ]," );
+
+		assertThat( reader.readLine() ).isEqualTo( "  \"rebrand\" : {" );
+		assertThat( reader.readLine() ).isEqualTo( "    \"splashScreenBackgroundClass\" : \"java.lang.String\"," );
+		assertThat( reader.readLine() ).isEqualTo( "    \"splashScreenTitleFontSize\" : 0.0," );
+		assertThat( reader.readLine() ).isEqualTo( "    \"moduleClasses\" : [ \"java.lang.String\", \"java.lang.Integer\" ]" );
+		assertThat( reader.readLine() ).isEqualTo( "  }," );
+
 		assertThat( reader.readLine() ).isEqualTo( "  \"enabled\" : false," );
 		assertThat( reader.readLine() ).isEqualTo( "  \"removable\" : false" );
 		assertThat( reader.readLine() ).isEqualTo( "}" );
