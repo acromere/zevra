@@ -16,8 +16,6 @@ module com.acromere.zevra {
 	requires me.xdrop.fuzzywuzzy;
 	requires org.jsoup;
 
-	opens com.acromere.util to com.fasterxml.jackson.databind;
-
 	exports com.acromere.annotation;
 	exports com.acromere.data;
 	exports com.acromere.event;
@@ -31,6 +29,8 @@ module com.acromere.zevra {
 	exports com.acromere.test;
 	exports com.acromere.transaction;
 	exports com.acromere.util;
+
+	opens com.acromere.util to com.fasterxml.jackson.databind;
 
 	uses LoggingProvider;
 
