@@ -32,6 +32,9 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
       - name: Fetch sources
         uses: actions/checkout@v6
@@ -74,13 +77,61 @@ jobs:
         run: |
           mvn ${{env.MAVEN_PARMS}} test
 
+      - name: Upload Artifacts for Next Steps
+        uses: actions/upload-artifact@v6
+        with:
+          name: build
+          path: target
+
   publish:
     needs: build
     name: Maven Publish
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: read
     if: github.ref == 'refs/heads/main' && github.actor != 'dependabot[bot]'
     steps:
+      - name: Fetch sources
+        uses: actions/checkout@v6
+
+      - name: Fetch CI/CD resources
+        uses: actions/checkout@v6
+        with:
+          repository: acromere/canoe
+          path: .github
+
+      - name: Configuration
+        shell: bash
+        run: |
+          source .github/config.sh
+
+      # Required to render the product icon
+      - name: Set up Virtual Display
+        run: |
+          Xvfb ${{env.DISPLAY}} ${{env.XVFB_PARMS}} &
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: ${{env.JAVA_DISTRO}}
+          java-version: ${{env.JAVA_VERSION}}
+
+      - name: Maven Repository Cache
+        uses: actions/cache@v5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: build
+          path: target
+
       - name: Publish Artifacts
         run: |
           mvn ${{env.MAVEN_PARMS}} deploy -Dmaven.test.skip=true
@@ -98,6 +149,9 @@ jobs:
     needs: publish
     name: Trigger Dependent Builds
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
     timeout-minutes: 15
     if: github.ref == 'refs/heads/main' && github.actor != 'dependabot[bot]'
     steps:
