@@ -360,6 +360,7 @@ public class FileUtil {
 
 	public static void unzip( Path source, Path target, LongConsumer progressCallback ) throws IOException {
 		Files.createDirectories( target );
+		Path normalizedTarget = target.toAbsolutePath().normalize();
 
 		ZipEntry entry;
 		try( ZipInputStream zip = new ZipInputStream( new FileInputStream( source.toFile() ) ) ) {
@@ -367,7 +368,10 @@ public class FileUtil {
 				String path = sanitize( entry.getName() );
 				if( TextUtil.isEmpty( path ) ) continue;
 
-				Path file = target.resolve( path );
+				Path file = normalizedTarget.resolve( path ).normalize();
+				if( !file.startsWith( normalizedTarget ) ) {
+					throw new IOException( "Bad zip entry path: " + entry.getName() );
+				}
 
 				if( path.endsWith( "/" ) ) {
 					Files.createDirectories( file );
