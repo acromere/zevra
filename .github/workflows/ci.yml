@@ -74,15 +74,18 @@ jobs:
         run: |
           mvn ${{env.MAVEN_PARMS}} test
 
-      - name: Deploy Artifacts
+  publish:
+    needs: build
+    name: Maven Publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.ref == 'refs/heads/main' && github.actor != 'dependabot[bot]'
+    steps:
+      - name: Publish Artifacts
         run: |
           mvn ${{env.MAVEN_PARMS}} deploy -Dmaven.test.skip=true
 
-      - name: Trigger Dependent Builds
-        run: |
-          curl -XPOST -u "${{secrets.ACM_CI_USERNAME}}:${{secrets.ACM_CI_PASSWORD}}" -H "Accept: application/vnd.github.v3+json" -H "Content-Type: application/json" https://api.github.com/repos/acromere/zerra/actions/workflows/ci.yml/dispatches --data '{"ref": "main"}'
-
-      - name: Deploy JavaDoc
+      - name: Publish JavaDoc
         run: |
           ssh -t ${{env.ACM_XENON_REPO_USERNAME}}@acromere.com "mkdir -p ${{env.JAVADOC_DEPLOY_PATH}};"
           if [ $? -ne 0 ]; then exit 1; fi
@@ -90,3 +93,16 @@ jobs:
           if [ $? -ne 0 ]; then exit 1; fi
           ssh -t ${{env.ACM_XENON_REPO_USERNAME}}@acromere.com "mkdir -p ${{env.JAVADOC_TARGET_PATH}};rm -rf ${{env.JAVADOC_TARGET_PATH}}/*;unzip -o ${{env.JAVADOC_DEPLOY_PATH}}/javadoc.jar -d ${{env.JAVADOC_TARGET_PATH}}"
           if [ $? -ne 0 ]; then exit 1; fi
+
+  trigger:
+    needs: publish
+    name: Trigger Dependent Builds
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.ref == 'refs/heads/main' && github.actor != 'dependabot[bot]'
+    steps:
+      - name: Trigger Dependent Builds
+        if: github.ref == 'refs/heads/main' && github.actor != 'dependabot[bot]'
+        run: |
+          curl -XPOST -u "${{secrets.ACM_CI_USERNAME}}:${{secrets.ACM_CI_PASSWORD}}" -H "Accept: application/vnd.github.v3+json" -H "Content-Type: application/json" https://api.github.com/repos/acromere/zerra/actions/workflows/ci.yml/dispatches --data '{"ref": "main"}'
+
