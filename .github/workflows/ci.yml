@@ -150,7 +150,7 @@ jobs:
     name: Trigger Dependent Builds
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pull-requests: read
     timeout-minutes: 15
     if: github.ref == 'refs/heads/main' && github.actor != 'dependabot[bot]'
