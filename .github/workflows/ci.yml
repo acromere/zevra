@@ -150,9 +150,9 @@ jobs:
     timeout-minutes: 5
     if: github.ref == 'refs/heads/main' && github.actor != 'dependabot[bot]'
     steps:
-      - name: Workflow Dispatch
-        uses: benc-uk/workflow-dispatch@v1
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v4
         with:
-          repo: acromere/zerra
-          workflow: ci.yml
+          repository: acromere/zerra
+          event-type: dependency-trigger
           token: ${{ secrets.ACM_CI_TOKEN }}
