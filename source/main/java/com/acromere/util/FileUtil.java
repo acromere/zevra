@@ -659,6 +659,7 @@ public class FileUtil {
 
 		try( WatchService watcher = FileSystems.getDefault().newWatchService() ) {
 			path.getParent().register( watcher, java.nio.file.StandardWatchEventKinds.ENTRY_CREATE );
+			if( Files.exists( path ) ) return;
 			WatchKey key;
 			long checkDuration = 0;
 			while( checkDuration < maxDuration ) {
