@@ -15,14 +15,8 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class DelayedAction {
 
-	/**
-	 * Action will be triggered at most this often.
-	 */
 	private static final long DEFAULT_MIN_TRIGGER_LIMIT = 100;
 
-	/**
-	 * Action will be triggered at least this often.
-	 */
 	private static final long DEFAULT_MAX_TRIGGER_LIMIT = 500;
 
 	private static final Timer timer = new Timer( DelayedAction.class.getSimpleName() + "-Timer", true );
@@ -41,10 +35,18 @@ public class DelayedAction {
 	@Getter
 	private final Runnable action;
 
+	/**
+	 * Action triggered no more than this limit, regardless of how often
+	 * {@link #schedule} is called.
+	 */
 	@Setter
 	@Getter
 	private long minTriggerLimit = DEFAULT_MIN_TRIGGER_LIMIT;
 
+	/**
+	 * Action will be triggered at least this often, regardless of how little
+	 * {@link #schedule} is called.
+	 */
 	@Setter
 	@Getter
 	private long maxTriggerLimit = DEFAULT_MAX_TRIGGER_LIMIT;
@@ -106,7 +108,7 @@ public class DelayedAction {
 
 			//System.out.println( "da=" +(dirtyTime - actionTime) + " ua=" + (updateTime - actionTime));
 
-			// If there are no changes since the last action time just return
+			// If there are no changes since the last action time, just return
 			if( !immediate && !changesSinceLastAction ) return;
 
 			long nextTime = Math.min( minNext, maxNext );
@@ -114,7 +116,7 @@ public class DelayedAction {
 
 			//System.out.println( "task=" + task + " taskTime=" + (taskTime - actionTime) + " nextTime=" + (nextTime - actionTime) );
 
-			// If the existing task time is already set to the next time just return
+			// If the existing task time is already set to the next time, just return
 			if( !immediate && (taskTime == nextTime) ) return;
 
 			// Cancel the existing task and schedule a new one
