@@ -9,6 +9,12 @@ import java.lang.annotation.*;
 @Inherited
 public @interface Note {
 
+	/**
+	 * Indicates that any thread may safely access this method and assumptions
+	 * about thread-safe execution will be managed by the method implementation.
+	 */
+	String THREAD_SAFE = "any-thread";
+
 	String value();
 
 }
