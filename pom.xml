@@ -51,7 +51,7 @@
 		<!-- Runtime dependencies -->
 		<jackson.version>2.21.3</jackson.version>
 		<!-- Annotations caused a mismatch with version 2.20.0 -->
-		<jackson.annotations.version>2.21</jackson.annotations.version>
+		<jackson.annotations.version>2.22</jackson.annotations.version>
 		<fuzzywuzzy.version>1.4.0</fuzzywuzzy.version>
 		<jsoup.version>1.22.2</jsoup.version>
 		<google.findbugs.version>3.0.2</google.findbugs.version>
