@@ -9,6 +9,10 @@ import java.lang.annotation.*;
 @Inherited
 public @interface Note {
 
+	String FX_THREAD = "fx-thread";
+
+	String TASK_THREAD = "task-thread";
+
 	/**
 	 * Indicates that any thread may safely access this method and assumptions
 	 * about thread-safe execution will be managed by the method implementation.
