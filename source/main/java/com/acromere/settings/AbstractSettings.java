@@ -342,7 +342,7 @@ public abstract class AbstractSettings implements Settings {
 	}
 
 	private void dispatch( SettingsEvent event ) {
-		valueChangeHandlers.getOrDefault( event.getKey(), Set.of() ).forEach( h -> h.handle( event ) );
+		valueChangeHandlers.getOrDefault( event.getKey(), new HashSet<>() ).forEach( h -> h.handle( event ) );
 	}
 
 	private interface OutboundConverter {
