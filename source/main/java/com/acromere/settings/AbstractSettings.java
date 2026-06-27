@@ -329,7 +329,7 @@ public abstract class AbstractSettings implements Settings {
 
 	@Override
 	public void unregister( String key, EventHandler<? extends SettingsEvent> handler ) {
-		valueChangeHandlers.getOrDefault( key, Set.of() ).remove( handler );
+		valueChangeHandlers.getOrDefault( key, new HashSet<>() ).remove( handler );
 	}
 
 	@Override
