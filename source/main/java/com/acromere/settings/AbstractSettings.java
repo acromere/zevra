@@ -329,7 +329,7 @@ public abstract class AbstractSettings implements Settings {
 
 	@Override
 	public void unregister( String key, EventHandler<? extends SettingsEvent> handler ) {
-		valueChangeHandlers.getOrDefault( key, new HashSet<>() ).remove( handler );
+		valueChangeHandlers.computeIfAbsent( key, ( k ) -> new CopyOnWriteArraySet<>() ).remove( handler );
 	}
 
 	@Override
@@ -342,7 +342,7 @@ public abstract class AbstractSettings implements Settings {
 	}
 
 	private void dispatch( SettingsEvent event ) {
-		valueChangeHandlers.getOrDefault( event.getKey(), new HashSet<>() ).forEach( h -> h.handle( event ) );
+		valueChangeHandlers.computeIfAbsent( event.getKey(), ( k ) -> new CopyOnWriteArraySet<>() ).forEach( h -> h.handle( event ) );
 	}
 
 	private interface OutboundConverter {
