@@ -9,8 +9,14 @@ import java.lang.annotation.*;
 @Inherited
 public @interface Note {
 
+	/**
+	 * This method is intended to be called only by the FX thread.
+	 */
 	String FX_THREAD = "fx-thread";
 
+	/**
+	 * This method is intended to be called only by a task thread.
+	 */
 	String TASK_THREAD = "task-thread";
 
 	/**
@@ -18,6 +24,11 @@ public @interface Note {
 	 * about thread-safe execution will be managed by the method implementation.
 	 */
 	String THREAD_SAFE = "any-thread";
+
+	/**
+	 * This field or method is intended to be used only for testing purposes.
+	 */
+	String TESTING_ONLY = "testing-only";
 
 	String value();
 
