@@ -41,32 +41,32 @@ import java.util.Set;
  * Also note that:
  * <ul>
  * <li>No path name contains multiple consecutive slash characters.</li>
- * <li>No path name with the exception of the root's absolute path name ends
- * in the slash character.</li>
+ * <li>No path name except the root's absolute path name ends in the slash
+ * character.</li>
  * <li>Any string that conforms to these two rules is a valid path name.</li>
  * </ul>
  * <p>
- * All of the methods that modify settings may operate asynchronously; meaning
+ * All the methods that modify settings may operate asynchronously, meaning
  * they may return immediately, and changes will eventually propagate to the
- * backing store with an implementation specific delay. The flush method may be
+ * backing store with an implementation-specific delay. The flush method may be
  * used to synchronously force updates to the backing store. Normal termination
- * of the Java Virtual Machine will not result in the loss of pending updates,
+ * of the Java Virtual Machine will not result in the loss of pending updates;
  * therefore, an explicit flush invocation is not required upon termination to
  * ensure that pending updates are made persistent.
  * <p>
  * Settings keys are always strings. There are four categories of supported
  * value types: simple (boolean, character, byte, short, integer, long, float
- * double and string), Java beans, arrays and collections. Arrays and
+ * double, and string), Java beans, arrays, and collections. Arrays and
  * collections are expected to contain beans. All values are stored in a
- * marshalled state using an implementation specific strategy. Typical
+ * marshaled state using an implementation-specific strategy. Typical
  * strategies are JSON and XML.
  * <p>
  * The get method will always return a string. If the original stored value was
- * simple then the returned value will simply be the string representation of
- * that value. If the original value was a bean, array or collection then the
- * marshalled string will be returned. In order to return an unmarshalled value
- * the expanded get with a result type must be used. This method can also be
- * used to convert between simple types like converting a string to a double.
+ * simple, then the returned value will simply be the string representation of
+ * that value. If the original value was a bean, array, or collection, then the
+ * marshaled string will be returned. To return an unmarshalled value, the
+ * expanded get with a result type must be used. This method can also be used to
+ * convert between simple types like converting a string to a double.
  */
 public interface Settings {
 
@@ -93,9 +93,13 @@ public interface Settings {
 	boolean nodeExists( String path );
 
 	/**
-	 * Get a settings object for the specified path. If the path starts with the separator character then the path is absolute. If the path does not start with the separator character then the path is relative to this settings node.
+	 * Get a settings object for the specified path. If the path starts with the
+	 * separator character, then the path is absolute. If the path does not start
+	 * with the separator character, then the path is relative to this settings
+	 * node.
 	 * <p>
-	 * Multiple requests from the same settings tree using the same path return the same settings object.
+	 * Multiple requests from the same settings tree using the same path return
+	 * the same settings object.
 	 *
 	 * @param path The requested path
 	 * @return The settings object for the path
@@ -103,7 +107,10 @@ public interface Settings {
 	Settings getNode( String path );
 
 	/**
-	 * Get a settings object for the specified parent path and name. If the path starts with the separator character then the path is absolute. If the path does not start with the separator character then the path is relative to this settings
+	 * Get a settings object for the specified parent path and name. If the path
+	 * starts with the separator character, then the path is absolute. If the path
+	 * does not start with the separator character, then the path is relative to
+	 * this settings
 	 * node.
 	 * <p>
 	 * Multiple requests from the same settings tree using the same path return the same settings object.
@@ -146,7 +153,8 @@ public interface Settings {
 	boolean exists( String key );
 
 	/**
-	 * Shortcut to calling get( key, String.class ). Calling this method for non-simple values is undefined.
+	 * Shortcut to calling {@link #get(String, Class)}. Calling this method for
+	 * non-simple values is undefined.
 	 *
 	 * @param key The value key
 	 * @return The value as a string
@@ -156,7 +164,8 @@ public interface Settings {
 	}
 
 	/**
-	 * Shortcut to calling get( key, String.class ). Calling this method for non-simple values is undefined.
+	 * Shortcut to calling {@link #get(String, Class)}. Calling this method for
+	 * non-simple values is undefined.
 	 *
 	 * @param key          The value key
 	 * @param defaultValue The default value if the setting value is null
@@ -192,7 +201,8 @@ public interface Settings {
 	}
 
 	/**
-	 * Get a value from the settings node. This method is needed for specifying a return type of a collection using generic specification.
+	 * Get a value from the settings node. This method is needed for specifying
+	 * the return-type of a collection using generic specification.
 	 * <p>
 	 * Example:
 	 * <pre>
@@ -228,7 +238,7 @@ public interface Settings {
 	Settings set( String key, Object value );
 
 	/**
-	 * Copy the values from the specified settings to this settings.
+	 * Copy the values from the specified settings object to this settings object.
 	 *
 	 * @param settings The setting from which to get values
 	 * @return This settings object
@@ -243,7 +253,8 @@ public interface Settings {
 	Settings remove( String key );
 
 	/**
-	 * Flush the settings values. For settings implementations that store values this method should be used to store the values promptly.
+	 * Flush the settings values. For settings implementations that store values,
+	 * this method should be used to store the values promptly.
 	 */
 	Settings flush();
 
