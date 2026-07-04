@@ -438,6 +438,33 @@ public abstract class BaseSettingsTest {
 	}
 
 	@Test
+	void testBindWithDefault() {
+		// given
+		SettingsEventWatcher watcher = new SettingsEventWatcher();
+
+		// when
+		settings.bind( "a", Object.class, null, watcher );
+
+		// then
+		assertThat( watcher.getEvents().size() ).isEqualTo( 1 );
+		assertThat( watcher.getEvents().getFirst().getNewValue() ).isEqualTo( null );
+	}
+
+	@Test
+	void testBindWithValue() {
+		// given
+		settings.set( "a", "A" );
+		SettingsEventWatcher watcher = new SettingsEventWatcher();
+
+		// when
+		settings.bind( "a", null, watcher );
+
+		// then
+		assertThat( watcher.getEvents().size() ).isEqualTo( 1 );
+		assertThat( watcher.getEvents().getFirst().getNewValue() ).isEqualTo( "A" );
+	}
+
+	@Test
 	void testShallowCopyFrom() {
 		Settings source = new MapSettings();
 		source.set( "a", "A" );

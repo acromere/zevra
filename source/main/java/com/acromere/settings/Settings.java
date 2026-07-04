@@ -266,6 +266,20 @@ public interface Settings {
 
 	void unregister( String key, EventHandler<? extends SettingsEvent> handler );
 
+	default <T> void bind( String key, T defaultValue, EventHandler<SettingsEvent> handler ) {
+		handler.handle( new SettingsEvent( this, SettingsEvent.CHANGED, getPath(), key, get( key, defaultValue ) ) );
+		register( key, handler );
+	}
+
+	default <T> void bind( String key, Class<T> type, T defaultValue, EventHandler<SettingsEvent> handler ) {
+		handler.handle( new SettingsEvent( this, SettingsEvent.CHANGED, getPath(), key, get( key, type, defaultValue ) ) );
+		register( key, handler );
+	}
+
+	default void unbind( String key, EventHandler<? extends SettingsEvent> handler ) {
+		unregister( key, handler );
+	}
+
 	Map<EventType<? extends Event>, Collection<? extends EventHandler<? extends Event>>> getEventHandlers();
 
 	@SuppressWarnings( "unused" )
