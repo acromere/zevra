@@ -13,13 +13,23 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A node in a hierarchical collection of settings data. This class allows programs to store and retrieve settings data. The data are stored according to the implementation of each subclass. Typical implementations include in-memory maps,
- * file systems and databases. The user of this class should choose an implementation according the needs of the program.
+ * A node in a hierarchical collection of settings data. This class allows
+ * programs to store and retrieve settings data. The data is stored according to
+ * the implementation of each subclass. Typical implementations include
+ * in-memory maps, file systems, and databases. The user of this class should
+ * choose an implementation according to the needs of the program.
  * <p>
- * Nodes in a settings tree are named in a fashion similar to files in a hierarchical file system. Every node in a settings tree has a unique absolute path and a name (which does not need to be unique). The root node has the name of the
- * empty string (""). Every other node has a name, specified at the time it is created. The only restrictions on the name are that it cannot be empty and it cannot contain the slash character ('/').
+ * Nodes in a settings tree are named in a fashion similar to files in a
+ * hierarchical file system. Every node in a settings tree has a unique absolute
+ * path and a name (which does not need to be unique). The root node has the
+ * name of the empty string (""). Every other node has a name, specified at the
+ * time it is created. The only restrictions on the name are that it cannot be
+ * empty, and it cannot contain the slash character ('/').
  * <p>
- * A node path name relative to its ancestor is simply the string that must be appended to the ancestor's absolute path name in order to form the node's absolute path name, with the initial slash character,if present, removed. Note that:
+ * A node path name relative to its ancestor is simply the string that must be
+ * appended to the ancestor's absolute path name to form the node's absolute
+ * path name, with the initial slash character, if present, removed.
+ * Note that:
  * <ul>
  * <li>No relative path names begin with the slash character.</li>
  * <li>Every node's path name relative to itself is the empty string.</li>
@@ -265,6 +275,20 @@ public interface Settings {
 	void register( String key, EventHandler<SettingsEvent> handler );
 
 	void unregister( String key, EventHandler<? extends SettingsEvent> handler );
+
+	default <T> void bind( String key, T defaultValue, EventHandler<SettingsEvent> handler ) {
+		handler.handle( new SettingsEvent( this, SettingsEvent.CHANGED, getPath(), key, get( key, defaultValue ) ) );
+		register( key, handler );
+	}
+
+	default <T> void bind( String key, Class<T> type, T defaultValue, EventHandler<SettingsEvent> handler ) {
+		handler.handle( new SettingsEvent( this, SettingsEvent.CHANGED, getPath(), key, get( key, type, defaultValue ) ) );
+		register( key, handler );
+	}
+
+	default void unbind( String key, EventHandler<? extends SettingsEvent> handler ) {
+		unregister( key, handler );
+	}
 
 	Map<EventType<? extends Event>, Collection<? extends EventHandler<? extends Event>>> getEventHandlers();
 

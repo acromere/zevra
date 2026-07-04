@@ -60,7 +60,7 @@ public abstract class BaseSettingsTest {
 		assertThat( peer ).isInstanceOf( settings.getClass() );
 		assertThat( peer.getPath() ).isEqualTo( "/peer" );
 
-		// Is the settings object viable
+		// Is the settings object viable?
 		peer.set( "a", "A" );
 		peer.flush();
 		assertThat( peer.get( "a" ) ).isEqualTo( "A" );
@@ -82,7 +82,7 @@ public abstract class BaseSettingsTest {
 		assertThat( grandchildSettings ).isInstanceOf( settings.getClass() );
 		assertThat( grandchildSettings.getPath() ).isEqualTo( "/child/grand" );
 
-		// Is the settings object viable
+		// Is the settings object viable?
 		grandchildSettings.set( "a", "A" );
 		grandchildSettings.flush();
 		assertThat( grandchildSettings.get( "a" ) ).isEqualTo( "A" );
@@ -416,15 +416,15 @@ public abstract class BaseSettingsTest {
 		settings.register( SettingsEvent.ANY, watcher );
 		assertThat( watcher.getEvents().size() ).isEqualTo( 0 );
 
-		// The value does not change so there should not be an extra event
+		// The value does not change, so there should not be an extra event
 		settings.set( "a", null );
 		assertThat( watcher.getEvents().size() ).isEqualTo( 0 );
 
 		settings.set( "a", "A" );
-		SettingsEventAssert.assertThat( watcher.getEvents().get( 0 ) ).hasValues( settings, SettingsEvent.CHANGED, settings.getPath(), "a", null, "A" );
+		SettingsEventAssert.assertThat( watcher.getEvents().getFirst() ).hasValues( settings, SettingsEvent.CHANGED, settings.getPath(), "a", null, "A" );
 		assertThat( watcher.getEvents().size() ).isEqualTo( 1 );
 
-		// The value does not change so there should not be an extra event
+		// The value does not change, so there should not be an extra event
 		settings.set( "a", "A" );
 		assertThat( watcher.getEvents().size() ).isEqualTo( 1 );
 
@@ -432,9 +432,36 @@ public abstract class BaseSettingsTest {
 		SettingsEventAssert.assertThat( watcher.getEvents().get( 1 ) ).hasValues( settings, SettingsEvent.CHANGED, settings.getPath(), "a", null, null );
 		assertThat( watcher.getEvents().size() ).isEqualTo( 2 );
 
-		// The value does not change so there should not be an extra event
+		// The value does not change, so there should not be an extra event
 		settings.set( "a", null );
 		assertThat( watcher.getEvents().size() ).isEqualTo( 2 );
+	}
+
+	@Test
+	void testBindWithDefault() {
+		// given
+		SettingsEventWatcher watcher = new SettingsEventWatcher();
+
+		// when
+		settings.bind( "a", Object.class, null, watcher );
+
+		// then
+		assertThat( watcher.getEvents().size() ).isEqualTo( 1 );
+		assertThat( watcher.getEvents().getFirst().getNewValue() ).isEqualTo( null );
+	}
+
+	@Test
+	void testBindWithValue() {
+		// given
+		settings.set( "a", "A" );
+		SettingsEventWatcher watcher = new SettingsEventWatcher();
+
+		// when
+		settings.bind( "a", null, watcher );
+
+		// then
+		assertThat( watcher.getEvents().size() ).isEqualTo( 1 );
+		assertThat( watcher.getEvents().getFirst().getNewValue() ).isEqualTo( "A" );
 	}
 
 	@Test
