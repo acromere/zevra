@@ -110,6 +110,7 @@ public class MapSettings extends AbstractSettings {
 	@Override
 	public Settings delete() {
 		root.settings.remove( getPath() );
+		values.clear();
 		return this;
 	}
 
