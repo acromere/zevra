@@ -169,7 +169,7 @@ public class OperatingSystem {
 		if( override == null ) override = System.getenv( PROCESS_PRIVILEGE_KEY );
 		if( ELEVATED_PRIVILEGE_VALUE.equals( override ) ) elevated = Boolean.TRUE;
 		if( NORMAL_PRIVILEGE_VALUE.equals( override ) ) elevated = Boolean.FALSE;
-		return elevated == null ? isAdminUser() : elevated;
+		return elevated != null && elevated;
 	}
 
 	/**
