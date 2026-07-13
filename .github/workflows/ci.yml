@@ -38,10 +38,10 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Fetch sources
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Fetch CI/CD resources
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: acromere/canoe
           path: .github
@@ -92,10 +92,10 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.actor != 'dependabot[bot]'
     steps:
       - name: Fetch sources
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Fetch CI/CD resources
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: acromere/canoe
           path: .github
