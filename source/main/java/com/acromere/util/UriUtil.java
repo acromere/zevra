@@ -83,7 +83,7 @@ public final class UriUtil {
 				return new URI( uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(), uri.getPath(), uri.getQuery(), null );
 			}
 		} catch( URISyntaxException exception ) {
-			log.atSevere().withCause( exception ).log( "Error resolving asset URI: %s", uri );
+			log.atSevere().withCause( exception ).log( "Error resolving resource URI: %s", uri );
 		}
 
 		return null;
@@ -107,7 +107,7 @@ public final class UriUtil {
 				return new URI( uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(), uri.getPath(), null, null );
 			}
 		} catch( URISyntaxException exception ) {
-			log.atSevere().withCause( exception ).log( "Error resolving asset URI: %s", uri );
+			log.atSevere().withCause( exception ).log( "Error resolving resource URI: %s", uri );
 		}
 
 		return null;
