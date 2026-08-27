@@ -64,7 +64,7 @@ public interface Program extends ProgramProduct {
 	////
 	////	ToolManager getToolManager();
 	////
-	////	AssetManager getAssetManager();
+	////	ResourceManager getResourceManager();
 	////
 	////	ThemeManager getThemeManager();
 	////
