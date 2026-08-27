@@ -30,7 +30,7 @@ public class NonBlockingReader {
 	}
 
 	public String readLine( long time, TimeUnit unit ) throws IOException {
-		if( closed && lines.size() == 0 ) return null;
+		if( closed && lines.isEmpty() ) return null;
 		try {
 			return lines.poll( time, unit );
 		} catch( InterruptedException exception ) {
