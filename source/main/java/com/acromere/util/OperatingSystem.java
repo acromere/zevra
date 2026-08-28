@@ -165,6 +165,15 @@ public class OperatingSystem {
 	 * @return true if the process has elevated privileges.
 	 */
 	public static boolean isProcessElevated() {
+		return isProcessElevatedFlagSet() || isAdminUser();
+	}
+
+	/**
+	 * Determine if the process has the elevated privilege flag set.
+	 *
+	 * @return true if the process has the elevated privilege flag set.
+	 */
+	public static boolean isProcessElevatedFlagSet() {
 		String override = System.getProperty( PROCESS_PRIVILEGE_KEY );
 		if( override == null ) override = System.getenv( PROCESS_PRIVILEGE_KEY );
 		if( ELEVATED_PRIVILEGE_VALUE.equals( override ) ) elevated = Boolean.TRUE;

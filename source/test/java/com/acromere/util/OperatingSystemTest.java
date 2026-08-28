@@ -165,11 +165,11 @@ class OperatingSystemTest {
 		OperatingSystem.init( "Mac OS X", "ppc", "10", UNIX_USER_DATA, UNIX_SHARED_DATA );
 		OperatingSystem.clearProcessElevatedFlag();
 		System.setProperty( OperatingSystem.PROCESS_PRIVILEGE_KEY, OperatingSystem.NORMAL_PRIVILEGE_VALUE );
-		assertThat( OperatingSystem.isProcessElevated() ).isFalse();
+		assertThat( OperatingSystem.isProcessElevatedFlagSet() ).isFalse();
 
 		OperatingSystem.clearProcessElevatedFlag();
 		System.setProperty( OperatingSystem.PROCESS_PRIVILEGE_KEY, OperatingSystem.ELEVATED_PRIVILEGE_VALUE );
-		assertThat( OperatingSystem.isProcessElevated() ).isTrue();
+		assertThat( OperatingSystem.isProcessElevatedFlagSet() ).isTrue();
 	}
 
 	@Test
@@ -177,22 +177,22 @@ class OperatingSystemTest {
 		OperatingSystem.init( "Linux", "x86_64", "2.6.32_45", UNIX_USER_DATA, UNIX_SHARED_DATA );
 		OperatingSystem.clearProcessElevatedFlag();
 		System.setProperty( OperatingSystem.PROCESS_PRIVILEGE_KEY, OperatingSystem.NORMAL_PRIVILEGE_VALUE );
-		assertThat( OperatingSystem.isProcessElevated() ).isFalse();
+		assertThat( OperatingSystem.isProcessElevatedFlagSet() ).isFalse();
 
 		OperatingSystem.clearProcessElevatedFlag();
 		System.setProperty( OperatingSystem.PROCESS_PRIVILEGE_KEY, OperatingSystem.ELEVATED_PRIVILEGE_VALUE );
-		assertThat( OperatingSystem.isProcessElevated() ).isTrue();
+		assertThat( OperatingSystem.isProcessElevatedFlagSet() ).isTrue();
 	}
 
 	@Test
 	void testIsProcessElevatedWindows() {
 		OperatingSystem.init( "Windows 7", "x86", "6.1", WINDOWS_USER_DATA, WINDOWS_SHARED_DATA );
 		OperatingSystem.clearProcessElevatedFlag();
-		assertThat( OperatingSystem.isProcessElevated() ).isFalse();
+		assertThat( OperatingSystem.isProcessElevatedFlagSet() ).isFalse();
 
 		System.setProperty( OperatingSystem.PROCESS_PRIVILEGE_KEY, OperatingSystem.ELEVATED_PRIVILEGE_VALUE );
 		OperatingSystem.clearProcessElevatedFlag();
-		assertThat( OperatingSystem.isProcessElevated() ).isTrue();
+		assertThat( OperatingSystem.isProcessElevatedFlagSet() ).isTrue();
 	}
 
 	@Test
