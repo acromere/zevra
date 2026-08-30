@@ -2,10 +2,12 @@ package com.acromere.util;
 
 import lombok.CustomLog;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -13,19 +15,19 @@ import java.util.*;
 @CustomLog
 public class OperatingSystem {
 
+	public enum Arch {
+		X86,
+		X64,
+		PPC,
+		UNKNOWN
+	}
+
 	public enum Family {
 		LINUX,
 		MACOS,
 		WINDOWS,
 		UNIX,
 		OS2,
-		UNKNOWN
-	}
-
-	public enum Architecture {
-		X86,
-		X64,
-		PPC,
 		UNKNOWN
 	}
 
@@ -51,32 +53,43 @@ public class OperatingSystem {
 	public static final String ELEVATED_PRIVILEGE_VALUE = OperatingSystem.class.getName() + ":process-privilege-elevated";
 
 	@Getter
-	private static Architecture architecture;
+	@Setter
+	private static String name;
 
 	@Getter
+	@Setter
+	private static Arch arch;
+
+	@Getter
+	@Setter
 	private static Family family;
 
 	@Getter
+	@Setter
 	private static String version;
 
 	@Getter
-	private static String name;
-
-	private static String arch;
-
-	@Getter
+	@Setter
 	private static String desktop;
 
-	private static Boolean elevated;
+	@Getter
+	@Setter
+	private static Boolean adminUser;
 
 	@Getter
+	@Setter
+	private static Boolean elevatedFlag;
+
+	@Getter
+	@Setter
 	private static boolean fileSystemCaseSensitive;
 
+	@Getter
+	@Setter
 	private static Path userHomeFolder;
 
 	/**
-	 * -- GETTER --
-	 * Get the program data folder for the operating system. On Windows systems
+	 * The program data folder for the operating system. On Windows systems
 	 * this is the %APPDATA% location. On other systems this is $HOME.
 	 * <p>
 	 * Examples:
@@ -85,11 +98,11 @@ public class OperatingSystem {
 	 * <br/> Linux: /home/&lt;username&gt;
 	 */
 	@Getter
+	@Setter
 	private static Path userProgramDataFolder;
 
 	/**
-	 * -- GETTER --
-	 * Get the shared program data folder for the operating system. On Windows
+	 * The shared program data folder for the operating system. On Windows
 	 * systems this is the %ALLUSERSPROFILE% location. On Linux systems this is
 	 * /usr/local/share/data.
 	 * <p>
@@ -98,13 +111,11 @@ public class OperatingSystem {
 	 * Windows 7: C:/ProgramData/<br/> Linux: /usr/local/share/data/
 	 */
 	@Getter
+	@Setter
 	private static Path sharedProgramDataFolder;
 
 	private static final Map<UserFolder, Path> userFolderCache = new EnumMap<>( UserFolder.class );
 
-	/*
-	 * Initialize the class.
-	 */
 	static {
 		reset();
 	}
@@ -112,7 +123,6 @@ public class OperatingSystem {
 	public static String info() {
 		StringBuilder builder = new StringBuilder();
 		if( name != null ) builder.append( "name=" ).append( name );
-		if( arch != null ) builder.append( "arch=" ).append( arch );
 		if( version != null ) builder.append( "version=" ).append( version );
 		if( userHomeFolder != null ) builder.append( "userHome=" ).append( userHomeFolder );
 		if( userProgramDataFolder != null ) builder.append( "userData=" ).append( userProgramDataFolder );
@@ -122,7 +132,169 @@ public class OperatingSystem {
 	}
 
 	public static void reset() {
-		init( System.getProperty( "os.name" ), System.getProperty( "os.arch" ), null, null, null, null, null );
+		userFolderCache.clear();
+
+		// Set the OS name
+		name = System.getProperty( "os.name" );
+
+		// Determine the OS family
+		family = parseFamily( System.getProperty( "os.name" ) );
+
+		// Determine the OS architecture
+		arch = parseArch( System.getProperty( "os.arch" ) );
+
+		// Store the OS version
+		version = deriveVersion( family, System.getProperty( "os.version" ) );
+
+		// Case-sensitive file system
+		fileSystemCaseSensitive = deriveFileSystemCaseInsensitive();
+
+		// User home folder
+		userHomeFolder = deriveUserHomeFolder( System.getProperty( "user.home" ) );
+
+		// User program data folder
+		userProgramDataFolder = deriveUserDataFolder( family );
+
+		// Shared program data folder
+		sharedProgramDataFolder = deriveProgramDataFolder( family );
+
+		desktop = deriveDesktop( family );
+
+		// Execution workaround
+		System.setProperty( "jdk.lang.Process.launchMechanism", "FORK" );
+	}
+
+	private static String deriveVersion( Family family, String osVersion ) {
+		String version;
+
+		if( family == Family.WINDOWS ) {
+			version = getExtendedWindowsVersion();
+		} else {
+			version = osVersion;
+		}
+
+		return version;
+	}
+
+	static boolean deriveFileSystemCaseInsensitive() {
+		// The fileName must contain upper and lower letters
+		String fileName = "TestFileName";
+		Path path1 = Paths.get( fileName );
+		Path path2 = Paths.get( fileName.toLowerCase() );
+		try {
+			return Files.isSameFile( path1, path2 );
+		} catch( IOException ignored ) {
+			return true;
+		}
+	}
+
+	static Path deriveUserHomeFolder( String folder ) {
+		return Paths.get( folder );
+	}
+
+	static Path deriveUserDataFolder( Family family ) {
+		return switch( family ) {
+			case WINDOWS -> Paths.get( System.getenv( "appdata" ) );
+			case MACOS -> Paths.get( System.getProperty( "user.home" ), "/Library/Application Support" );
+			case LINUX -> Paths.get( System.getProperty( "user.home" ), ".config" );
+			default -> Paths.get( System.getProperty( "user.home" ) );
+		};
+	}
+
+	static Path deriveProgramDataFolder( Family family ) {
+		return switch( family ) {
+			case WINDOWS -> Paths.get( System.getenv( "allusersprofile" ) );
+			case MACOS -> Paths.get( "/Library/Application Support" );
+			case LINUX -> Paths.get( "/usr/local/share/data" );
+			default -> Paths.get( System.getProperty( "user.home" ) );
+		};
+	}
+
+	static String deriveDesktop( Family family ) {
+		switch( family ) {
+			case LINUX -> {
+				String xdgDesktop = System.getenv( "XDG_CURRENT_DESKTOP" );
+				return xdgDesktop == null ? "UNKNOWN" : xdgDesktop.toUpperCase();
+			}
+			case MACOS -> {
+				return "MAC";
+			}
+			case WINDOWS -> {
+				return "WINDOWS";
+			}
+			default -> {
+				return "UNKNOWN";
+			}
+		}
+	}
+
+	static void setup( String name, String arch, String version, String userData, String sharedData ) {
+		setup( name, arch, version, null, userData, sharedData );
+	}
+
+	static void setup( String name, String arch, String version, String userHome, String userData, String sharedData ) {
+		setup( name, arch, version, userHome, userData, sharedData, null );
+	}
+
+	/**
+	 * The init() method is intentionally package private, and separate from the
+	 * static initializer, so the initialization logic can be tested.
+	 *
+	 * @param osName The os name from System.getProperty("os.name")
+	 * @param osArch The os arch from System.getProperty("os.arch")
+	 * @param osVersion The os version from System.getProperty("os.version")
+	 * @param userHome The user home folder from System.getProperty("user.home")
+	 * @param userData The program user data folder
+	 * @param sharedData The program shared data folder
+	 * @param desktop The desktop environment
+	 */
+	static void setup( String osName, String osArch, String osVersion, String userHome, String userData, String sharedData, String desktop ) {
+		userFolderCache.clear();
+		setName( osName );
+		setArch( parseArch( osArch ) );
+		setFamily( parseFamily( osName ) );
+		setVersion( osVersion );
+		setUserHomeFolder( userHome == null ? deriveUserHomeFolder( System.getProperty( "user.home" ) ) : Paths.get( userHome ) );
+		setUserProgramDataFolder( userData == null ? deriveUserDataFolder( getFamily() ) : Paths.get( userData ) );
+		setSharedProgramDataFolder( sharedData == null ? deriveProgramDataFolder( getFamily() ) : Paths.get( sharedData ) );
+		setDesktop( desktop );
+	}
+
+	public static Arch parseArch( String osArch ) {
+		Arch arch;
+
+		// Determine the OS architecture
+		if( osArch.matches( "x86" ) || osArch.matches( "i.86" ) ) {
+			arch = Arch.X86;
+		} else if( "x86_64".equals( osArch ) || "amd64".equals( osArch ) ) {
+			arch = Arch.X64;
+		} else if( "ppc".equals( osArch ) || "PowerPC".equals( osArch ) ) {
+			arch = Arch.PPC;
+		} else {
+			arch = Arch.UNKNOWN;
+		}
+
+		return arch;
+	}
+
+	static Family parseFamily( String osName ) {
+		Family family;
+
+		if( osName.contains( "Linux" ) ) {
+			family = Family.LINUX;
+		} else if( osName.contains( "Windows" ) ) {
+			family = Family.WINDOWS;
+		} else if( osName.contains( "OS/2" ) ) {
+			family = Family.OS2;
+		} else if( osName.contains( "SunOS" ) | osName.contains( "Solaris" ) | osName.contains( "HP-UX" ) | osName.contains( "AIX" ) | osName.contains( "FreeBSD" ) ) {
+			family = Family.UNIX;
+		} else if( osName.contains( "Mac OS" ) ) {
+			family = Family.MACOS;
+		} else {
+			family = Family.UNKNOWN;
+		}
+
+		return family;
 	}
 
 	public static String getProvider() {
@@ -133,10 +305,6 @@ public class OperatingSystem {
 			case OS2 -> "IBM";
 			default -> "Unknown";
 		};
-	}
-
-	public static String getSystemArchitecture() {
-		return arch;
 	}
 
 	public static boolean isPosix() {
@@ -176,9 +344,9 @@ public class OperatingSystem {
 	public static boolean isProcessElevatedFlagSet() {
 		String override = System.getProperty( PROCESS_PRIVILEGE_KEY );
 		if( override == null ) override = System.getenv( PROCESS_PRIVILEGE_KEY );
-		if( ELEVATED_PRIVILEGE_VALUE.equals( override ) ) elevated = Boolean.TRUE;
-		if( NORMAL_PRIVILEGE_VALUE.equals( override ) ) elevated = Boolean.FALSE;
-		return elevated != null && elevated;
+		if( ELEVATED_PRIVILEGE_VALUE.equals( override ) ) elevatedFlag = Boolean.TRUE;
+		if( NORMAL_PRIVILEGE_VALUE.equals( override ) ) elevatedFlag = Boolean.FALSE;
+		return elevatedFlag != null && elevatedFlag;
 	}
 
 	/**
@@ -415,153 +583,11 @@ public class OperatingSystem {
 
 	@SuppressWarnings( "unused" )
 	public static String asString() {
-		return getName() + " " + getArchitecture() + " " + getVersion();
+		return getName() + " " + getArch() + " " + getVersion();
 	}
 
 	static void clearProcessElevatedFlag() {
-		elevated = null;
-	}
-
-	static void init( String name, String arch, String version, String userData, String sharedData ) {
-		init( name, arch, version, null, userData, sharedData );
-	}
-
-	static void init( String name, String arch, String version, String userHome, String userData, String sharedData ) {
-		init( name, arch, version, userHome, userData, sharedData, null );
-	}
-
-	/**
-	 * The init() method is intentionally package private, and separate from the
-	 * static initializer, so the initialization logic can be tested.
-	 *
-	 * @param name The os name from System.getProperty( "os.name" )
-	 * @param arch The os arch from System.getProperty( "os.arch" )
-	 * @param version The os version from System.getProperty( "os.version" )
-	 * @param userHome The user home folder from System.getProperty( "user.home" )
-	 * @param userData The program user data folder
-	 * @param sharedData The program shared data folder
-	 * @param desktop The desktop environment
-	 */
-	static void init( String name, String arch, String version, String userHome, String userData, String sharedData, String desktop ) {
-		OperatingSystem.name = name;
-		OperatingSystem.arch = arch;
-
-		userFolderCache.clear();
-
-		// Determine the OS family
-		if( name.contains( "Linux" ) ) {
-			family = Family.LINUX;
-		} else if( name.contains( "Windows" ) ) {
-			family = Family.WINDOWS;
-		} else if( name.contains( "OS/2" ) ) {
-			family = Family.OS2;
-		} else if( name.contains( "SunOS" ) | name.contains( "Solaris" ) | name.contains( "HP-UX" ) | name.contains( "AIX" ) | name.contains( "FreeBSD" ) ) {
-			family = Family.UNIX;
-		} else if( name.contains( "Mac OS" ) ) {
-			family = Family.MACOS;
-		} else {
-			family = Family.UNKNOWN;
-		}
-
-		// Determine the OS architecture
-		if( arch.matches( "x86" ) || arch.matches( "i.86" ) ) {
-			OperatingSystem.architecture = Architecture.X86;
-		} else if( "x86_64".equals( arch ) || "amd64".equals( arch ) ) {
-			OperatingSystem.architecture = Architecture.X64;
-		} else if( "ppc".equals( arch ) || "PowerPC".equals( arch ) ) {
-			OperatingSystem.architecture = Architecture.PPC;
-		} else {
-			OperatingSystem.architecture = Architecture.UNKNOWN;
-		}
-
-		// Store the version
-		if( version == null ) {
-			if( family == Family.WINDOWS ) {
-				OperatingSystem.version = getExtendedWindowsVersion();
-			} else {
-				OperatingSystem.version = System.getProperty( "os.version" );
-			}
-		} else {
-			OperatingSystem.version = version;
-		}
-
-		// Case-sensitive file system
-		File fileOne = new File( "TeStFiLe" );
-		File fileTwo = new File( "tEsTfIlE" );
-		fileSystemCaseSensitive = !fileOne.equals( fileTwo );
-
-		// User home folder
-		if( userHome == null ) {
-			userHomeFolder = Paths.get( System.getProperty( "user.home" ) );
-		} else {
-			userHomeFolder = Paths.get( userHome );
-		}
-
-		// User program data folder
-		if( userData == null ) {
-			switch( family ) {
-				case WINDOWS: {
-					userProgramDataFolder = Paths.get( System.getenv( "appdata" ) );
-					break;
-				}
-				case MACOS: {
-					userProgramDataFolder = Paths.get( System.getProperty( "user.home" ), "/Library/Application Support" );
-					break;
-				}
-				case LINUX: {
-					userProgramDataFolder = Paths.get( System.getProperty( "user.home" ), ".config" );
-					break;
-				}
-				default: {
-					sharedProgramDataFolder = Paths.get( System.getProperty( "user.home" ) );
-					break;
-				}
-			}
-		} else {
-			userProgramDataFolder = Paths.get( userData );
-		}
-
-		// Shared program data folder
-		if( sharedData == null ) {
-			switch( family ) {
-				case WINDOWS: {
-					sharedProgramDataFolder = Paths.get( System.getenv( "allusersprofile" ) );
-					break;
-				}
-				case MACOS: {
-					sharedProgramDataFolder = Paths.get( "/Library/Application Support" );
-					break;
-				}
-				case LINUX: {
-					sharedProgramDataFolder = Paths.get( "/usr/local/share/data" );
-					break;
-				}
-				default: {
-					sharedProgramDataFolder = Paths.get( System.getProperty( "user.home" ) );
-					break;
-				}
-			}
-		} else {
-			sharedProgramDataFolder = Paths.get( sharedData );
-		}
-
-		if( desktop == null ) {
-			if( isLinux() ) {
-				String xdgDesktop = System.getenv( "XDG_CURRENT_DESKTOP" );
-				OperatingSystem.desktop = xdgDesktop == null ? "UNKNOWN" : xdgDesktop.toUpperCase();
-			} else if( isMac() ) {
-				OperatingSystem.desktop = "MAC";
-			} else if( isWindows() ) {
-				OperatingSystem.desktop = "WINDOWS";
-			} else {
-				OperatingSystem.desktop = "UNKNOWN";
-			}
-		} else {
-			OperatingSystem.desktop = desktop;
-		}
-
-		// Execution workaround
-		if( isUnix() ) System.setProperty( "jdk.lang.Process.launchMechanism", "FORK" );
+		elevatedFlag = null;
 	}
 
 	private static String getExtendedWindowsVersion() {
@@ -589,10 +615,10 @@ public class OperatingSystem {
 	}
 
 	private static String getArchitectureFolder() {
-		return switch( architecture ) {
+		return switch( arch ) {
 			case X86 -> "x86";
 			case X64 -> "x86_64";
-			default -> architecture.name().toLowerCase();
+			default -> arch.name().toLowerCase();
 		};
 	}
 
