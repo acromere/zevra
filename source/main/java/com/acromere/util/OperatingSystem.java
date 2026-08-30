@@ -74,11 +74,11 @@ public class OperatingSystem {
 
 	@Getter
 	@Setter
-	private static Boolean adminUser;
+	private static boolean adminUser;
 
 	@Getter
 	@Setter
-	private static Boolean elevatedFlag;
+	private static boolean elevatedFlag;
 
 	@Getter
 	@Setter
@@ -160,72 +160,12 @@ public class OperatingSystem {
 
 		desktop = deriveDesktop( family );
 
+		adminUser = deriveAdminUser();
+
+		elevatedFlag = deriveProcessElevatedFlag();
+
 		// Execution workaround
 		System.setProperty( "jdk.lang.Process.launchMechanism", "FORK" );
-	}
-
-	private static String deriveVersion( Family family, String osVersion ) {
-		String version;
-
-		if( family == Family.WINDOWS ) {
-			version = getExtendedWindowsVersion();
-		} else {
-			version = osVersion;
-		}
-
-		return version;
-	}
-
-	static boolean deriveFileSystemCaseInsensitive() {
-		// The fileName must contain upper and lower letters
-		String fileName = "TestFileName";
-		Path path1 = Paths.get( fileName );
-		Path path2 = Paths.get( fileName.toLowerCase() );
-		try {
-			return Files.isSameFile( path1, path2 );
-		} catch( IOException ignored ) {
-			return true;
-		}
-	}
-
-	static Path deriveUserHomeFolder( String folder ) {
-		return Paths.get( folder );
-	}
-
-	static Path deriveUserDataFolder( Family family ) {
-		return switch( family ) {
-			case WINDOWS -> Paths.get( System.getenv( "appdata" ) );
-			case MACOS -> Paths.get( System.getProperty( "user.home" ), "/Library/Application Support" );
-			case LINUX -> Paths.get( System.getProperty( "user.home" ), ".config" );
-			default -> Paths.get( System.getProperty( "user.home" ) );
-		};
-	}
-
-	static Path deriveProgramDataFolder( Family family ) {
-		return switch( family ) {
-			case WINDOWS -> Paths.get( System.getenv( "allusersprofile" ) );
-			case MACOS -> Paths.get( "/Library/Application Support" );
-			case LINUX -> Paths.get( "/usr/local/share/data" );
-			default -> Paths.get( System.getProperty( "user.home" ) );
-		};
-	}
-
-	static String deriveDesktop( Family family ) {
-		switch( family ) {
-			case LINUX -> {
-				String xdgDesktop = System.getenv( "XDG_CURRENT_DESKTOP" );
-				return xdgDesktop == null ? "UNKNOWN" : xdgDesktop.toUpperCase();
-			}
-			case MACOS -> {
-				return "MAC";
-			}
-			case WINDOWS -> {
-				return "WINDOWS";
-			}
-			default -> {
-				return "UNKNOWN";
-			}
-		}
 	}
 
 	static void setup( String name, String arch, String version, String userData, String sharedData ) {
@@ -260,7 +200,7 @@ public class OperatingSystem {
 		setDesktop( desktop );
 	}
 
-	public static Arch parseArch( String osArch ) {
+	private static Arch parseArch( String osArch ) {
 		Arch arch;
 
 		// Determine the OS architecture
@@ -277,7 +217,7 @@ public class OperatingSystem {
 		return arch;
 	}
 
-	static Family parseFamily( String osName ) {
+	private static Family parseFamily( String osName ) {
 		Family family;
 
 		if( osName.contains( "Linux" ) ) {
@@ -295,6 +235,109 @@ public class OperatingSystem {
 		}
 
 		return family;
+	}
+
+	private static String deriveVersion( Family family, String osVersion ) {
+		String version;
+
+		if( family == Family.WINDOWS ) {
+			version = getExtendedWindowsVersion();
+		} else {
+			version = osVersion;
+		}
+
+		return version;
+	}
+
+	private static boolean deriveFileSystemCaseInsensitive() {
+		// The fileName must contain upper and lower letters
+		String fileName = "TestFileName";
+		Path path1 = Paths.get( fileName );
+		Path path2 = Paths.get( fileName.toLowerCase() );
+		try {
+			return Files.isSameFile( path1, path2 );
+		} catch( IOException ignored ) {
+			return true;
+		}
+	}
+
+	private static Path deriveUserHomeFolder( String folder ) {
+		return Paths.get( folder );
+	}
+
+	private static Path deriveUserDataFolder( Family family ) {
+		return switch( family ) {
+			case WINDOWS -> Paths.get( System.getenv( "appdata" ) );
+			case MACOS -> Paths.get( System.getProperty( "user.home" ), "/Library/Application Support" );
+			case LINUX -> Paths.get( System.getProperty( "user.home" ), ".config" );
+			default -> Paths.get( System.getProperty( "user.home" ) );
+		};
+	}
+
+	private static Path deriveProgramDataFolder( Family family ) {
+		return switch( family ) {
+			case WINDOWS -> Paths.get( System.getenv( "allusersprofile" ) );
+			case MACOS -> Paths.get( "/Library/Application Support" );
+			case LINUX -> Paths.get( "/usr/local/share/data" );
+			default -> Paths.get( System.getProperty( "user.home" ) );
+		};
+	}
+
+	private static String deriveDesktop( Family family ) {
+		switch( family ) {
+			case LINUX -> {
+				String xdgDesktop = System.getenv( "XDG_CURRENT_DESKTOP" );
+				return xdgDesktop == null ? "UNKNOWN" : xdgDesktop.toUpperCase();
+			}
+			case MACOS -> {
+				return "MAC";
+			}
+			case WINDOWS -> {
+				return "WINDOWS";
+			}
+			default -> {
+				return "UNKNOWN";
+			}
+		}
+	}
+
+	/**
+	 * Determine if user has elevated privileges.
+	 *
+	 * @return true if the user has elevated privileges.
+	 */
+	private static boolean deriveAdminUser() {
+		if( isWindows() ) {
+			try {
+				Process process = Runtime.getRuntime().exec( new String[]{ "reg", "query", "\"HKU\\S-1-5-19\"" } );
+				process.waitFor();
+				return (process.exitValue() == 0);
+			} catch( Exception exception ) {
+				return canWriteToProgramFiles();
+			}
+		}
+		try {
+			Process process = Runtime.getRuntime().exec( new String[]{ "id", "-u" } );
+			process.waitFor();
+
+			BufferedReader bufferedReader = new BufferedReader( new InputStreamReader( process.getInputStream() ) );
+			return bufferedReader.readLine().equals( "0" );
+		} catch( Exception exception ) {
+			return System.getProperty( "user.name" ).equals( "root" );
+		}
+	}
+
+	/**
+	 * Determine if the process has the elevated privilege flag set.
+	 *
+	 * @return true if the process has the elevated privilege flag set.
+	 */
+	static boolean deriveProcessElevatedFlag() {
+		return ELEVATED_PRIVILEGE_VALUE.equals( System.getProperty( PROCESS_PRIVILEGE_KEY ) );
+	}
+
+	static void clearProcessElevatedFlag() {
+		elevatedFlag = false;
 	}
 
 	public static String getProvider() {
@@ -333,46 +376,7 @@ public class OperatingSystem {
 	 * @return true if the process has elevated privileges.
 	 */
 	public static boolean isProcessElevated() {
-		return isProcessElevatedFlagSet() || isAdminUser();
-	}
-
-	/**
-	 * Determine if the process has the elevated privilege flag set.
-	 *
-	 * @return true if the process has the elevated privilege flag set.
-	 */
-	public static boolean isProcessElevatedFlagSet() {
-		String override = System.getProperty( PROCESS_PRIVILEGE_KEY );
-		if( override == null ) override = System.getenv( PROCESS_PRIVILEGE_KEY );
-		if( ELEVATED_PRIVILEGE_VALUE.equals( override ) ) elevatedFlag = Boolean.TRUE;
-		if( NORMAL_PRIVILEGE_VALUE.equals( override ) ) elevatedFlag = Boolean.FALSE;
-		return elevatedFlag != null && elevatedFlag;
-	}
-
-	/**
-	 * Determine if user has elevated privileges.
-	 *
-	 * @return true if the user has elevated privileges.
-	 */
-	public static boolean isAdminUser() {
-		if( isWindows() ) {
-			try {
-				Process process = Runtime.getRuntime().exec( new String[]{ "reg", "query", "\"HKU\\S-1-5-19\"" } );
-				process.waitFor();
-				return (process.exitValue() == 0);
-			} catch( Exception exception ) {
-				return canWriteToProgramFiles();
-			}
-		}
-		try {
-			Process process = Runtime.getRuntime().exec( new String[]{ "id", "-u" } );
-			process.waitFor();
-
-			BufferedReader bufferedReader = new BufferedReader( new InputStreamReader( process.getInputStream() ) );
-			return bufferedReader.readLine().equals( "0" );
-		} catch( Exception exception ) {
-			return System.getProperty( "user.name" ).equals( "root" );
-		}
+		return isAdminUser() || isElevatedFlag();
 	}
 
 	@SuppressWarnings( "unused" )
@@ -466,12 +470,8 @@ public class OperatingSystem {
 	 */
 	@SuppressWarnings( "unused" )
 	public static Path getJPackageAppPath() {
-		return toPath( System.getProperty( JPACKAGE_APP_PATH ) );
-	}
-
-	static Path toPath( String property ) {
-		if( property == null ) return null;
-		return Path.of( property );
+		String path = System.getProperty( JPACKAGE_APP_PATH );
+		return path == null ? null : Path.of ( path );
 	}
 
 	/**
@@ -584,10 +584,6 @@ public class OperatingSystem {
 	@SuppressWarnings( "unused" )
 	public static String asString() {
 		return getName() + " " + getArch() + " " + getVersion();
-	}
-
-	static void clearProcessElevatedFlag() {
-		elevatedFlag = null;
 	}
 
 	private static String getExtendedWindowsVersion() {

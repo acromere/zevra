@@ -195,38 +195,56 @@ class OperatingSystemTest {
 	}
 
 	@Test
-	void testIsProcessElevatedMac() {
+	void testIsProcessElevatedBecauseOfAdminUser() {
+		OperatingSystem.reset();
+		assertThat( OperatingSystem.isProcessElevated()).isFalse();
+
+		OperatingSystem.setAdminUser( true );
+		assertThat( OperatingSystem.isProcessElevated() ).isTrue();
+	}
+
+	@Test
+	void testIsProcessElevatedBecauseOfElevatedFlag() {
+		OperatingSystem.reset();
+		assertThat( OperatingSystem.isProcessElevated()).isFalse();
+
+		OperatingSystem.setElevatedFlag( true );
+		assertThat( OperatingSystem.isProcessElevated() ).isTrue();
+	}
+
+	@Test
+	void testDeriveProcessElevatedFlagMac() {
 		OperatingSystem.setup( "Mac OS X", "ppc", "10", UNIX_USER_DATA, UNIX_SHARED_DATA );
 		OperatingSystem.clearProcessElevatedFlag();
 		System.setProperty( OperatingSystem.PROCESS_PRIVILEGE_KEY, OperatingSystem.NORMAL_PRIVILEGE_VALUE );
-		assertThat( OperatingSystem.isProcessElevatedFlagSet() ).isFalse();
+		assertThat( OperatingSystem.deriveProcessElevatedFlag() ).isFalse();
 
 		OperatingSystem.clearProcessElevatedFlag();
 		System.setProperty( OperatingSystem.PROCESS_PRIVILEGE_KEY, OperatingSystem.ELEVATED_PRIVILEGE_VALUE );
-		assertThat( OperatingSystem.isProcessElevatedFlagSet() ).isTrue();
+		assertThat( OperatingSystem.deriveProcessElevatedFlag() ).isTrue();
 	}
 
 	@Test
-	void testIsProcessElevatedUnix() {
+	void testDeriveProcessElevatedFlagUnix() {
 		OperatingSystem.setup( "Linux", "x86_64", "2.6.32_45", UNIX_USER_DATA, UNIX_SHARED_DATA );
 		OperatingSystem.clearProcessElevatedFlag();
 		System.setProperty( OperatingSystem.PROCESS_PRIVILEGE_KEY, OperatingSystem.NORMAL_PRIVILEGE_VALUE );
-		assertThat( OperatingSystem.isProcessElevatedFlagSet() ).isFalse();
+		assertThat( OperatingSystem.deriveProcessElevatedFlag() ).isFalse();
 
 		OperatingSystem.clearProcessElevatedFlag();
 		System.setProperty( OperatingSystem.PROCESS_PRIVILEGE_KEY, OperatingSystem.ELEVATED_PRIVILEGE_VALUE );
-		assertThat( OperatingSystem.isProcessElevatedFlagSet() ).isTrue();
+		assertThat( OperatingSystem.deriveProcessElevatedFlag() ).isTrue();
 	}
 
 	@Test
-	void testIsProcessElevatedWindows() {
+	void testDeriveProcessElevatedFlagWindows() {
 		OperatingSystem.setup( "Windows 7", "x86", "6.1", WINDOWS_USER_DATA, WINDOWS_SHARED_DATA );
 		OperatingSystem.clearProcessElevatedFlag();
-		assertThat( OperatingSystem.isProcessElevatedFlagSet() ).isFalse();
+		assertThat( OperatingSystem.deriveProcessElevatedFlag() ).isFalse();
 
 		System.setProperty( OperatingSystem.PROCESS_PRIVILEGE_KEY, OperatingSystem.ELEVATED_PRIVILEGE_VALUE );
 		OperatingSystem.clearProcessElevatedFlag();
-		assertThat( OperatingSystem.isProcessElevatedFlagSet() ).isTrue();
+		assertThat( OperatingSystem.deriveProcessElevatedFlag() ).isTrue();
 	}
 
 	@Test
