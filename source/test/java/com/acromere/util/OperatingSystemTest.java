@@ -208,7 +208,7 @@ class OperatingSystemTest {
 		OperatingSystem.reset();
 		assertThat( OperatingSystem.isProcessElevated()).isFalse();
 
-		OperatingSystem.setElevatedFlag( true );
+		OperatingSystem.setElevatedProcess( true );
 		assertThat( OperatingSystem.isProcessElevated() ).isTrue();
 	}
 

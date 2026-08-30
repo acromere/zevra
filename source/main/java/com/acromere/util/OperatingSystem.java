@@ -46,11 +46,11 @@ public class OperatingSystem {
 
 	public static final String JPACKAGE_APP_PATH = "jpackage.app-path";
 
-	public static final String PROCESS_PRIVILEGE_KEY = OperatingSystem.class.getName() + ":process-privilege-key";
+	static final String PROCESS_PRIVILEGE_KEY = OperatingSystem.class.getName() + ":process-privilege-key";
 
-	public static final String NORMAL_PRIVILEGE_VALUE = OperatingSystem.class.getName() + ":process-privilege-normal";
+	static final String NORMAL_PRIVILEGE_VALUE = OperatingSystem.class.getName() + ":process-privilege-normal";
 
-	public static final String ELEVATED_PRIVILEGE_VALUE = OperatingSystem.class.getName() + ":process-privilege-elevated";
+	static final String ELEVATED_PRIVILEGE_VALUE = OperatingSystem.class.getName() + ":process-privilege-elevated";
 
 	@Getter
 	@Setter
@@ -78,7 +78,7 @@ public class OperatingSystem {
 
 	@Getter
 	@Setter
-	private static boolean elevatedFlag;
+	private static boolean elevatedProcess;
 
 	@Getter
 	@Setter
@@ -162,7 +162,7 @@ public class OperatingSystem {
 
 		adminUser = deriveAdminUser();
 
-		elevatedFlag = deriveProcessElevatedFlag();
+		elevatedProcess = deriveProcessElevatedFlag();
 
 		// Execution workaround
 		System.setProperty( "jdk.lang.Process.launchMechanism", "FORK" );
@@ -337,7 +337,7 @@ public class OperatingSystem {
 	}
 
 	static void clearProcessElevatedFlag() {
-		elevatedFlag = false;
+		elevatedProcess = false;
 	}
 
 	public static String getProvider() {
@@ -376,7 +376,7 @@ public class OperatingSystem {
 	 * @return true if the process has elevated privileges.
 	 */
 	public static boolean isProcessElevated() {
-		return isAdminUser() || isElevatedFlag();
+		return isAdminUser() || isElevatedProcess();
 	}
 
 	@SuppressWarnings( "unused" )
