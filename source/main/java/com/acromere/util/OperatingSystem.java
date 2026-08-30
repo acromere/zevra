@@ -240,20 +240,20 @@ public class OperatingSystem {
 	 * The init() method is intentionally package private, and separate from the
 	 * static initializer, so the initialization logic can be tested.
 	 *
-	 * @param osName The os name from System.getProperty("os.name")
-	 * @param osArch The os arch from System.getProperty("os.arch")
-	 * @param osVersion The os version from System.getProperty("os.version")
+	 * @param name The os name from System.getProperty("os.name")
+	 * @param arch The os arch from System.getProperty("os.arch")
+	 * @param version The os version from System.getProperty("os.version")
 	 * @param userHome The user home folder from System.getProperty("user.home")
 	 * @param userData The program user data folder
 	 * @param sharedData The program shared data folder
 	 * @param desktop The desktop environment
 	 */
-	static void setup( String osName, String osArch, String osVersion, String userHome, String userData, String sharedData, String desktop ) {
+	static void setup( String name, String arch, String version, String userHome, String userData, String sharedData, String desktop ) {
 		userFolderCache.clear();
-		setName( osName );
-		setArch( parseArch( osArch ) );
-		setFamily( parseFamily( osName ) );
-		setVersion( osVersion );
+		setName( name );
+		setArch( parseArch( arch ) );
+		setFamily( parseFamily( name ) );
+		setVersion( version );
 		setUserHomeFolder( userHome == null ? deriveUserHomeFolder( System.getProperty( "user.home" ) ) : Paths.get( userHome ) );
 		setUserProgramDataFolder( userData == null ? deriveUserDataFolder( getFamily() ) : Paths.get( userData ) );
 		setSharedProgramDataFolder( sharedData == null ? deriveProgramDataFolder( getFamily() ) : Paths.get( sharedData ) );
