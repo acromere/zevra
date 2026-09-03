@@ -45,7 +45,7 @@ import java.util.stream.Stream;
  * </pre>
  * If a {@link List} is desired then a {@link Comparator<E>} must be supplied
  * to sort the elements by some attribute in the {@link DataNode}s. The
- * {@link NodeComparator} class is helpful to easily create a comparator based
+ * {@link DataNodeComparator} class is helpful to easily create a comparator based
  * on know value keys.
  *
  * @param <E> The type of {@link DataNode}s in the {@link DataNodeSet}

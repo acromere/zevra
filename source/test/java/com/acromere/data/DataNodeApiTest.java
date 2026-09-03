@@ -127,8 +127,8 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 
 		int index = 0;
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -139,8 +139,8 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		assertThat( data.isModifiedBySelf() ).isEqualTo( false );
 		assertThat( data.isModified() ).isEqualTo( false );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -155,9 +155,9 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.setValue( "key", 423984 );
 		NodeAssert.assertThat( data ).hasStates( true, false, 1, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "key", null, 423984 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "key", null, 423984 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -165,8 +165,8 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.setModified( false );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -181,9 +181,9 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.setValue( "key", 423984 );
 		NodeAssert.assertThat( data ).hasStates( true, false, 1, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "key", null, 423984 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "key", null, 423984 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -191,9 +191,9 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.setValue( "key", null );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "key", 423984, null );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "key", 423984, null );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -344,9 +344,9 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		assertThat( data.<Object> getValue( "key" ) ).isEqualTo( "value" );
 		NodeAssert.assertThat( data ).hasStates( true, false, 1, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "key", null, "value" );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "key", null, "value" );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -365,9 +365,9 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		assertThat( data.<Object> getValue( "key" ) ).isNull();
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "key", "value", null );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "key", "value", null );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -404,21 +404,21 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.setValue( "z", 3 );
 		NodeAssert.assertThat( data ).hasStates( true, false, 3, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "x", null, 1 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "x", null, 1 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "y", null, 2 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "y", null, 2 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "z", null, 3 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "z", null, 3 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -436,27 +436,27 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.setModified( false );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "x", null, 0 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "x", null, 0 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "y", null, 0 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "y", null, 0 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "z", null, 0 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "z", null, 0 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -466,21 +466,21 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.setValue( "z", 3 );
 		NodeAssert.assertThat( data ).hasStates( true, false, 3, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "x", 0, 1 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "x", 0, 1 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "y", 0, 2 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "y", 0, 2 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "z", 0, 3 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "z", 0, 3 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -490,21 +490,21 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.setValue( "z", 0 );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "x", 1, 0 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "x", 1, 0 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "y", 2, 0 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "y", 2, 0 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "z", 3, 0 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "z", 3, 0 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -521,21 +521,21 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.setValue( "z", 3 );
 		NodeAssert.assertThat( data ).hasStates( true, false, 3, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "x", null, 1 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "x", null, 1 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "y", null, 2 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "y", null, 2 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "z", null, 3 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "z", null, 3 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -543,8 +543,8 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.setModified( false );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -568,7 +568,7 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 
 		data.refresh();
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		assertThat( data.getEventCount() ).isEqualTo( index );
 	}
 
@@ -606,8 +606,8 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		assertThat( data.<Object> getValue( "name" ) ).isEqualTo( "mock" );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "name", null, "mock" );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "name", null, "mock" );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -616,8 +616,8 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		assertThat( data.<Object> getValue( "name" ) ).isNull();
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "name", "mock", null );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "name", "mock", null );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -633,8 +633,8 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		assertThat( data.<String> computeIfAbsent( "name", k -> "mock" ) ).isEqualTo( "mock" );
 		assertThat( data.<String> getValue( "name" ) ).isEqualTo( "mock" );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "name", null, "mock" );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "name", null, "mock" );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -643,8 +643,8 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		assertThat( data.<Object> getValue( "name" ) ).isNull();
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "name", "mock", null );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "name", "mock", null );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -672,20 +672,20 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 		// There should not be a MODIFIED event
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "u", null, 1 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "u", null, 1 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "v", null, 2 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "v", null, 2 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "w", null, 3 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "w", null, 3 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -694,10 +694,10 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 		// There should not be an UNMODIFIED event
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "u", 1, null );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "v", 2, null );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "w", 3, null );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "u", 1, null );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "v", 2, null );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "w", 3, null );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -714,21 +714,21 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.setValue( "z", 3 );
 		NodeAssert.assertThat( data ).hasStates( true, false, 3, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "x", null, 1 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "x", null, 1 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "y", null, 2 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "y", null, 2 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "z", null, 3 );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "z", null, 3 );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -736,11 +736,11 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.clear();
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "x", 1, null );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "y", 2, null );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.VALUE_CHANGED, "z", 3, null );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "x", 1, null );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "y", 2, null );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.VALUE_CHANGED, "z", 3, null );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
@@ -885,14 +885,14 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		// Remove the default watcher
 		data.unregister( Event.ANY, data.getWatcher() );
 
-		EventHandler<NodeEvent> listener = e -> {};
-		data.register( NodeEvent.ANY, listener );
+		EventHandler<DataNodeEvent> listener = e -> {};
+		data.register( DataNodeEvent.ANY, listener );
 
 		Map<EventType<? extends Event>, Collection<? extends EventHandler<? extends Event>>> handlers = data.getEventHandlers();
 
 		assertThat( handlers ).isNotNull();
 		assertThat( handlers.size() ).isEqualTo( 1 );
-		assertThat( handlers.get( NodeEvent.ANY ).contains( listener ) ).isTrue();
+		assertThat( handlers.get( DataNodeEvent.ANY ).contains( listener ) ).isTrue();
 	}
 
 	@Test
@@ -901,31 +901,31 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data.unregister( Event.ANY, data.getWatcher() );
 
 		Map<EventType<? extends Event>, Collection<? extends EventHandler<? extends Event>>> handlers;
-		EventHandler<NodeEvent> listener = e -> {};
+		EventHandler<DataNodeEvent> listener = e -> {};
 
-		data.register( NodeEvent.ANY, listener );
+		data.register( DataNodeEvent.ANY, listener );
 		handlers = data.getEventHandlers();
 		assertThat( handlers ).isNotNull();
 		assertThat( handlers.size() ).isEqualTo( 1 );
-		assertThat( handlers.get( NodeEvent.ANY ).contains( listener ) ).isTrue();
+		assertThat( handlers.get( DataNodeEvent.ANY ).contains( listener ) ).isTrue();
 
-		data.unregister( NodeEvent.ANY, listener );
+		data.unregister( DataNodeEvent.ANY, listener );
 		handlers = data.getEventHandlers();
 		assertThat( handlers ).isNotNull();
 		assertThat( handlers.size() ).isEqualTo( 0 );
-		assertThat( handlers.get( NodeEvent.ANY ) ).isNull();
+		assertThat( handlers.get( DataNodeEvent.ANY ) ).isNull();
 
-		data.register( NodeEvent.ANY, listener );
+		data.register( DataNodeEvent.ANY, listener );
 		handlers = data.getEventHandlers();
 		assertThat( handlers ).isNotNull();
 		assertThat( handlers.size() ).isEqualTo( 1 );
-		assertThat( handlers.get( NodeEvent.ANY ).contains( listener ) ).isTrue();
+		assertThat( handlers.get( DataNodeEvent.ANY ).contains( listener ) ).isTrue();
 
-		data.unregister( NodeEvent.ANY, listener );
+		data.unregister( DataNodeEvent.ANY, listener );
 		handlers = data.getEventHandlers();
 		assertThat( handlers ).isNotNull();
 		assertThat( handlers.size() ).isEqualTo( 0 );
-		assertThat( handlers.get( NodeEvent.ANY ) ).isNull();
+		assertThat( handlers.get( DataNodeEvent.ANY ) ).isNull();
 	}
 
 	@Test

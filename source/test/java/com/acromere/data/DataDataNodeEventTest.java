@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DataNodeEventTest {
+class DataDataNodeEventTest {
 
 	@Test
 	void testEquals() {
 		DataNode node = new MockDataNode();
-		NodeEvent event1 = new NodeEvent( node, NodeEvent.NODE_CHANGED );
-		NodeEvent event2 = new NodeEvent( node, NodeEvent.NODE_CHANGED );
+		DataNodeEvent event1 = new DataNodeEvent( node, DataNodeEvent.NODE_CHANGED );
+		DataNodeEvent event2 = new DataNodeEvent( node, DataNodeEvent.NODE_CHANGED );
 		assertThat( event1.equals( event2 ) ).isEqualTo( true );
 		assertThat( event2.equals( event1 ) ).isEqualTo( true );
 	}
@@ -18,8 +18,8 @@ class DataNodeEventTest {
 	@Test
 	void testEqualsWithValueKey() {
 		DataNode node = new MockDataNode();
-		NodeEvent event1 = new NodeEvent( node, NodeEvent.VALUE_CHANGED, "a", null, "1" );
-		NodeEvent event2 = new NodeEvent( node, NodeEvent.VALUE_CHANGED, "a", "1", "5" );
+		DataNodeEvent event1 = new DataNodeEvent( node, DataNodeEvent.VALUE_CHANGED, "a", null, "1" );
+		DataNodeEvent event2 = new DataNodeEvent( node, DataNodeEvent.VALUE_CHANGED, "a", "1", "5" );
 		assertThat( event1.equals( event2 ) ).isEqualTo( true );
 		assertThat( event2.equals( event1 ) ).isEqualTo( true );
 	}

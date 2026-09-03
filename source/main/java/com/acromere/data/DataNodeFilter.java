@@ -5,7 +5,7 @@ package com.acromere.data;
  *
  * @param <T> The data node type
  */
-public interface DataFilter<T> {
+public interface DataNodeFilter<T> {
 
 	/**
 	 * Test the specified node.

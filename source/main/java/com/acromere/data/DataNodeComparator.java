@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @param <T> The node type
  */
-public record NodeComparator<T extends DataNode>(List<String> keys) implements Comparator<T> {
+public record DataNodeComparator<T extends DataNode>(List<String> keys) implements Comparator<T> {
 
 	@Override
 	public int compare( T a, T b ) {
@@ -25,12 +25,12 @@ public record NodeComparator<T extends DataNode>(List<String> keys) implements C
 		return 0;
 	}
 
-	public static <T extends DataNode> NodeComparator<T> of( String... keys ) {
-		return new NodeComparator<>( List.of( keys ) );
+	public static <T extends DataNode> DataNodeComparator<T> of( String... keys ) {
+		return new DataNodeComparator<>( List.of( keys ) );
 	}
 
-	public static <T extends DataNode> NodeComparator<T> of( List<String> keys ) {
-		return new NodeComparator<>( keys );
+	public static <T extends DataNode> DataNodeComparator<T> of( List<String> keys ) {
+		return new DataNodeComparator<>( keys );
 	}
 
 }

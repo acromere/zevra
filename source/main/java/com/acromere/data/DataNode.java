@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 /**
  * A generic data node supporting getting and setting values, a modified (or
- * dirty) flag, {@link NodeEvent events} and {@link Txn transactions}. It is
+ * dirty) flag, {@link DataNodeEvent events} and {@link Txn transactions}. It is
  * expected that this class be inherited and that subclasses will be configured
  * to represent specific data types. For example, consider this Person type:
  * <p>
@@ -82,9 +82,9 @@ import java.util.stream.Collectors;
  * are produced can be rather complex depending on the data structure, the
  * transaction state, and the actions taken. However, simple situations should be
  * straightforward. For example, setting a value will cause a
- * {@link NodeEvent#VALUE_CHANGED} event and a {@link NodeEvent#NODE_CHANGED}
- * event. If the value was a modifying value then a {@link NodeEvent#MODIFIED}
- * or {@link NodeEvent#UNMODIFIED} event would also be produced. Events
+ * {@link DataNodeEvent#VALUE_CHANGED} event and a {@link DataNodeEvent#NODE_CHANGED}
+ * event. If the value was a modifying value then a {@link DataNodeEvent#MODIFIED}
+ * or {@link DataNodeEvent#UNMODIFIED} event would also be produced. Events
  * produced during an active {@link Txn transaction} are not fired until the
  * transaction is committed. Events are not fired if the transaction fails and
  * is rolled back.
@@ -117,7 +117,7 @@ import java.util.stream.Collectors;
  * data models. This mostly affects how the modified flag and events are
  * handled. If a child node is modified, the parent node is also modified. Also,
  * some events that occur on a child node are also bubbled up to the parent
- * node. Particularly, {@link NodeEvent#VALUE_CHANGED} events are propagated to
+ * node. Particularly, {@link DataNodeEvent#VALUE_CHANGED} events are propagated to
  * parent nodes.
  */
 @CustomLog
@@ -137,7 +137,7 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	/**
 	 * The node value change handlers, a special set of handlers for value changes.
 	 */
-	private final Map<Object, Map<String, Set<EventHandler<NodeEvent>>>> valueChangeHandlers;
+	private final Map<Object, Map<String, Set<EventHandler<DataNodeEvent>>>> valueChangeHandlers;
 
 	/**
 	 * The node id.
@@ -254,14 +254,14 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	}
 
 	/**
-	 * Request that a {@link NodeEvent#NODE_CHANGED} event occur. This is usually
+	 * Request that a {@link DataNodeEvent#NODE_CHANGED} event occur. This is usually
 	 * used to cause the node handlers to run if they were added after the node
 	 * was changed. This is common during node initialization where the state is
 	 * set, the modified flag is cleared, the handlers added, and then this method
 	 * is called.
 	 */
 	public void refresh() {
-		fireHoppingEvent( new NodeEvent( this, NodeEvent.NODE_CHANGED ) );
+		fireHoppingEvent( new DataNodeEvent( this, DataNodeEvent.NODE_CHANGED ) );
 	}
 
 	/**
@@ -272,9 +272,9 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	 */
 	@Override
 	public void dispatch( TxnEvent event ) {
-		boolean isNodeEvent = event instanceof NodeEvent;
+		boolean isNodeEvent = event instanceof DataNodeEvent;
 
-		if( isNodeEvent ) doDispatchToNode( (NodeEvent)event );
+		if( isNodeEvent ) doDispatchToNode( (DataNodeEvent)event );
 		hub.dispatch( event );
 		if( !isNodeEvent && getParent() != null ) getParent().dispatch( event );
 	}
@@ -358,7 +358,7 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	 * @param key The value key
 	 * @param handler The value changed handler
 	 */
-	public void register( String key, EventHandler<NodeEvent> handler ) {
+	public void register( String key, EventHandler<DataNodeEvent> handler ) {
 		register( this, key, handler );
 	}
 
@@ -373,11 +373,11 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	 * @param key The value key
 	 * @param handler The value changed handler
 	 */
-	public void register( Object owner, String key, EventHandler<NodeEvent> handler ) {
+	public void register( Object owner, String key, EventHandler<DataNodeEvent> handler ) {
 		// The owner is the "owner" of the handler. When the owner is garbage
 		// collected the handler will be removed from the valueChangeHandlers map.
-		Map<String, Set<EventHandler<NodeEvent>>> keyHandlers = valueChangeHandlers.computeIfAbsent( owner, ( k ) -> new HashMap<>() );
-		Set<EventHandler<NodeEvent>> handlers = keyHandlers.computeIfAbsent( key, ( k ) -> new CopyOnWriteArraySet<>() );
+		Map<String, Set<EventHandler<DataNodeEvent>>> keyHandlers = valueChangeHandlers.computeIfAbsent( owner, ( k ) -> new HashMap<>() );
+		Set<EventHandler<DataNodeEvent>> handlers = keyHandlers.computeIfAbsent( key, ( k ) -> new CopyOnWriteArraySet<>() );
 		handlers.add( handler );
 	}
 
@@ -387,7 +387,7 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	 * @param key The value key
 	 * @param handler The value changed handler
 	 */
-	public void unregister( String key, EventHandler<NodeEvent> handler ) {
+	public void unregister( String key, EventHandler<DataNodeEvent> handler ) {
 		unregister( this, key, handler );
 	}
 
@@ -398,10 +398,10 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	 * @param key The value key
 	 * @param handler The value changed handler
 	 */
-	public void unregister( Object owner, String key, EventHandler<NodeEvent> handler ) {
-		Map<String, Set<EventHandler<NodeEvent>>> keyHandlers = valueChangeHandlers.get( owner );
+	public void unregister( Object owner, String key, EventHandler<DataNodeEvent> handler ) {
+		Map<String, Set<EventHandler<DataNodeEvent>>> keyHandlers = valueChangeHandlers.get( owner );
 		if( keyHandlers == null ) return;
-		Set<EventHandler<NodeEvent>> handlers = keyHandlers.get( key );
+		Set<EventHandler<DataNodeEvent>> handlers = keyHandlers.get( key );
 		if( handlers == null ) return;
 		handlers.remove( handler );
 		if( handlers.isEmpty() ) keyHandlers.remove( key );
@@ -586,7 +586,7 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	 * @return A node comparator
 	 */
 	public <T extends DataNode> Comparator<T> getNaturalComparator() {
-		return NodeComparator.of( getNaturalKey() );
+		return DataNodeComparator.of( getNaturalKey() );
 	}
 
 	protected List<String> getPrimaryKey() {
@@ -1089,15 +1089,15 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	}
 
 	/**
-	 * Dispatch a {@link NodeEvent} to the data node. This method should not be
+	 * Dispatch a {@link DataNodeEvent} to the data node. This method should not be
 	 * called by other classes other than the {@link DataNode data} class.
 	 *
 	 * @param event The data node event
 	 */
-	private void doDispatchToNode( NodeEvent event ) {
+	private void doDispatchToNode( DataNodeEvent event ) {
 		// Dispatch to value change handlers only when the event is on itself
 		boolean self = event.getNode() == this;
-		boolean valueChanged = event.getEventType() == NodeEvent.VALUE_CHANGED;
+		boolean valueChanged = event.getEventType() == DataNodeEvent.VALUE_CHANGED;
 		if( self && valueChanged ) {
 			ConcurrentModificationException exception;
 			do {
@@ -1108,7 +1108,7 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 					String key = event.getKey();
 
 					// Collect all handlers for the key
-					Set<EventHandler<NodeEvent>> valueHandlers = new HashSet<>();
+					Set<EventHandler<DataNodeEvent>> valueHandlers = new HashSet<>();
 					valueChangeHandlers.values().forEach( map -> {
 						if( map.containsKey( key ) ) valueHandlers.addAll( map.get( key ) );
 					} );
@@ -1140,15 +1140,15 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	 *
 	 * @param event The event
 	 */
-	private void fireHoppingEvent( NodeEvent event ) {
+	private void fireHoppingEvent( DataNodeEvent event ) {
 		DataNode node = this;
 		while( node != null ) {
-			fireTargetedEvent( node, new NodeEvent( node, event.getEventType() ) );
+			fireTargetedEvent( node, new DataNodeEvent( node, event.getEventType() ) );
 			node = node.getParent();
 		}
 	}
 
-	private void fireTargetedEvent( DataNode target, NodeEvent event ) {
+	private void fireTargetedEvent( DataNode target, DataNodeEvent event ) {
 		target.getEventHub().dispatch( event );
 	}
 
@@ -1162,7 +1162,7 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 			return (DataNode)getTarget();
 		}
 
-		final void fireEvent( NodeEvent event ) {
+		final void fireEvent( DataNodeEvent event ) {
 			fireTargetedEvent( getNode(), event );
 		}
 
@@ -1172,7 +1172,7 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		 *
 		 * @param event The event
 		 */
-		protected final void fireSlidingEvent( NodeEvent event ) {
+		protected final void fireSlidingEvent( DataNodeEvent event ) {
 			DataNode node = event.getNode();
 			while( node != null ) {
 				fireTargetedEvent( node, event );
@@ -1186,29 +1186,29 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		 *
 		 * @param event The event
 		 */
-		final void fireHoppingEvent( NodeEvent event ) {
+		final void fireHoppingEvent( DataNodeEvent event ) {
 			DataNode node = getNode();
 			while( node != null ) {
-				fireTargetedEvent( node, new NodeEvent( node, event.getEventType() ) );
+				fireTargetedEvent( node, new DataNodeEvent( node, event.getEventType() ) );
 				node = node.getParent();
 			}
 		}
 
 		@SuppressWarnings( "SameParameterValue" )
-		final void fireDroppingEvent( EventType<NodeEvent> type ) {
+		final void fireDroppingEvent( EventType<DataNodeEvent> type ) {
 			DataNode source = getNode();
 			DataNode target = getNode();
 
 			if( source instanceof DataNodeSet ) source = source.getParent();
 			if( source == null ) return;
 
-			fireDroppingEvent( target, new NodeEvent( source, type ) );
+			fireDroppingEvent( target, new DataNodeEvent( source, type ) );
 		}
 
-		final void fireDroppingEvent( DataNode target, NodeEvent event ) {
+		final void fireDroppingEvent( DataNode target, DataNodeEvent event ) {
 			if( target == null || target.values == null ) return;
 
-			NodeEvent newEvent = new NodeEvent( event.getNode(), event.getEventType() );
+			DataNodeEvent newEvent = new DataNodeEvent( event.getNode(), event.getEventType() );
 
 			for( Object value : target.values.values() ) {
 				if( value instanceof DataNode child ) {
@@ -1226,7 +1226,7 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 			}
 		}
 
-		final void fireTargetedEvent( DataNode target, NodeEvent event ) {
+		final void fireTargetedEvent( DataNode target, DataNodeEvent event ) {
 			getResult().addEvent( target, event );
 		}
 
@@ -1331,18 +1331,18 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 			boolean childAdd = oldValue == null && newValue instanceof DataNode;
 			boolean childRemove = newValue == null && oldValue instanceof DataNode;
 			if( childAdd ) {
-				fireTargetedEvent( (DataNode)newValue, new NodeEvent( (DataNode)newValue, NodeEvent.ADDED ) );
-				fireSlidingEvent( new NodeEvent( getNode(), NodeEvent.CHILD_ADDED, setKey, key, null, newValue ) );
+				fireTargetedEvent( (DataNode)newValue, new DataNodeEvent( (DataNode)newValue, DataNodeEvent.ADDED ) );
+				fireSlidingEvent( new DataNodeEvent( getNode(), DataNodeEvent.CHILD_ADDED, setKey, key, null, newValue ) );
 			} else if( childRemove ) {
-				fireTargetedEvent( (DataNode)oldValue, new NodeEvent( (DataNode)oldValue, NodeEvent.REMOVED ) );
-				fireSlidingEvent( new NodeEvent( getNode(), NodeEvent.CHILD_REMOVED, setKey, key, oldValue, null ) );
+				fireTargetedEvent( (DataNode)oldValue, new DataNodeEvent( (DataNode)oldValue, DataNodeEvent.REMOVED ) );
+				fireSlidingEvent( new DataNodeEvent( getNode(), DataNodeEvent.CHILD_REMOVED, setKey, key, oldValue, null ) );
 			} else {
-				fireDroppingEvent( NodeEvent.PARENT_CHANGED );
+				fireDroppingEvent( DataNodeEvent.PARENT_CHANGED );
 			}
 
-			fireSlidingEvent( new NodeEvent( getNode(), NodeEvent.VALUE_CHANGED, setKey, key, oldValue, newValue ) );
+			fireSlidingEvent( new DataNodeEvent( getNode(), DataNodeEvent.VALUE_CHANGED, setKey, key, oldValue, newValue ) );
 			getResult().addEventsFrom( updateModified );
-			fireHoppingEvent( new NodeEvent( getNode(), NodeEvent.NODE_CHANGED ) );
+			fireHoppingEvent( new DataNodeEvent( getNode(), DataNodeEvent.NODE_CHANGED ) );
 
 			return this;
 		}
@@ -1369,7 +1369,7 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 
 		@Override
 		protected RefreshOperation commit() {
-			fireHoppingEvent( new NodeEvent( getNode(), NodeEvent.NODE_CHANGED ) );
+			fireHoppingEvent( new DataNodeEvent( getNode(), DataNodeEvent.NODE_CHANGED ) );
 			return this;
 		}
 
@@ -1397,8 +1397,8 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 
 			if( newModified != oldModified ) {
 				updateParentsModified( newModified );
-				fireEvent( new NodeEvent( getNode(), newModified ? NodeEvent.MODIFIED : NodeEvent.UNMODIFIED ) );
-				fireHoppingEvent( new NodeEvent( getNode(), NodeEvent.NODE_CHANGED ) );
+				fireEvent( new DataNodeEvent( getNode(), newModified ? DataNodeEvent.MODIFIED : DataNodeEvent.UNMODIFIED ) );
+				fireHoppingEvent( new DataNodeEvent( getNode(), DataNodeEvent.NODE_CHANGED ) );
 			}
 
 			return this;
@@ -1413,7 +1413,7 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 				parent.doSetChildModified( node, newModified );
 				boolean newParentModified = parent.isModified();
 				boolean parentChanged = oldParentModified != newParentModified;
-				if( parentChanged ) fireTargetedEvent( parent, new NodeEvent( parent, newParentModified ? NodeEvent.MODIFIED : NodeEvent.UNMODIFIED ) );
+				if( parentChanged ) fireTargetedEvent( parent, new DataNodeEvent( parent, newParentModified ? DataNodeEvent.MODIFIED : DataNodeEvent.UNMODIFIED ) );
 				node = parent;
 				parent = parent.getTrueParent();
 			}

@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DataNodeComparatorTest {
+public class DataDataNodeComparatorTest {
 
 	@Test
 	void testCompareTo() {
 		NamedDataNode a = new NamedDataNode();
 		NamedDataNode b = new NamedDataNode();
-		NodeComparator<MockDataNode> comparator = NodeComparator.of( "name" );
+		DataNodeComparator<MockDataNode> comparator = DataNodeComparator.of( "name" );
 
 		a.setName( "a" );
 		b.setName( "b" );
@@ -26,7 +26,7 @@ public class DataNodeComparatorTest {
 	void testCompareToWithMissingValues() {
 		NamedDataNode a = new NamedDataNode();
 		NamedDataNode b = new NamedDataNode();
-		NodeComparator<MockDataNode> comparator = NodeComparator.of( "name" );
+		DataNodeComparator<MockDataNode> comparator = DataNodeComparator.of( "name" );
 
 		assertThat( comparator.compare( a, b ) ).isEqualTo( 0 );
 	}
@@ -35,7 +35,7 @@ public class DataNodeComparatorTest {
 	void testCompareToWithNullValues() {
 		NamedDataNode a = new NamedDataNode();
 		NamedDataNode b = new NamedDataNode();
-		NodeComparator<MockDataNode> comparator = NodeComparator.of( "name" );
+		DataNodeComparator<MockDataNode> comparator = DataNodeComparator.of( "name" );
 
 		a.setName( "a" );
 		b.setName( null );

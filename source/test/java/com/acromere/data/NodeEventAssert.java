@@ -39,8 +39,8 @@ public class NodeEventAssert extends AbstractAssert<NodeEventAssert, Event> {
 	public NodeEventAssert hasEventState( DataNode node, EventType<? extends Event> type, String setKey, String key, Object oldValue, Object newValue ) {
 		if( node != null && !Objects.equals( node, actual.getSource() ) ) failWithMessage( "Expected node to be %s but was %s", node, actual.getSource() );
 		if( type != null && !Objects.equals( type, actual.getEventType() ) ) failWithMessage( "Expected type to be %s but was %s", type, actual.getEventType() );
-		if( actual instanceof NodeEvent ) {
-			NodeEvent actual = (NodeEvent)this.actual;
+		if( actual instanceof DataNodeEvent ) {
+			DataNodeEvent actual = (DataNodeEvent)this.actual;
 			if( setKey != null && !Objects.equals( setKey, actual.getSetKey() ) ) failWithMessage( "Expected setKey to be %s but was %s", setKey, actual.getSetKey() );
 			if( key != null && !Objects.equals( key, actual.getKey() ) ) failWithMessage( "Expected key to be %s but was %s", key, actual.getKey() );
 			if( oldValue != null && !Objects.equals( oldValue, actual.getOldValue() ) ) failWithMessage( "Expected oldValue to be %s but was %s", oldValue, actual.getOldValue() );

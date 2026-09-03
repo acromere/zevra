@@ -18,16 +18,16 @@ import java.util.Set;
  * Settings} interface. In particular, this allows any property on a data node
  * to be treated as a setting.
  */
-public class NodeSettings implements Settings {
+public class DataNodeSettings implements Settings {
 
 	private final DataNode node;
 
 	private final EventHub eventHub;
 
-	public NodeSettings( DataNode node ) {
+	public DataNodeSettings( DataNode node ) {
 		this.node = node;
 		this.eventHub = new EventHub();
-		node.register( NodeEvent.VALUE_CHANGED, e -> {
+		node.register( DataNodeEvent.VALUE_CHANGED, e -> {
 			if( e.getNode() == node ) eventHub.dispatch( new SettingsEvent( this, SettingsEvent.CHANGED, this.getPath(), e.getKey(), e.getOldValue(), e.getNewValue() ) );
 		} );
 	}

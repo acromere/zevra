@@ -6,27 +6,27 @@ import lombok.Getter;
 
 import java.util.Objects;
 
-public class NodeEvent extends TxnEvent {
+public class DataNodeEvent extends TxnEvent {
 
-	public static final EventType<NodeEvent> ANY = new EventType<>( TxnEvent.ANY, "NODE" );
+	public static final EventType<DataNodeEvent> ANY = new EventType<>( TxnEvent.ANY, "NODE" );
 
-	public static final EventType<NodeEvent> MODIFIED = new EventType<>( ANY, "MODIFIED" );
+	public static final EventType<DataNodeEvent> MODIFIED = new EventType<>( ANY, "MODIFIED" );
 
-	public static final EventType<NodeEvent> UNMODIFIED = new EventType<>( ANY, "UNMODIFIED" );
+	public static final EventType<DataNodeEvent> UNMODIFIED = new EventType<>( ANY, "UNMODIFIED" );
 
-	public static final EventType<NodeEvent> ADDED = new EventType<>( ANY, "ADDED" );
+	public static final EventType<DataNodeEvent> ADDED = new EventType<>( ANY, "ADDED" );
 
-	public static final EventType<NodeEvent> REMOVED = new EventType<>( ANY, "REMOVED" );
+	public static final EventType<DataNodeEvent> REMOVED = new EventType<>( ANY, "REMOVED" );
 
-	public static final EventType<NodeEvent> CHILD_ADDED = new EventType<>( ANY, "CHILD_ADDED" );
+	public static final EventType<DataNodeEvent> CHILD_ADDED = new EventType<>( ANY, "CHILD_ADDED" );
 
-	public static final EventType<NodeEvent> CHILD_REMOVED = new EventType<>( ANY, "CHILD_REMOVED" );
+	public static final EventType<DataNodeEvent> CHILD_REMOVED = new EventType<>( ANY, "CHILD_REMOVED" );
 
-	public static final EventType<NodeEvent> NODE_CHANGED = new EventType<>( ANY, "NODE_CHANGED" );
+	public static final EventType<DataNodeEvent> NODE_CHANGED = new EventType<>( ANY, "NODE_CHANGED" );
 
-	public static final EventType<NodeEvent> PARENT_CHANGED = new EventType<>( ANY, "PARENT_CHANGED" );
+	public static final EventType<DataNodeEvent> PARENT_CHANGED = new EventType<>( ANY, "PARENT_CHANGED" );
 
-	public static final EventType<NodeEvent> VALUE_CHANGED = new EventType<>( ANY, "VALUE_CHANGED" );
+	public static final EventType<DataNodeEvent> VALUE_CHANGED = new EventType<>( ANY, "VALUE_CHANGED" );
 
 	@Getter
 	private final String setKey;
@@ -38,15 +38,15 @@ public class NodeEvent extends TxnEvent {
 
 	private final Object newValue;
 
-	public NodeEvent( DataNode node, EventType<? extends NodeEvent> type ) {
+	public DataNodeEvent( DataNode node, EventType<? extends DataNodeEvent> type ) {
 		this( node, type, null, null, null );
 	}
 
-	public NodeEvent( DataNode node, EventType<? extends NodeEvent> type, String key, Object oldValue, Object newValue ) {
+	public DataNodeEvent( DataNode node, EventType<? extends DataNodeEvent> type, String key, Object oldValue, Object newValue ) {
 		this( node, type, null, key, oldValue, newValue );
 	}
 
-	public NodeEvent( DataNode node, EventType<? extends NodeEvent> type, String setKey, String key, Object oldValue, Object newValue ) {
+	public DataNodeEvent( DataNode node, EventType<? extends DataNodeEvent> type, String setKey, String key, Object oldValue, Object newValue ) {
 		super( node, type );
 		this.setKey = setKey;
 		this.key = key;
@@ -54,7 +54,7 @@ public class NodeEvent extends TxnEvent {
 		this.newValue = newValue;
 	}
 
-	public NodeEvent( DataNode node, NodeEvent event ) {
+	public DataNodeEvent( DataNode node, DataNodeEvent event ) {
 		super( node, event.getEventType() );
 		this.setKey = event.getSetKey();
 		this.key = event.getKey();
@@ -78,12 +78,12 @@ public class NodeEvent extends TxnEvent {
 	}
 
 	public boolean collapseUp() {
-		return getEventType() == NodeEvent.VALUE_CHANGED;
+		return getEventType() == DataNodeEvent.VALUE_CHANGED;
 	}
 
 	@SuppressWarnings( "unchecked" )
-	public EventType<? extends NodeEvent> getEventType() {
-		return (EventType<? extends NodeEvent>)super.getEventType();
+	public EventType<? extends DataNodeEvent> getEventType() {
+		return (EventType<? extends DataNodeEvent>)super.getEventType();
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class NodeEvent extends TxnEvent {
 
 	@Override
 	public boolean equals( Object object ) {
-		if( !(object instanceof NodeEvent that) ) return false;
+		if( !(object instanceof DataNodeEvent that) ) return false;
 		return Objects.equals( this.getNode(), that.getNode() ) && Objects.equals( this.getEventType(), that.getEventType() ) && Objects.equals( this.key, that.key );
 	}
 

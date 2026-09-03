@@ -93,9 +93,9 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 0, 1 );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "key", null, "value0" );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "key", null, "value0" );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( index );
@@ -105,9 +105,9 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 0, 1 );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "key", "value0", "value1" );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "key", "value0", "value1" );
 		// The parent is already modified so there should not be a modified event here
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( index );
@@ -117,9 +117,9 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "key", "value1", null );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "key", "value1", null );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( index );
@@ -143,9 +143,9 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 0, 1 );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "key", null, "value0" );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "key", null, "value0" );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( index );
@@ -156,8 +156,8 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
 
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( TxnEvent.COMMIT_END );
 
@@ -182,9 +182,9 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 0, 1 );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "key", null, "value" );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "key", null, "value" );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( index );
@@ -194,9 +194,9 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "key", "value", null );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "key", "value", null );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( index );
@@ -218,9 +218,9 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		// Set an attribute on the child to a non-null value
 		child.setValue( "key", "value0" );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "key", null, "value0" );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "key", null, "value0" );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_END );
 
@@ -229,8 +229,8 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( TxnEvent.COMMIT_END );
 
@@ -239,9 +239,9 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 0, 1 );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "key", "value0", "value1" );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "key", "value0", "value1" );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( index );
@@ -260,9 +260,9 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "key", "value1", "value0" );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "key", "value1", "value0" );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, index++ ).hasEventState( child, TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( index );
@@ -290,14 +290,14 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( grandChild ).hasStates( false, false, 0, 0 );
 
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.CHILD_ADDED, "child", null, child );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "child", null, child );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.CHILD_ADDED, "child", null, child );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "child", null, child );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.ADDED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.ADDED );
 		//NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( parent, NodeEvent.PARENT_CHANGED );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
@@ -310,21 +310,21 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( grandChild ).hasStates( false, false, 0, 0 );
 
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, NodeEvent.CHILD_ADDED, "child", null, grandChild );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "child", null, grandChild );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, DataNodeEvent.CHILD_ADDED, "child", null, grandChild );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "child", null, grandChild );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.CHILD_ADDED, "child", null, grandChild );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "child", null, grandChild );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.CHILD_ADDED, "child", null, grandChild );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "child", null, grandChild );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 
-		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( NodeEvent.ADDED );
+		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( DataNodeEvent.ADDED );
 
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
@@ -336,13 +336,13 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( grandChild ).hasStates( false, false, 0, 0 );
 
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
@@ -355,23 +355,23 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( grandChild ).hasStates( true, false, 1, 0 );
 
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( grandChild, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( grandChild, NodeEvent.VALUE_CHANGED, "key", null, "value" );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( parent, NodeEvent.MODIFIED, null, null, null );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( grandChild, DataNodeEvent.VALUE_CHANGED, "key", null, "value" );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( parent, DataNodeEvent.MODIFIED, null, null, null );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( grandChild, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( grandChild, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( grandChild, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( grandChild, NodeEvent.VALUE_CHANGED, "key", null, "value" );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child, NodeEvent.MODIFIED, null, null, null );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( grandChild, DataNodeEvent.VALUE_CHANGED, "key", null, "value" );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child, DataNodeEvent.MODIFIED, null, null, null );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( grandChild, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( grandChild, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "key", null, "value" );
-		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "key", null, "value" );
+		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
@@ -384,23 +384,23 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( grandChild ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( grandChild, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( grandChild, NodeEvent.VALUE_CHANGED, "key", "value", null );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( grandChild, DataNodeEvent.VALUE_CHANGED, "key", "value", null );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( grandChild, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( grandChild, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( grandChild, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( grandChild, NodeEvent.VALUE_CHANGED, "key", "value", null );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( grandChild, DataNodeEvent.VALUE_CHANGED, "key", "value", null );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( grandChild, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( grandChild, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "key", "value", null );
-		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "key", "value", null );
+		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 
@@ -424,12 +424,12 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		assertThat( child.<DataNode> getParent() ).isEqualTo( parent );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.ADDED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.ADDED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.CHILD_ADDED, "child", null, child );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "child", null, child );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.CHILD_ADDED, "child", null, child );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "child", null, child );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
@@ -439,8 +439,8 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
@@ -452,16 +452,16 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( true, false, 1, 0 );
 
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "a", null, "1" );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "a", null, "1" );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "a", null, "1" );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "a", null, "1" );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 
@@ -473,14 +473,14 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( parent ).hasStates( true, false, 0, 1 );
 		NodeAssert.assertThat( child ).hasStates( true, false, 2, 0 );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "b", null, "1" );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "b", null, "1" );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "b", null, "1" );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "b", null, "1" );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 
@@ -493,14 +493,14 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 
@@ -525,14 +525,14 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.CHILD_ADDED, "child", null, child );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "child", null, child );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.CHILD_ADDED, "child", null, child );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "child", null, child );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.ADDED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.ADDED );
 		//NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( parent, NodeEvent.PARENT_CHANGED );
 
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
@@ -542,8 +542,8 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
@@ -555,16 +555,16 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( parent ).hasStates( true, false, 0, 1 );
 
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "a", null, "2" );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "a", null, "2" );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "a", null, "2" );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "a", null, "2" );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 
@@ -576,14 +576,14 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( true, false, 2, 0 );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 0, 1 );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "b", null, "2" );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "b", null, "2" );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "b", null, "2" );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "b", null, "2" );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
@@ -594,14 +594,14 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 0, 1 );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "a", "2", null );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "a", "2", null );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "a", "2", null );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "a", "2", null );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
@@ -613,16 +613,16 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
 
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "b", "2", null );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "b", "2", null );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "b", "2", null );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "b", "2", null );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 
@@ -645,12 +645,12 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		assertThat( child.<DataNode> getParent() ).isEqualTo( parent );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.ADDED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.ADDED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.CHILD_ADDED, "child", null, child );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "child", null, child );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.CHILD_ADDED, "child", null, child );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "child", null, child );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
@@ -660,8 +660,8 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
@@ -672,16 +672,16 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( child ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 0, 1 );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, NodeEvent.VALUE_CHANGED, "x", null, "2" );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, DataNodeEvent.VALUE_CHANGED, "x", null, "2" );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child, TxnEvent.COMMIT_END );
 
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.VALUE_CHANGED, "x", null, "2" );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "x", null, "2" );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
@@ -691,13 +691,13 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		assertThat( parent.isModified() ).isFalse();
 		assertThat( child.isModified() ).isFalse();
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( TxnEvent.COMMIT_END );
 
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
@@ -723,14 +723,14 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( parent0 ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( parent1 ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.ADDED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.ADDED );
 		//NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( parent0, NodeEvent.PARENT_CHANGED );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
 		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( NodeEvent.CHILD_ADDED, "child", null, child );
-		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( NodeEvent.VALUE_CHANGED, "child", null, child );
-		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( DataNodeEvent.CHILD_ADDED, "child", null, child );
+		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "child", null, child );
+		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( parent0.getEventCount() ).isEqualTo( parent0Index );
@@ -743,8 +743,8 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( parent1 ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( NodeEvent.UNMODIFIED );
-		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( DataNodeEvent.UNMODIFIED );
+		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( TxnEvent.COMMIT_END );
 		assertThat( parent0.getEventCount() ).isEqualTo( parent0Index );
@@ -759,20 +759,20 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		NodeAssert.assertThat( parent0 ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( parent1 ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.REMOVED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.REMOVED );
 		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( NodeEvent.CHILD_REMOVED, "child", child, null );
-		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( NodeEvent.VALUE_CHANGED, "child", child, null );
-		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( DataNodeEvent.CHILD_REMOVED, "child", child, null );
+		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "child", child, null );
+		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent0, parent0Index++ ).hasEventState( TxnEvent.COMMIT_END );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.ADDED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.ADDED );
 		NodeEventAssert.assertThat( parent1, parent1Index++ ).hasEventState( TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent1, parent1Index++ ).hasEventState( NodeEvent.CHILD_ADDED, "child", null, child );
-		NodeEventAssert.assertThat( parent1, parent1Index++ ).hasEventState( NodeEvent.VALUE_CHANGED, "child", null, child );
-		NodeEventAssert.assertThat( parent1, parent1Index++ ).hasEventState( NodeEvent.MODIFIED );
-		NodeEventAssert.assertThat( parent1, parent1Index++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent1, parent1Index++ ).hasEventState( DataNodeEvent.CHILD_ADDED, "child", null, child );
+		NodeEventAssert.assertThat( parent1, parent1Index++ ).hasEventState( DataNodeEvent.VALUE_CHANGED, "child", null, child );
+		NodeEventAssert.assertThat( parent1, parent1Index++ ).hasEventState( DataNodeEvent.MODIFIED );
+		NodeEventAssert.assertThat( parent1, parent1Index++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent1, parent1Index++ ).hasEventState( TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent1, parent1Index++ ).hasEventState( TxnEvent.COMMIT_END );
 		//NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( parent1, NodeEvent.PARENT_CHANGED );
@@ -800,7 +800,7 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 
 		parent.addModifyingKeys( "x" );
 		parent.setValue( "x", 1 );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( parent, NodeEvent.PARENT_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( parent, DataNodeEvent.PARENT_CHANGED );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
 	}
 
@@ -837,9 +837,9 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 
 		parent.addModifyingKeys( "x" );
 		parent.setValue( "x", 1 );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( parent, NodeEvent.PARENT_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( parent, DataNodeEvent.PARENT_CHANGED );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
-		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( parent, NodeEvent.PARENT_CHANGED );
+		NodeEventAssert.assertThat( grandChild, grandChildIndex++ ).hasEventState( parent, DataNodeEvent.PARENT_CHANGED );
 		assertThat( grandChild.getEventCount() ).isEqualTo( grandChildIndex );
 	}
 
@@ -858,15 +858,15 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		child.setSetModifyFilter( MockDataNode.ITEMS, n -> n.getValue( "dont-modify" ) == null );
 		assertThat( child.isModified() ).isFalse();
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.VALUE_CHANGED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), DataNodeEvent.VALUE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
 
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.VALUE_CHANGED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), DataNodeEvent.VALUE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_END );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
@@ -892,16 +892,16 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		assertThat( child.isModified() ).isFalse();
 		assertThat( parent.isModified() ).isFalse();
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.CHILD_ADDED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.VALUE_CHANGED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), DataNodeEvent.CHILD_ADDED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), DataNodeEvent.VALUE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.CHILD_ADDED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.VALUE_CHANGED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), DataNodeEvent.CHILD_ADDED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), DataNodeEvent.VALUE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_END );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
@@ -915,16 +915,16 @@ public class DataNodeApiStructureTest extends BaseDataNodeTest {
 		assertThat( child.isModified() ).isFalse();
 		assertThat( parent.isModified() ).isFalse();
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.CHILD_REMOVED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.VALUE_CHANGED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), DataNodeEvent.CHILD_REMOVED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), DataNodeEvent.VALUE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.CHILD_REMOVED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.VALUE_CHANGED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), DataNodeEvent.CHILD_REMOVED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), DataNodeEvent.VALUE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( DataNodeEvent.NODE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_END );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
