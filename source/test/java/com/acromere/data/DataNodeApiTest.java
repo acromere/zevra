@@ -1027,35 +1027,35 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 	@Test
 	void testToString() {
 		data.defineNaturalKey( "firstName", "lastName", "birthDate" );
-		assertThat( data.toString() ).isEqualTo( "MockNode{}" );
+		assertThat( data.toString() ).isEqualTo( "MockDataNode{}" );
 
 		Date birthDate = new Date( 0 );
 		data.setValue( "firstName", "Jane" );
 		data.setValue( "birthDate", birthDate );
-		assertThat( data.toString() ).isEqualTo( "MockNode{birthDate=" + birthDate + ",firstName=Jane}" );
+		assertThat( data.toString() ).isEqualTo( "MockDataNode{birthDate=" + birthDate + ",firstName=Jane}" );
 
 		data.setValue( "lastName", "Doe" );
-		assertThat( data.toString() ).isEqualTo( "MockNode{birthDate=" + birthDate + ",firstName=Jane,lastName=Doe}" );
+		assertThat( data.toString() ).isEqualTo( "MockDataNode{birthDate=" + birthDate + ",firstName=Jane,lastName=Doe}" );
 	}
 
 	@Test
 	void testToStringWithSomeValues() {
 		data.defineNaturalKey( "firstName", "lastName", "birthDate" );
-		assertThat( data.toString() ).isEqualTo( "MockNode{}" );
+		assertThat( data.toString() ).isEqualTo( "MockDataNode{}" );
 
 		data.setValue( "firstName", "Jane" );
 		data.setValue( "lastName", "Doe" );
-		assertThat( data.toString( "firstName" ) ).isEqualTo( "MockNode{firstName=Jane}" );
-		assertThat( data.toString( "lastName" ) ).isEqualTo( "MockNode{lastName=Doe}" );
+		assertThat( data.toString( "firstName" ) ).isEqualTo( "MockDataNode{firstName=Jane}" );
+		assertThat( data.toString( "lastName" ) ).isEqualTo( "MockDataNode{lastName=Doe}" );
 	}
 
 	@Test
 	void testToStringWithAllValues() {
-		assertThat( data.toString( true ) ).isEqualTo( "MockNode{}" );
+		assertThat( data.toString( true ) ).isEqualTo( "MockDataNode{}" );
 
 		data.setValue( "firstName", "Jane" );
 		data.setValue( "lastName", "Doe" );
-		assertThat( data.toString( true ) ).isEqualTo( "MockNode{firstName=Jane,lastName=Doe}" );
+		assertThat( data.toString( true ) ).isEqualTo( "MockDataNode{firstName=Jane,lastName=Doe}" );
 	}
 
 	@Test
