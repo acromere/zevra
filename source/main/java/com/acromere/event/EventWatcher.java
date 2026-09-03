@@ -61,14 +61,14 @@ public class EventWatcher implements EventHandler<Event> {
 		long expiration = start + timeout;
 		long duration = expiration - System.currentTimeMillis();
 
-		while( findNext( type ) == null & shouldWait ) {
-			wait( duration );
+		Event event;
+		while( (event = findNext( type )) == null & shouldWait ) {
+			wait( Math.max( 1, duration ) );
 			duration = expiration - System.currentTimeMillis();
 			shouldWait = duration > 0;
 		}
-		duration = expiration - System.currentTimeMillis();
 
-		if( duration < 0 ) throw new TimeoutException( "Timeout waiting for event " + type.getParentEventType() + "." + type );
+		if( event == null ) throw new TimeoutException( "Timeout waiting for event " + type.getParentEventType() + "." + type );
 	}
 
 	/**
