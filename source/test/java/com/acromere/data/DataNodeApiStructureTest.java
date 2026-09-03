@@ -7,31 +7,31 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NodeApiStructureTest extends BaseNodeTest{
+public class DataNodeApiStructureTest extends BaseDataNodeTest {
 
 	@Test
 	void testGetParent() {
-		MockNode parent = new MockNode();
-		MockNode child = new MockNode();
-		assertThat( child.<Node> getParent() ).isNull();
+		MockDataNode parent = new MockDataNode();
+		MockDataNode child = new MockDataNode();
+		assertThat( child.<DataNode> getParent() ).isNull();
 
 		String key = "key";
 
 		parent.setValue( key, child );
-		assertThat( child.<MockNode> getParent() ).isEqualTo( parent );
+		assertThat( child.<MockDataNode> getParent() ).isEqualTo( parent );
 
 		parent.setValue( key, null );
-		assertThat( child.<Node> getParent() ).isNull();
+		assertThat( child.<DataNode> getParent() ).isNull();
 	}
 
 	@Test
 	void testGetNodePath() {
-		MockNode parent = new MockNode();
-		MockNode child = new MockNode();
+		MockDataNode parent = new MockDataNode();
+		MockDataNode child = new MockDataNode();
 
 		parent.setValue( "child", child );
 
-		List<Node> path = parent.getNodePath();
+		List<DataNode> path = parent.getNodePath();
 		assertThat( path.size() ).isEqualTo( 1 );
 		assertThat( path.get( 0 ) ).isEqualTo( parent );
 
@@ -43,11 +43,11 @@ public class NodeApiStructureTest extends BaseNodeTest{
 
 	@Test
 	void testParentGetsModifiedAndUnmodifiedWithChildModifyFlag() {
-		MockNode grandparent = new MockNode( "grandparent" );
-		MockNode parent = new MockNode( "parent" );
+		MockDataNode grandparent = new MockDataNode( "grandparent" );
+		MockDataNode parent = new MockDataNode( "parent" );
 		grandparent.setValue( "child", parent );
 		grandparent.setModified( false );
-		MockNode child = new MockNode( "child" );
+		MockDataNode child = new MockDataNode( "child" );
 		parent.setValue( "child", child );
 		parent.setModified( false );
 
@@ -78,8 +78,8 @@ public class NodeApiStructureTest extends BaseNodeTest{
 	@Test
 	void testParentGetsModifiedEventsWhenChildModifiedAndUnmodified() {
 		// Start with a standard parent/child model
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		parent.setValue( "child", child );
 		parent.setModified( false );
 		child.getWatcher().reset();
@@ -128,8 +128,8 @@ public class NodeApiStructureTest extends BaseNodeTest{
 	@Test
 	void testChildModifiedClearedWhenParentModifiedCleared() {
 		// Start with a standard parent/child model
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		parent.setValue( "child", child );
 		parent.setModified( false );
 		child.getWatcher().reset();
@@ -167,8 +167,8 @@ public class NodeApiStructureTest extends BaseNodeTest{
 	@Test
 	void testParentModifiedAndUnmodifiedByChildNodeAttributeChangeWithNullStartValue() {
 		// Start with a standard parent/child model
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		parent.setValue( "child", child );
 		parent.setModified( false );
 		child.getWatcher().reset();
@@ -205,8 +205,8 @@ public class NodeApiStructureTest extends BaseNodeTest{
 	@Test
 	void testParentModifiedAndUnmodifiedByChildNodeAttributeChangeWithNonNullStartValue() {
 		// Start with a standard parent/child model
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		parent.setValue( "child", child );
 		parent.setModified( false );
 		child.getWatcher().reset();
@@ -273,9 +273,9 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		int parentIndex = 0;
 		int childIndex = 0;
 		int grandChildIndex = 0;
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
-		MockNode grandChild = new MockNode( "grandChild" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
+		MockDataNode grandChild = new MockDataNode( "grandChild" );
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( grandChild ).hasStates( false, false, 0, 0 );
@@ -284,7 +284,7 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		assertThat( grandChild.getEventCount() ).isEqualTo( grandChildIndex );
 
 		parent.setValue( "child", child );
-		assertThat( child.<Node> getParent() ).isEqualTo( parent );
+		assertThat( child.<DataNode> getParent() ).isEqualTo( parent );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( grandChild ).hasStates( false, false, 0, 0 );
@@ -304,7 +304,7 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		assertThat( grandChild.getEventCount() ).isEqualTo( grandChildIndex );
 
 		child.setValue( "child", grandChild );
-		assertThat( grandChild.<Node> getParent() ).isEqualTo( child );
+		assertThat( grandChild.<DataNode> getParent() ).isEqualTo( child );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 1, 1 );
 		NodeAssert.assertThat( child ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( grandChild ).hasStates( false, false, 0, 0 );
@@ -411,8 +411,8 @@ public class NodeApiStructureTest extends BaseNodeTest{
 
 	@Test
 	void testParentModifiedByChildNodeClearedByFlag() {
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		int parentIndex = 0;
 		int childIndex = 0;
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
@@ -421,7 +421,7 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
 
 		parent.setValue( "child", child );
-		assertThat( child.<Node> getParent() ).isEqualTo( parent );
+		assertThat( child.<DataNode> getParent() ).isEqualTo( parent );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.ADDED );
@@ -510,8 +510,8 @@ public class NodeApiStructureTest extends BaseNodeTest{
 
 	@Test
 	void testParentModifiedByChildNodeClearedByValue() {
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		int parentIndex = 0;
 		int childIndex = 0;
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
@@ -520,7 +520,7 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
 
 		parent.setValue( "child", child );
-		assertThat( child.<Node> getParent() ).isEqualTo( parent );
+		assertThat( child.<DataNode> getParent() ).isEqualTo( parent );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 
@@ -632,8 +632,8 @@ public class NodeApiStructureTest extends BaseNodeTest{
 
 	@Test
 	void testChildModifiedClearedByParentSetModifiedFalse() {
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		int parentIndex = 0;
 		int childIndex = 0;
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
@@ -642,7 +642,7 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
 
 		parent.setValue( "child", child );
-		assertThat( child.<Node> getParent() ).isEqualTo( parent );
+		assertThat( child.<DataNode> getParent() ).isEqualTo( parent );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.ADDED );
@@ -705,9 +705,9 @@ public class NodeApiStructureTest extends BaseNodeTest{
 
 	@Test
 	void testAddNodeAttributeToDifferentParent() {
-		MockNode parent0 = new MockNode( "parent0" );
-		MockNode parent1 = new MockNode( "parent1" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent0 = new MockDataNode( "parent0" );
+		MockDataNode parent1 = new MockDataNode( "parent1" );
+		MockDataNode child = new MockDataNode( "child" );
 		int parent0Index = 0;
 		int parent1Index = 0;
 		int childIndex = 0;
@@ -738,7 +738,7 @@ public class NodeApiStructureTest extends BaseNodeTest{
 
 		// Clear the modified flag of parent 0.
 		parent0.setModified( false );
-		assertThat( child.<Node> getParent() ).isEqualTo( parent0 );
+		assertThat( child.<DataNode> getParent() ).isEqualTo( parent0 );
 		NodeAssert.assertThat( parent0 ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( parent1 ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
@@ -753,9 +753,9 @@ public class NodeApiStructureTest extends BaseNodeTest{
 
 		// Add the child attribute to parent 1.
 		parent1.setValue( "child", child );
-		assertThat( child.<Node> getParent() ).isEqualTo( parent1 );
-		assertThat( parent1.<Node> getValue( "child" ) ).isEqualTo( child );
-		assertThat( parent0.<Node> getValue( "child" ) ).isNull();
+		assertThat( child.<DataNode> getParent() ).isEqualTo( parent1 );
+		assertThat( parent1.<DataNode> getValue( "child" ) ).isEqualTo( child );
+		assertThat( parent0.<DataNode> getValue( "child" ) ).isNull();
 		NodeAssert.assertThat( parent0 ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( parent1 ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
@@ -783,8 +783,8 @@ public class NodeApiStructureTest extends BaseNodeTest{
 
 	@Test
 	void testChildReceivesParentChangedEvent() {
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		int parentIndex = 0;
 		int childIndex = 0;
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
@@ -793,7 +793,7 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
 
 		parent.setValue( "child", child );
-		assertThat( child.<Node> getParent() ).isEqualTo( parent );
+		assertThat( child.<DataNode> getParent() ).isEqualTo( parent );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex += 1 );
@@ -809,9 +809,9 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		int parentIndex = 0;
 		int childIndex = 0;
 		int grandChildIndex = 0;
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
-		MockNode grandChild = new MockNode( "grandChild" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
+		MockDataNode grandChild = new MockDataNode( "grandChild" );
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( grandChild ).hasStates( false, false, 0, 0 );
@@ -820,7 +820,7 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		assertThat( grandChild.getEventCount() ).isEqualTo( grandChildIndex );
 
 		parent.setValue( "child", child );
-		assertThat( child.<Node> getParent() ).isEqualTo( parent );
+		assertThat( child.<DataNode> getParent() ).isEqualTo( parent );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeAssert.assertThat( grandChild ).hasStates( false, false, 0, 0 );
@@ -828,7 +828,7 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		assertThat( grandChild.getEventCount() ).isEqualTo( grandChildIndex );
 
 		child.setValue( "child", grandChild );
-		assertThat( grandChild.<Node> getParent() ).isEqualTo( child );
+		assertThat( grandChild.<DataNode> getParent() ).isEqualTo( child );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 1, 1 );
 		NodeAssert.assertThat( child ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( grandChild ).hasStates( false, false, 0, 0 );
@@ -848,30 +848,30 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		int parentIndex = 12;
 		int childIndex = 1;
 
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		parent.setValue( "child", child );
 		parent.setModified( false );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
 
-		child.setSetModifyFilter( MockNode.ITEMS, n -> n.getValue( "dont-modify" ) == null );
+		child.setSetModifyFilter( MockDataNode.ITEMS, n -> n.getValue( "dont-modify" ) == null );
 		assertThat( child.isModified() ).isFalse();
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), NodeEvent.VALUE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.VALUE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_END );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
 
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), NodeEvent.VALUE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.VALUE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_END );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_END );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
 
-		MockNode item0 = new MockNode( "0" );
+		MockDataNode item0 = new MockDataNode( "0" );
 		item0.setValue( "dont-modify", true );
 		assertThat( item0.isModified() ).isFalse();
 		// No new events should have occurred
@@ -891,19 +891,19 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		child.addItem( item0 );
 		assertThat( child.isModified() ).isFalse();
 		assertThat( parent.isModified() ).isFalse();
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), NodeEvent.CHILD_ADDED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), NodeEvent.VALUE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.CHILD_ADDED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.VALUE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_END );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), NodeEvent.CHILD_ADDED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), NodeEvent.VALUE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.CHILD_ADDED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.VALUE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_END );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_END );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
 		child.addItem( item0 );
 		assertThat( child.isModified() ).isFalse();
@@ -914,19 +914,19 @@ public class NodeApiStructureTest extends BaseNodeTest{
 		child.removeItem( item0 );
 		assertThat( child.isModified() ).isFalse();
 		assertThat( parent.isModified() ).isFalse();
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), NodeEvent.CHILD_REMOVED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), NodeEvent.VALUE_CHANGED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.CHILD_REMOVED );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.VALUE_CHANGED );
 		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
-		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_END );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
+		NodeEventAssert.assertThat( parent, parentIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_END );
 		assertThat( parent.getEventCount() ).isEqualTo( parentIndex );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), NodeEvent.CHILD_REMOVED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), NodeEvent.VALUE_CHANGED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_BEGIN );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.CHILD_REMOVED );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), NodeEvent.VALUE_CHANGED );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.NODE_CHANGED );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
-		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockNode.ITEMS ), TxnEvent.COMMIT_END );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_SUCCESS );
+		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( child.getValue( MockDataNode.ITEMS ), TxnEvent.COMMIT_END );
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
 		child.removeItem( item0 );
 		assertThat( child.isModified() ).isFalse();
@@ -937,15 +937,15 @@ public class NodeApiStructureTest extends BaseNodeTest{
 
 	@Test
 	void testNodeNotModifiedByChildAddUntilNodeFilterValueChange() {
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		parent.setValue( "child", child );
 		parent.setModified( false );
-		child.setSetModifyFilter( MockNode.ITEMS, n -> n.getValue( "dont-modify" ) == null );
+		child.setSetModifyFilter( MockDataNode.ITEMS, n -> n.getValue( "dont-modify" ) == null );
 		assertThat( parent.isModified() ).isFalse();
 		assertThat( child.isModified() ).isFalse();
 
-		MockNode item0 = new MockNode( "A" );
+		MockDataNode item0 = new MockDataNode( "A" );
 
 		// Make sure the modified flag is working as expected before using the dont-modify value
 		child.addItem( item0 );
@@ -982,15 +982,15 @@ public class NodeApiStructureTest extends BaseNodeTest{
 
 	@Test
 	void testNodeNotModifiedByChildRemoveUntilNodeFilterValueChange() {
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		parent.setValue( "child", child );
 		parent.setModified( false );
-		child.setSetModifyFilter( MockNode.ITEMS, n -> n.getValue( "dont-modify" ) == null );
+		child.setSetModifyFilter( MockDataNode.ITEMS, n -> n.getValue( "dont-modify" ) == null );
 		assertThat( parent.isModified() ).isFalse();
 		assertThat( child.isModified() ).isFalse();
 
-		MockNode item0 = new MockNode( "A" );
+		MockDataNode item0 = new MockDataNode( "A" );
 
 		// Make sure the modified flag is working as expected before using the dont-modify value
 		child.addItem( item0 );
@@ -1018,15 +1018,15 @@ public class NodeApiStructureTest extends BaseNodeTest{
 
 	@Test
 	void testParentNodeNotModifiedByNodeSetWithModifyFilter() {
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		parent.setValue( "child", child );
 		parent.setModified( false );
 
-		child.setSetModifyFilter( MockNode.ITEMS, n -> n.getValue( "dont-modify" ) == null );
+		child.setSetModifyFilter( MockDataNode.ITEMS, n -> n.getValue( "dont-modify" ) == null );
 		assertThat( child.isModified() ).isFalse();
 
-		MockNode item0 = new MockNode( "0" );
+		MockDataNode item0 = new MockDataNode( "0" );
 		child.addItem( item0 );
 		assertThat( item0.isModified() ).isFalse();
 		assertThat( child.isModified() ).isTrue();
@@ -1060,12 +1060,12 @@ public class NodeApiStructureTest extends BaseNodeTest{
 
 	@Test
 	void testParentModifiedByAddingModifiedChild() {
-		MockNode child = new MockNode( "child" );
+		MockDataNode child = new MockDataNode( "child" );
 		child.setModified( true );
 		assertThat( data.isModified() ).isFalse();
 		assertThat( child.isModified() ).isTrue();
 
-		data.addItem( new MockNode().addItem( new MockNode().addItem( child ) ) );
+		data.addItem( new MockDataNode().addItem( new MockDataNode().addItem( child ) ) );
 		assertThat( data.isModified() ).isTrue();
 		assertThat( child.isModified() ).isTrue();
 

@@ -38,15 +38,15 @@ public class NodeEvent extends TxnEvent {
 
 	private final Object newValue;
 
-	public NodeEvent( Node node, EventType<? extends NodeEvent> type ) {
+	public NodeEvent( DataNode node, EventType<? extends NodeEvent> type ) {
 		this( node, type, null, null, null );
 	}
 
-	public NodeEvent( Node node, EventType<? extends NodeEvent> type, String key, Object oldValue, Object newValue ) {
+	public NodeEvent( DataNode node, EventType<? extends NodeEvent> type, String key, Object oldValue, Object newValue ) {
 		this( node, type, null, key, oldValue, newValue );
 	}
 
-	public NodeEvent( Node node, EventType<? extends NodeEvent> type, String setKey, String key, Object oldValue, Object newValue ) {
+	public NodeEvent( DataNode node, EventType<? extends NodeEvent> type, String setKey, String key, Object oldValue, Object newValue ) {
 		super( node, type );
 		this.setKey = setKey;
 		this.key = key;
@@ -54,7 +54,7 @@ public class NodeEvent extends TxnEvent {
 		this.newValue = newValue;
 	}
 
-	public NodeEvent( Node node, NodeEvent event ) {
+	public NodeEvent( DataNode node, NodeEvent event ) {
 		super( node, event.getEventType() );
 		this.setKey = event.getSetKey();
 		this.key = event.getKey();
@@ -63,7 +63,7 @@ public class NodeEvent extends TxnEvent {
 	}
 
 	@SuppressWarnings( "unchecked" )
-	public <T extends Node> T getNode() {
+	public <T extends DataNode> T getNode() {
 		return (T)getSource();
 	}
 
@@ -95,7 +95,7 @@ public class NodeEvent extends TxnEvent {
 		builder.append( "type=" );
 		builder.append( getEventType() );
 		builder.append( ", node=" );
-		builder.append( (Node)getNode() );
+		builder.append( (DataNode)getNode() );
 		if( setKey != null ) builder.append( ", setKey=" ).append( setKey );
 		if( key != null ) {
 			builder.append( ", key=" ).append( key );

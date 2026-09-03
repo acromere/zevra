@@ -5,7 +5,7 @@ import com.acromere.event.Event;
 import java.util.Collection;
 import java.util.Set;
 
-class MockNode extends Node {
+class MockDataNode extends DataNode {
 
 	public static final String MOCK_ID = "mock-id";
 
@@ -13,11 +13,11 @@ class MockNode extends Node {
 
 	private final NodeWatcher watcher;
 
-	MockNode() {
+	MockDataNode() {
 		this( null );
 	}
 
-	MockNode( String id ) {
+	MockDataNode( String id ) {
 		definePrimaryKey( MOCK_ID );
 		if( id != null ) setMockId( id );
 		addModifyingKeys( ITEMS, "key", "child", "a", "b", "c", "x", "y", "z" );
@@ -28,53 +28,53 @@ class MockNode extends Node {
 		return getValue( MOCK_ID );
 	}
 
-	public MockNode setMockId( String id ) {
+	public MockDataNode setMockId( String id ) {
 		setValue( MOCK_ID, id );
 		return this;
 	}
 
 	/**
-	 * This method follows the pattern documented in {@link NodeSet}
+	 * This method follows the pattern documented in {@link DataNodeSet}
 	 *
 	 * @return The set of items
 	 */
-	public Set<MockNode> getItems() {
+	public Set<MockDataNode> getItems() {
 		return getValues( ITEMS );
 	}
 
 	/**
-	 * This method follows the pattern documented in {@link NodeSet}
+	 * This method follows the pattern documented in {@link DataNodeSet}
 	 *
 	 * @param item The item to add
 	 * @return This node
 	 */
-	public MockNode addItem( MockNode item ) {
+	public MockDataNode addItem( MockDataNode item ) {
 		addToSet( ITEMS, item );
 		return this;
 	}
 
 	/**
-	 * This method follows the pattern documented in {@link NodeSet}
+	 * This method follows the pattern documented in {@link DataNodeSet}
 	 *
 	 * @param item The item to remove
 	 * @return This node
 	 */
-	public MockNode removeItem( MockNode item ) {
+	public MockDataNode removeItem( MockDataNode item ) {
 		removeFromSet( ITEMS, item );
 		return this;
 	}
 
-	public MockNode addItems( Collection<MockNode> items ) {
+	public MockDataNode addItems( Collection<MockDataNode> items ) {
 		addToSet( ITEMS, items );
 		return this;
 	}
 
-	public MockNode removeItems( Collection<MockNode> items ) {
+	public MockDataNode removeItems( Collection<MockDataNode> items ) {
 		removeFromSet( ITEMS, items );
 		return this;
 	}
 
-	public MockNode clearItems() {
+	public MockDataNode clearItems() {
 		clearSet( ITEMS );
 		return this;
 	}

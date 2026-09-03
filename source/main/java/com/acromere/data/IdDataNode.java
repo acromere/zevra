@@ -2,11 +2,11 @@ package com.acromere.data;
 
 import java.util.UUID;
 
-public abstract class IdNode extends Node {
+public abstract class IdDataNode extends DataNode {
 
 	public static final String ID = "id";
 
-	public IdNode() {
+	public IdDataNode() {
 		definePrimaryKey( ID );
 		setId( UUID.randomUUID().toString() );
 	}

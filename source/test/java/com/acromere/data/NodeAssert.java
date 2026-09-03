@@ -2,13 +2,13 @@ package com.acromere.data;
 
 import org.assertj.core.api.AbstractAssert;
 
-public class NodeAssert extends AbstractAssert<NodeAssert, Node> {
+public class NodeAssert extends AbstractAssert<NodeAssert, DataNode> {
 
-	public static NodeAssert assertThat( Node actual ) {
+	public static NodeAssert assertThat( DataNode actual ) {
 		return new NodeAssert( actual );
 	}
 
-	protected NodeAssert( Node actual ) {
+	protected NodeAssert( DataNode actual ) {
 		super( actual, NodeAssert.class );
 	}
 

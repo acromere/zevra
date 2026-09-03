@@ -12,7 +12,7 @@ public class NodeEventAssert extends AbstractAssert<NodeEventAssert, Event> {
 		return new NodeEventAssert( actual );
 	}
 
-	public static NodeEventAssert assertThat( MockNode node, int index ) {
+	public static NodeEventAssert assertThat( MockDataNode node, int index ) {
 		return new NodeEventAssert( node.getWatcher().getEvents().get( index ) );
 	}
 
@@ -28,15 +28,15 @@ public class NodeEventAssert extends AbstractAssert<NodeEventAssert, Event> {
 		return hasEventState( null, type, null, key, oldValue, newValue );
 	}
 
-	public NodeEventAssert hasEventState( Node node, EventType<? extends Event> type ) {
+	public NodeEventAssert hasEventState( DataNode node, EventType<? extends Event> type ) {
 		return hasEventState( node, type, null, null, null, null );
 	}
 
-	public NodeEventAssert hasEventState( Node node, EventType<? extends Event> type, String key, Object oldValue, Object newValue ) {
+	public NodeEventAssert hasEventState( DataNode node, EventType<? extends Event> type, String key, Object oldValue, Object newValue ) {
 		return hasEventState( node, type, null, key, oldValue, newValue );
 	}
 
-	public NodeEventAssert hasEventState( Node node, EventType<? extends Event> type, String setKey, String key, Object oldValue, Object newValue ) {
+	public NodeEventAssert hasEventState( DataNode node, EventType<? extends Event> type, String setKey, String key, Object oldValue, Object newValue ) {
 		if( node != null && !Objects.equals( node, actual.getSource() ) ) failWithMessage( "Expected node to be %s but was %s", node, actual.getSource() );
 		if( type != null && !Objects.equals( type, actual.getEventType() ) ) failWithMessage( "Expected type to be %s but was %s", type, actual.getEventType() );
 		if( actual instanceof NodeEvent ) {

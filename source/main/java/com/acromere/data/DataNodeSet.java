@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * This class is the internal implementation of a {@link Node} {@link Set}. In
+ * This class is the internal implementation of a {@link DataNode} {@link Set}. In
  * general, implementers should not need to directly work with this class, but
  * its intended use is documented here for reference. Take, for example, an
  * Organization model that allows an arbitrary number of Person nodes. Both
- * Organization and Person should extend from {@link Node} or {@link IdNode}.
+ * Organization and Person should extend from {@link DataNode} or {@link IdDataNode}.
  * <pre>
  *   public class Organization extends IdNode {
  *     ...
@@ -44,14 +44,14 @@ import java.util.stream.Stream;
  *   }
  * </pre>
  * If a {@link List} is desired then a {@link Comparator<E>} must be supplied
- * to sort the elements by some attribute in the {@link Node}s. The
+ * to sort the elements by some attribute in the {@link DataNode}s. The
  * {@link NodeComparator} class is helpful to easily create a comparator based
  * on know value keys.
  *
- * @param <E> The type of {@link Node}s in the {@link NodeSet}
+ * @param <E> The type of {@link DataNode}s in the {@link DataNodeSet}
  */
 @CustomLog
-class NodeSet<E extends Node> extends Node implements Set<E> {
+class DataNodeSet<E extends DataNode> extends DataNode implements Set<E> {
 
 	private static final String NODE_SET_MODIFY_FILTER = "node-set-modify-filter";
 
@@ -63,9 +63,9 @@ class NodeSet<E extends Node> extends Node implements Set<E> {
 
 	private boolean dirtyCache;
 
-	private Node priorParent;
+	private DataNode priorParent;
 
-	NodeSet( String key ) {
+	DataNodeSet( String key ) {
 		this.key = key;
 		setAllKeysModify();
 		addExcludedModifyingKeys( NODE_SET_MODIFY_FILTER );
@@ -75,7 +75,7 @@ class NodeSet<E extends Node> extends Node implements Set<E> {
 	@Override
 	@SuppressWarnings( "unchecked" )
 	public <T> T setValue( String key, T newValue ) {
-		if( newValue instanceof Node && getParent() == null ) {
+		if( newValue instanceof DataNode && getParent() == null ) {
 			priorParent.getValue( this.key, () -> priorParent.doSetValue( this.key, null, this ) ).add( (E)newValue );
 		} else {
 			super.setValue( this.key, key, newValue );
@@ -150,11 +150,11 @@ class NodeSet<E extends Node> extends Node implements Set<E> {
 		return modified;
 	}
 
-	private boolean addNodes( String setKey, Collection<? extends Node> collection ) {
+	private boolean addNodes( String setKey, Collection<? extends DataNode> collection ) {
 		boolean changed = false;
 
 		try( Txn ignored = Txn.create() ) {
-			for( Node node : collection ) {
+			for( DataNode node : collection ) {
 				String key = node.getCollectionId();
 				if( hasKey( key ) ) continue;
 				Txn.submit( new SetValueOperation( this, setKey, key, null, node ) );
@@ -178,7 +178,7 @@ class NodeSet<E extends Node> extends Node implements Set<E> {
 		boolean changed = false;
 		try( Txn ignored = Txn.create() ) {
 			for( Object object : collection ) {
-				if( !(object instanceof Node node) ) continue;
+				if( !(object instanceof DataNode node) ) continue;
 				String key = node.getCollectionId();
 				if( !hasKey( key ) ) continue;
 				Txn.submit( new SetValueOperation( this, setKey, key, node, null ) );
@@ -238,9 +238,9 @@ class NodeSet<E extends Node> extends Node implements Set<E> {
 	}
 
 	public boolean modifyAllowed( Object value ) {
-		if( !(value instanceof Node) ) return super.modifyAllowed( value );
-		Function<Node, Boolean> filter = getSetModifyFilter();
-		return filter == null || filter.apply( (Node)value );
+		if( !(value instanceof DataNode) ) return super.modifyAllowed( value );
+		Function<DataNode, Boolean> filter = getSetModifyFilter();
+		return filter == null || filter.apply( (DataNode)value );
 	}
 
 	@Override
@@ -249,16 +249,16 @@ class NodeSet<E extends Node> extends Node implements Set<E> {
 	}
 
 	@Override
-	void doSetParent( Node parent ) {
+	void doSetParent( DataNode parent ) {
 		if( parent != null ) this.priorParent = parent;
 		super.doSetParent( parent );
 	}
 
-	void setSetModifyFilter( Function<Node, Boolean> filter ) {
+	void setSetModifyFilter( Function<DataNode, Boolean> filter ) {
 		setValue( NODE_SET_MODIFY_FILTER, filter );
 	}
 
-	private Function<Node, Boolean> getSetModifyFilter() {
+	private Function<DataNode, Boolean> getSetModifyFilter() {
 		return getValue( NODE_SET_MODIFY_FILTER );
 	}
 

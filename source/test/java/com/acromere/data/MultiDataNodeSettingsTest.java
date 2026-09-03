@@ -11,21 +11,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MultiNodeSettingsTest {
+public class MultiDataNodeSettingsTest {
 
-	private MockNode node1;
+	private MockDataNode node1;
 
-	private MockNode node2;
+	private MockDataNode node2;
 
-	private MockNode node3;
+	private MockDataNode node3;
 
 	private MultiNodeSettings settings;
 
 	@BeforeEach
 	public void setup() {
-		node1 = new MockNode( "a" );
-		node2 = new MockNode( "b" );
-		node3 = new MockNode( "c" );
+		node1 = new MockDataNode( "a" );
+		node2 = new MockDataNode( "b" );
+		node3 = new MockDataNode( "c" );
 
 		node1.setValue( "color", "blue" );
 		node2.setValue( "color", "blue" );
@@ -60,7 +60,7 @@ public class MultiNodeSettingsTest {
 
 	@Test
 	void testGetKeys() {
-		assertThat( settings.getKeys() ).contains( MockNode.MOCK_ID, "color", "size" );
+		assertThat( settings.getKeys() ).contains( MockDataNode.MOCK_ID, "color", "size" );
 	}
 
 	@Test

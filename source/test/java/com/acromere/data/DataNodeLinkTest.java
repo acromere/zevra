@@ -5,25 +5,25 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NodeLinkTest {
+public class DataNodeLinkTest {
 
-	private MockNode data;
+	private MockDataNode data;
 
 	@BeforeEach
 	void setup() {
-		data = new MockNode( "a" );
+		data = new MockDataNode( "a" );
 	}
 
 	@Test
 	void testAddRemove() {
-		MockNode a = new MockNode( "a" );
-		MockNode peer = new MockNode( "peer" );
+		MockDataNode a = new MockDataNode( "a" );
+		MockDataNode peer = new MockDataNode( "peer" );
 
 		data.setValue( "a", a );
 		data.setModified( false );
 		assertThat( data.isModified() ).isFalse();
 
-		NodeLink<MockNode> l = new NodeLink<>( a );
+		DataNodeLink<MockDataNode> l = new DataNodeLink<>( a );
 		peer.setValue( "l", l );
 		assertThat( peer.isModified() ).isFalse();
 		assertThat( data.isModified() ).isFalse();
@@ -31,25 +31,25 @@ public class NodeLinkTest {
 		assertThat( peer.<Object> getValue( "l" ) ).isEqualTo( l );
 		// Node 'a' should still belong to 'data'
 		assertThat( data.<Object> getValue( "a" ) ).isEqualTo( a );
-		assertThat( peer.<NodeLink<MockNode>> getValue( "l" ).getNode() ).isEqualTo( a );
+		assertThat( peer.<DataNodeLink<MockDataNode>> getValue( "l" ).getNode() ).isEqualTo( a );
 
 		peer.setValue( "l", null );
 		assertThat( peer.isModified() ).isFalse();
 		assertThat( data.isModified() ).isFalse();
 		assertThat( peer.<Object> getValue( "l" ) ).isNull();
-		assertThat( data.<MockNode> getValue( "a" ) ).isEqualTo( a );
+		assertThat( data.<MockDataNode> getValue( "a" ) ).isEqualTo( a );
 	}
 
 	@Test
 	void testModified() {
-		MockNode a = new MockNode( "a" );
-		MockNode peer = new MockNode( "peer" );
+		MockDataNode a = new MockDataNode( "a" );
+		MockDataNode peer = new MockDataNode( "peer" );
 
 		data.setValue( "a", a );
 		data.setModified( false );
 		assertThat( data.isModified() ).isFalse();
 
-		NodeLink<MockNode> l = new NodeLink<>( a );
+		DataNodeLink<MockDataNode> l = new DataNodeLink<>( a );
 		peer.setValue( "l", l );
 		assertThat( peer.isModified() ).isFalse();
 

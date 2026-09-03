@@ -5,23 +5,23 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IdNodeTest {
+public class IdDataNodeTest {
 
 	@Test
 	void testId() {
-		assertThat( new MockIdNode().getId() ).isNotNull();
+		assertThat( new MockIdDataNode().getId() ).isNotNull();
 	}
 
 	@Test
 	void testConstructor() {
-		assertThat( new MockIdNode() ).isNotNull();
+		assertThat( new MockIdDataNode() ).isNotNull();
 	}
 
 	@Test
 	void testConstructorWithTransaction() throws Exception {
-		IdNode node;
+		IdDataNode node;
 		try( Txn ignore = Txn.create() ) {
-			node = new MockIdNode();
+			node = new MockIdDataNode();
 			// The id will be null until the txn is complete
 			assertThat( node.getId() ).isNull();
 		}

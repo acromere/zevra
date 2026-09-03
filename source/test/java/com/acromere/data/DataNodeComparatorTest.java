@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NodeComparatorTest {
+public class DataNodeComparatorTest {
 
 	@Test
 	void testCompareTo() {
-		NamedNode a = new NamedNode();
-		NamedNode b = new NamedNode();
-		NodeComparator<MockNode> comparator = NodeComparator.of( "name" );
+		NamedDataNode a = new NamedDataNode();
+		NamedDataNode b = new NamedDataNode();
+		NodeComparator<MockDataNode> comparator = NodeComparator.of( "name" );
 
 		a.setName( "a" );
 		b.setName( "b" );
@@ -24,18 +24,18 @@ public class NodeComparatorTest {
 
 	@Test
 	void testCompareToWithMissingValues() {
-		NamedNode a = new NamedNode();
-		NamedNode b = new NamedNode();
-		NodeComparator<MockNode> comparator = NodeComparator.of( "name" );
+		NamedDataNode a = new NamedDataNode();
+		NamedDataNode b = new NamedDataNode();
+		NodeComparator<MockDataNode> comparator = NodeComparator.of( "name" );
 
 		assertThat( comparator.compare( a, b ) ).isEqualTo( 0 );
 	}
 
 	@Test
 	void testCompareToWithNullValues() {
-		NamedNode a = new NamedNode();
-		NamedNode b = new NamedNode();
-		NodeComparator<MockNode> comparator = NodeComparator.of( "name" );
+		NamedDataNode a = new NamedDataNode();
+		NamedDataNode b = new NamedDataNode();
+		NodeComparator<MockDataNode> comparator = NodeComparator.of( "name" );
 
 		a.setName( "a" );
 		b.setName( null );

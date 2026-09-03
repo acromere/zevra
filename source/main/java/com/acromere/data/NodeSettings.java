@@ -14,17 +14,17 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The NodeSettings class links data {@link Node} properties to the {@link
+ * The NodeSettings class links data {@link DataNode} properties to the {@link
  * Settings} interface. In particular, this allows any property on a data node
  * to be treated as a setting.
  */
 public class NodeSettings implements Settings {
 
-	private final Node node;
+	private final DataNode node;
 
 	private final EventHub eventHub;
 
-	public NodeSettings( Node node ) {
+	public NodeSettings( DataNode node ) {
 		this.node = node;
 		this.eventHub = new EventHub();
 		node.register( NodeEvent.VALUE_CHANGED, e -> {

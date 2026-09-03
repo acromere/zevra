@@ -21,15 +21,15 @@ import java.util.*;
 @CustomLog
 public class MultiNodeSettings implements Settings {
 
-	private final Set<? extends Node> nodes;
+	private final Set<? extends DataNode> nodes;
 
 	private final EventHub eventHub;
 
-	public MultiNodeSettings( Node... nodes ) {
+	public MultiNodeSettings( DataNode... nodes ) {
 		this( Arrays.asList( nodes ) );
 	}
 
-	public MultiNodeSettings( Collection<? extends Node> nodes ) {
+	public MultiNodeSettings( Collection<? extends DataNode> nodes ) {
 		this.nodes = new HashSet<>( nodes );
 		this.eventHub = new EventHub();
 
@@ -86,7 +86,7 @@ public class MultiNodeSettings implements Settings {
 		if( !nodes.isEmpty() ) keys.addAll( nodes.iterator().next().getValueKeys() );
 
 		// Remove any keys that are not in every node
-		for( Node node : nodes ) {
+		for( DataNode node : nodes ) {
 			Set<String> valueKeys = node.getValueKeys();
 			for( String key : new HashSet<>( keys ) ) {
 				if( valueKeys.contains( key ) ) continue;
@@ -108,7 +108,7 @@ public class MultiNodeSettings implements Settings {
 		T value = null;
 		if( !nodes.isEmpty() ) value = nodes.iterator().next().getValue( key );
 
-		for( Node node : nodes ) {
+		for( DataNode node : nodes ) {
 			if( !Objects.equals( node.getValue( key ), value ) ) return defaultValue;
 		}
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class NodeApiEventTest extends BaseNodeTest {
+class DataNodeApiEventTest extends BaseDataNodeTest {
 
 	@Test
 	void testGetAndSetValueEvents() {
@@ -54,8 +54,8 @@ class NodeApiEventTest extends BaseNodeTest {
 
 	@Test
 	void testRefreshOnChildCausesParentNodeChangedEvent() {
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		int parentIndex = 0;
 		int childIndex = 0;
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
@@ -65,7 +65,7 @@ class NodeApiEventTest extends BaseNodeTest {
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
 
 		parent.setValue( "child", child );
-		assertThat( child.<Node> getParent() ).isEqualTo( parent );
+		assertThat( child.<DataNode> getParent() ).isEqualTo( parent );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.ADDED );
@@ -103,10 +103,10 @@ class NodeApiEventTest extends BaseNodeTest {
 	void testNodeSetAddRemoveEvents() {
 		int index = 0;
 		int itemIndex = 0;
-		MockNode item = new MockNode();
+		MockDataNode item = new MockDataNode();
 
 		data.addItem( item );
-		NodeSet<?> items = data.getValue( "items" );
+		DataNodeSet<?> items = data.getValue( "items" );
 		NodeEventAssert.assertThat( item.event( itemIndex++ ) ).hasEventState( NodeEvent.ADDED );
 		assertThat( item.getEventCount() ).isEqualTo( itemIndex );
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( items, TxnEvent.COMMIT_BEGIN );
@@ -118,7 +118,7 @@ class NodeApiEventTest extends BaseNodeTest {
 		NodeEventAssert.assertThat( data.event( index++ ) ).hasEventState( items, TxnEvent.COMMIT_END );
 		assertThat( data.getEventCount() ).isEqualTo( index );
 
-		Node set = item.getTrueParent();
+		DataNode set = item.getTrueParent();
 		data.removeItem( item );
 		NodeEventAssert.assertThat( item.event( itemIndex++ ) ).hasEventState( NodeEvent.REMOVED );
 		assertThat( item.getEventCount() ).isEqualTo( itemIndex );
@@ -134,8 +134,8 @@ class NodeApiEventTest extends BaseNodeTest {
 
 	@Test
 	void testResourceChangesOnChildCausesParentNodeChangedEvent() {
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 		int parentIndex = 0;
 		int childIndex = 0;
 		NodeAssert.assertThat( parent ).hasStates( false, false, 0, 0 );
@@ -144,7 +144,7 @@ class NodeApiEventTest extends BaseNodeTest {
 		assertThat( child.getEventCount() ).isEqualTo( childIndex );
 
 		parent.setValue( "child", child );
-		assertThat( child.<MockNode> getParent() ).isEqualTo( parent );
+		assertThat( child.<MockDataNode> getParent() ).isEqualTo( parent );
 		NodeAssert.assertThat( parent ).hasStates( true, false, 1, 0 );
 		NodeAssert.assertThat( child ).hasStates( false, false, 0, 0 );
 		NodeEventAssert.assertThat( child, childIndex++ ).hasEventState( NodeEvent.ADDED );

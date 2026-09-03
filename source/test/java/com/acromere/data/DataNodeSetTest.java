@@ -8,18 +8,18 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class NodeSetTest {
+public class DataNodeSetTest {
 
-	private NodeSet<MockNode> set;
+	private DataNodeSet<MockDataNode> set;
 
 	@BeforeEach
 	void setup() {
-		set = new NodeSet<>( "test" );
+		set = new DataNodeSet<>( "test" );
 	}
 
 	@Test
 	void testCircularReferenceCheck() {
-		MockNode node = new MockNode();
+		MockDataNode node = new MockDataNode();
 		try {
 			node.addItem( node );
 			fail( "CircularReferenceException should be thrown" );
@@ -34,14 +34,14 @@ public class NodeSetTest {
 		assertThat( set.size() ).isEqualTo( 0 );
 		assertFalse( set.isModified() );
 
-		set.add( new MockNode() );
+		set.add( new MockDataNode() );
 		assertThat( set.size() ).isEqualTo( 1 );
 		assertTrue( set.isModified() );
 	}
 
 	@Test
 	void testContains() {
-		MockNode node = new MockNode();
+		MockDataNode node = new MockDataNode();
 		assertFalse( set.contains( node ) );
 		set.add( node );
 		assertTrue( set.contains( node ) );
@@ -51,7 +51,7 @@ public class NodeSetTest {
 
 	@Test
 	void testSize() {
-		MockNode node = new MockNode();
+		MockDataNode node = new MockDataNode();
 		assertThat( set.size() ).isEqualTo( 0 );
 		set.add( node );
 		assertThat( set.size() ).isEqualTo( 1 );
@@ -61,7 +61,7 @@ public class NodeSetTest {
 
 	@Test
 	void testAddAll() {
-		Set<MockNode> nodes = Set.of( new MockNode( "a" ), new MockNode( "b" ) );
+		Set<MockDataNode> nodes = Set.of( new MockDataNode( "a" ), new MockDataNode( "b" ) );
 		assertThat( set.size() ).isEqualTo( 0 );
 		set.addAll( nodes );
 		assertThat( set.size() ).isEqualTo( 2 );
@@ -71,8 +71,8 @@ public class NodeSetTest {
 
 	@Test
 	void testClearSet() {
-		MockNode node = new MockNode();
-		node.addItems( Set.of( new MockNode( "a" ), new MockNode( "b" ) ) );
+		MockDataNode node = new MockDataNode();
+		node.addItems( Set.of( new MockDataNode( "a" ), new MockDataNode( "b" ) ) );
 		assertThat( node.getItems().size() ).isEqualTo( 2 );
 		node.clearItems();
 		assertThat( node.getItems().size() ).isEqualTo( 0 );

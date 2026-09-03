@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
 
-public class NodeApiTest extends BaseNodeTest {
+public class DataNodeApiTest extends BaseDataNodeTest {
 
 	@Test
 	void testAsMap() {
@@ -32,8 +32,8 @@ public class NodeApiTest extends BaseNodeTest {
 
 	@Test
 	void testValueChangeEventsNotBubbledToParentValueListeners() {
-		MockNode a = new MockNode( "a" );
-		MockNode b = new MockNode( "b" );
+		MockDataNode a = new MockDataNode( "a" );
+		MockDataNode b = new MockDataNode( "b" );
 		a.setValue( "child", b );
 
 		AtomicInteger count = new AtomicInteger();
@@ -49,7 +49,7 @@ public class NodeApiTest extends BaseNodeTest {
 		AtomicInteger counterA = new AtomicInteger();
 		AtomicInteger counterB = new AtomicInteger();
 
-		MockNode node = new MockNode( "node" );
+		MockDataNode node = new MockDataNode( "node" );
 		node.register( "key", e -> counterA.incrementAndGet() );
 		node.register( "key", e -> counterB.incrementAndGet() );
 
@@ -68,7 +68,7 @@ public class NodeApiTest extends BaseNodeTest {
 	void testEventHandlerWithOwner() {
 		// given
 		Object owner = new Object();
-		MockNode node = new MockNode( "node" );
+		MockDataNode node = new MockDataNode( "node" );
 		AtomicInteger counter = new AtomicInteger();
 
 		node.register(owner, "key", e -> counter.incrementAndGet() );
@@ -90,9 +90,9 @@ public class NodeApiTest extends BaseNodeTest {
 
 	@Test
 	void testDistanceTo() {
-		MockNode grandParent = new MockNode( "grandParent" );
-		MockNode parent = new MockNode( "parent" );
-		MockNode child = new MockNode( "child" );
+		MockDataNode grandParent = new MockDataNode( "grandParent" );
+		MockDataNode parent = new MockDataNode( "parent" );
+		MockDataNode child = new MockDataNode( "child" );
 
 		assertThat( child.distanceTo( grandParent ) ).isEqualTo( -1 );
 		assertThat( child.distanceTo( parent ) ).isEqualTo( -1 );
@@ -759,7 +759,7 @@ public class NodeApiTest extends BaseNodeTest {
 
 	@Test
 	void testNodeSetAddWithNull() {
-		assertThat( data.getValues( MockNode.ITEMS ) ).isEqualTo( Set.of() );
+		assertThat( data.getValues( MockDataNode.ITEMS ) ).isEqualTo( Set.of() );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 
 		data.addItem( null );
@@ -768,57 +768,57 @@ public class NodeApiTest extends BaseNodeTest {
 
 	@Test
 	void testNodeSetAddRemove() {
-		MockNode item = new MockNode();
-		assertThat( data.getValues( MockNode.ITEMS ) ).isEqualTo( Set.of() );
+		MockDataNode item = new MockDataNode();
+		assertThat( data.getValues( MockDataNode.ITEMS ) ).isEqualTo( Set.of() );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 
 		data.addItem( item );
-		assertThat( data.getValues( MockNode.ITEMS ) ).contains( item );
+		assertThat( data.getValues( MockDataNode.ITEMS ) ).contains( item );
 		NodeAssert.assertThat( data ).hasStates( true, false, 0, 1 );
 
 		data.removeItem( item );
-		assertThat( data.getValues( MockNode.ITEMS ) ).isEqualTo( Set.of() );
+		assertThat( data.getValues( MockDataNode.ITEMS ) ).isEqualTo( Set.of() );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 
 		data.addItem( item );
-		assertThat( data.getValues( MockNode.ITEMS ) ).contains( item );
+		assertThat( data.getValues( MockDataNode.ITEMS ) ).contains( item );
 		data.setModified( false );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 
 		data.removeItem( item );
-		assertThat( data.getValues( MockNode.ITEMS ) ).isEqualTo( Set.of() );
+		assertThat( data.getValues( MockDataNode.ITEMS ) ).isEqualTo( Set.of() );
 		NodeAssert.assertThat( data ).hasStates( true, false, 0, 1 );
 	}
 
 	@Test
 	void testNodeSetAddRemoveDataStructure() {
-		MockNode item = new MockNode();
-		assertThat( item.<Node> getParent() ).isNull();
+		MockDataNode item = new MockDataNode();
+		assertThat( item.<DataNode> getParent() ).isNull();
 
 		data.addItem( item );
-		assertThat( item.<Node> getParent() ).isNotNull();
-		assertThat( item.<Node> getTrueParent() ).isInstanceOf( NodeSet.class );
-		assertThat( item.<Node> getParent() ).isEqualTo( data );
+		assertThat( item.<DataNode> getParent() ).isNotNull();
+		assertThat( item.<DataNode> getTrueParent() ).isInstanceOf( DataNodeSet.class );
+		assertThat( item.<DataNode> getParent() ).isEqualTo( data );
 
 		data.removeItem( item );
-		assertThat( item.<Node> getParent() ).isNull();
+		assertThat( item.<DataNode> getParent() ).isNull();
 	}
 
 	@Test
 	void testAddMultipleSetItems() {
-		MockNode item1 = new MockNode();
-		MockNode item2 = new MockNode();
-		assertThat( data.getValues( MockNode.ITEMS ) ).isEqualTo( Set.of() );
+		MockDataNode item1 = new MockDataNode();
+		MockDataNode item2 = new MockDataNode();
+		assertThat( data.getValues( MockDataNode.ITEMS ) ).isEqualTo( Set.of() );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 
 		data.addItem( item1 );
-		assertThat( data.getValues( MockNode.ITEMS ) ).contains( item1 );
+		assertThat( data.getValues( MockDataNode.ITEMS ) ).contains( item1 );
 		NodeAssert.assertThat( data ).hasStates( true, false, 0, 1 );
 		data.setModified( false );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 
 		data.addItem( item2 );
-		assertThat( data.getValues( MockNode.ITEMS ) ).contains( item1, item2 );
+		assertThat( data.getValues( MockDataNode.ITEMS ) ).contains( item1, item2 );
 		NodeAssert.assertThat( data ).hasStates( true, false, 0, 1 );
 		data.setModified( false );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
@@ -826,23 +826,23 @@ public class NodeApiTest extends BaseNodeTest {
 
 	@Test
 	void testRemoveFromMultipleSetItems() {
-		MockNode item1 = new MockNode();
-		MockNode item2 = new MockNode();
+		MockDataNode item1 = new MockDataNode();
+		MockDataNode item2 = new MockDataNode();
 		data.addItem( item1 ).addItem( item2 );
-		assertThat( data.getValues( MockNode.ITEMS ) ).contains( item1, item2 );
+		assertThat( data.getValues( MockDataNode.ITEMS ) ).contains( item1, item2 );
 		NodeAssert.assertThat( data ).hasStates( true, false, 0, 1 );
 		data.setModified( false );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 
 		data.removeItem( item1 );
-		assertThat( data.getValues( MockNode.ITEMS ) ).contains( item2 );
+		assertThat( data.getValues( MockDataNode.ITEMS ) ).contains( item2 );
 		NodeAssert.assertThat( data ).hasStates( true, false, 0, 1 );
 		data.setModified( false );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
 
 		data.removeItem( item2 );
-		assertThat( data.getValues( MockNode.ITEMS ) ).isEqualTo( Set.of() );
-		assertThat( data.<Object> getValue( MockNode.ITEMS ) ).isNull();
+		assertThat( data.getValues( MockDataNode.ITEMS ) ).isEqualTo( Set.of() );
+		assertThat( data.<Object> getValue( MockDataNode.ITEMS ) ).isNull();
 		NodeAssert.assertThat( data ).hasStates( true, false, 0, 1 );
 		data.setModified( false );
 		NodeAssert.assertThat( data ).hasStates( false, false, 0, 0 );
@@ -850,13 +850,13 @@ public class NodeApiTest extends BaseNodeTest {
 
 	@Test
 	void testNodeSetIterator() {
-		MockNode item0 = new MockNode( "0" );
+		MockDataNode item0 = new MockDataNode( "0" );
 		data.addItem( item0 );
-		MockNode item1 = new MockNode( "1" );
+		MockDataNode item1 = new MockDataNode( "1" );
 		data.addItem( item1 );
-		MockNode item2 = new MockNode( "2" );
+		MockDataNode item2 = new MockDataNode( "2" );
 		data.addItem( item2 );
-		MockNode item3 = new MockNode( "3" );
+		MockDataNode item3 = new MockDataNode( "3" );
 		data.addItem( item3 );
 
 		assertThat( data.getItems() ).contains( item0, item1, item2, item3 );
@@ -865,16 +865,16 @@ public class NodeApiTest extends BaseNodeTest {
 
 	@Test
 	void testNodeSetIteratorWithModifyFilter() {
-		MockNode item0 = new MockNode( "0" );
+		MockDataNode item0 = new MockDataNode( "0" );
 		data.addItem( item0 );
-		MockNode item1 = new MockNode( "1" );
+		MockDataNode item1 = new MockDataNode( "1" );
 		data.addItem( item1 );
-		MockNode item2 = new MockNode( "2" );
+		MockDataNode item2 = new MockDataNode( "2" );
 		data.addItem( item2 );
-		MockNode item3 = new MockNode( "3" );
+		MockDataNode item3 = new MockDataNode( "3" );
 		data.addItem( item3 );
 
-		data.setSetModifyFilter( MockNode.ITEMS, n -> true );
+		data.setSetModifyFilter( MockDataNode.ITEMS, n -> true );
 
 		assertThat( data.getItems() ).contains( item0, item1, item2, item3 );
 		assertThat( data.getItems().size() ).isEqualTo( 4 );
@@ -930,7 +930,7 @@ public class NodeApiTest extends BaseNodeTest {
 
 	@Test
 	void testCircularReferenceCheck() {
-		MockNode node = new MockNode();
+		MockDataNode node = new MockDataNode();
 		try {
 			node.setValue( "node", node );
 			fail( "CircularReferenceException should be thrown" );
@@ -942,11 +942,11 @@ public class NodeApiTest extends BaseNodeTest {
 
 	@Test
 	void testCopyFrom() {
-		Node node1 = new Node();
+		DataNode node1 = new DataNode();
 		node1.setValue( "key1", "value1" );
 		node1.setValue( "key2", "value2" );
 
-		Node node2 = new Node();
+		DataNode node2 = new DataNode();
 		node2.setValue( "key2", "valueB" );
 
 		node2.copyFrom( node1 );
@@ -958,11 +958,11 @@ public class NodeApiTest extends BaseNodeTest {
 
 	@Test
 	void testCopyFromWithOverwrite() {
-		Node node1 = new Node();
+		DataNode node1 = new DataNode();
 		node1.setValue( "key1", "value1" );
 		node1.setValue( "key2", "value2" );
 
-		Node node2 = new Node();
+		DataNode node2 = new DataNode();
 		node2.setValue( "key2", "valueB" );
 
 		node2.copyFrom( node1, true );
@@ -974,31 +974,31 @@ public class NodeApiTest extends BaseNodeTest {
 
 	@Test
 	void testCopyFromWithOverwriteAndPrimaryKey() {
-		Node node1 = new MockNode();
-		node1.setValue( MockNode.MOCK_ID, "a" );
+		DataNode node1 = new MockDataNode();
+		node1.setValue( MockDataNode.MOCK_ID, "a" );
 		node1.setValue( "key1", "value1" );
 		node1.setValue( "key2", "value2" );
 
-		Node node2 = new MockNode();
-		node2.setValue( MockNode.MOCK_ID, "b" );
+		DataNode node2 = new MockDataNode();
+		node2.setValue( MockDataNode.MOCK_ID, "b" );
 		node2.setValue( "key2", "valueB" );
 
 		node2.copyFrom( node1, true );
 		assertThat( node1.<String> getValue( "key1" ) ).isEqualTo( "value1" );
 		assertThat( node1.<String> getValue( "key2" ) ).isEqualTo( "value2" );
-		assertThat( node1.<String> getValue( MockNode.MOCK_ID ) ).isEqualTo( "a" );
+		assertThat( node1.<String> getValue( MockDataNode.MOCK_ID ) ).isEqualTo( "a" );
 		assertThat( node2.<String> getValue( "key1" ) ).isEqualTo( "value1" );
 		assertThat( node2.<String> getValue( "key2" ) ).isEqualTo( "value2" );
-		assertThat( node2.<String> getValue( MockNode.MOCK_ID ) ).isEqualTo( "b" );
+		assertThat( node2.<String> getValue( MockDataNode.MOCK_ID ) ).isEqualTo( "b" );
 	}
 
 	@Test
 	void testCopyFromUsingResources() {
-		Node node1 = new Node();
+		DataNode node1 = new DataNode();
 		node1.setValue( "key1", "value1" );
 		node1.setValue( "key2", "value2" );
 
-		Node node2 = new Node();
+		DataNode node2 = new DataNode();
 		node2.setValue( "key2", "valueB" );
 
 		node2.copyFrom( node1 );
@@ -1010,11 +1010,11 @@ public class NodeApiTest extends BaseNodeTest {
 
 	@Test
 	void testCopyFromWithOverwriteUsingResources() {
-		Node node1 = new Node();
+		DataNode node1 = new DataNode();
 		node1.setValue( "key1", "value1" );
 		node1.setValue( "key2", "value2" );
 
-		Node node2 = new Node();
+		DataNode node2 = new DataNode();
 		node2.setValue( "key2", "valueB" );
 
 		node2.copyFrom( node1, true );
@@ -1083,7 +1083,7 @@ public class NodeApiTest extends BaseNodeTest {
 		assertThat( data.hashCode() ).isEqualTo( System.identityHashCode( data )  );
 
 		// Test the primary key
-		data.setValue( MockNode.MOCK_ID, key );
+		data.setValue( MockDataNode.MOCK_ID, key );
 		assertThat( data.hashCode() ).isEqualTo( key.hashCode()  );
 
 		// Test the natural key
@@ -1096,17 +1096,17 @@ public class NodeApiTest extends BaseNodeTest {
 		String key = UUID.randomUUID().toString();
 		String lastName = "Doe";
 
-		MockNode data1 = new MockNode();
+		MockDataNode data1 = new MockDataNode();
 		data1.defineNaturalKey( "firstName", "lastName", "birthDate" );
-		MockNode data2 = new MockNode();
+		MockDataNode data2 = new MockDataNode();
 		data2.defineNaturalKey( "firstName", "lastName", "birthDate" );
 		assertThat( data1.equals( data2 ) ).isEqualTo( true  );
 
 		// Test the primary key
-		data1.setValue( MockNode.MOCK_ID, key );
+		data1.setValue( MockDataNode.MOCK_ID, key );
 		assertThat( data1.equals( data2 ) ).isEqualTo( false  );
 
-		data2.setValue( MockNode.MOCK_ID, key );
+		data2.setValue( MockDataNode.MOCK_ID, key );
 		assertThat( data1.equals( data2 ) ).isEqualTo( true  );
 
 		// Test the natural key

@@ -9,15 +9,15 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class NodeSettingsTest {
+public class DataNodeSettingsTest {
 
-	private MockNode node;
+	private MockDataNode node;
 
 	private NodeSettings settings;
 
 	@BeforeEach
 	public void setup() {
-		node = new MockNode();
+		node = new MockDataNode();
 		settings = new NodeSettings( node );
 	}
 

@@ -4,12 +4,12 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * A {@link Comparator} for {@link Node nodes}. The comparator is constructed
+ * A {@link Comparator} for {@link DataNode nodes}. The comparator is constructed
  * with the keys that should be compared.
  *
  * @param <T> The node type
  */
-public record NodeComparator<T extends Node>(List<String> keys) implements Comparator<T> {
+public record NodeComparator<T extends DataNode>(List<String> keys) implements Comparator<T> {
 
 	@Override
 	public int compare( T a, T b ) {
@@ -25,11 +25,11 @@ public record NodeComparator<T extends Node>(List<String> keys) implements Compa
 		return 0;
 	}
 
-	public static <T extends Node> NodeComparator<T> of( String... keys ) {
+	public static <T extends DataNode> NodeComparator<T> of( String... keys ) {
 		return new NodeComparator<>( List.of( keys ) );
 	}
 
-	public static <T extends Node> NodeComparator<T> of( List<String> keys ) {
+	public static <T extends DataNode> NodeComparator<T> of( List<String> keys ) {
 		return new NodeComparator<>( keys );
 	}
 

@@ -2,13 +2,13 @@ package com.acromere.data;
 
 import org.junit.jupiter.api.BeforeEach;
 
-public abstract class BaseNodeTest {
+public abstract class BaseDataNodeTest {
 
-	protected MockNode data;
+	protected MockDataNode data;
 
 	@BeforeEach
 	void setup() {
-		data = new MockNode();
+		data = new MockDataNode();
 	}
 
 }

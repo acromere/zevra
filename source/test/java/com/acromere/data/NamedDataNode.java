@@ -1,8 +1,8 @@
 package com.acromere.data;
 
-class NamedNode extends MockNode {
+class NamedDataNode extends MockDataNode {
 
-	public NamedNode() {
+	public NamedDataNode() {
 		defineNaturalKey( "name" );
 	}
 

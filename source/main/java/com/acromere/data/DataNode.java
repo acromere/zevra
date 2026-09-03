@@ -121,7 +121,7 @@ import java.util.stream.Collectors;
  * parent nodes.
  */
 @CustomLog
-public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
+public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode> {
 
 	/**
 	 * A special object to represent previously null values in the modifiedValues
@@ -147,7 +147,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 	/**
 	 * The parent of the node.
 	 */
-	private Node parent;
+	private DataNode parent;
 
 	/**
 	 * The node values.
@@ -210,16 +210,16 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 	 * The count of child nodes that are modified since the modified flag was last
 	 * cleared. This set is set to null when the modified flag is cleared.
 	 */
-	private Set<Node> modifiedChildren;
+	private Set<DataNode> modifiedChildren;
 
-	private Comparator<Node> comparator;
+	private Comparator<DataNode> comparator;
 
 	/**
 	 * Create a new, generic, empty data node. It is generally expected that the
 	 * Node class will be inherited instead of used directly, but there is no
 	 * restriction on creating "generic" nodes.
 	 */
-	public Node() {
+	public DataNode() {
 		this.collectionId = UUID.randomUUID().toString();
 		this.hub = new EventHub();
 		this.valueChangeHandlers = new WeakHashMap<>();
@@ -414,7 +414,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 	 *
 	 * @param node The node from which to copy values and resources
 	 */
-	public <T extends Node> T copyFrom( Node node ) {
+	public <T extends DataNode> T copyFrom( DataNode node ) {
 		return copyFrom( node, false );
 	}
 
@@ -428,7 +428,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 	 * @param overwrite Should the new values overwrite existing values?
 	 */
 	@SuppressWarnings( "unchecked" )
-	public <T extends Node> T copyFrom( Node node, boolean overwrite ) {
+	public <T extends DataNode> T copyFrom( DataNode node, boolean overwrite ) {
 		// Clone values
 		for( String key : node.getValueKeys() ) {
 			// Do not overwrite primary key values
@@ -445,7 +445,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 	public Object clone() {
 		try {
 			getClass().getConstructor().newInstance();
-			Node clone = getClass().getConstructor().newInstance();
+			DataNode clone = getClass().getConstructor().newInstance();
 			clone.copyFrom( this );
 			return clone;
 		} catch( Exception exception ) {
@@ -536,7 +536,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 	public boolean equals( Object object, Set<String> keys ) {
 		if( object == null || this.getClass() != object.getClass() ) return false;
 
-		Node that = (Node)object;
+		DataNode that = (DataNode)object;
 		Set<String> mismatchedKeys = keys.stream().filter( k -> !Objects.equals( this.getValue( k ), that.getValue( k ) ) ).collect( Collectors.toSet() );
 
 		return mismatchedKeys.isEmpty();
@@ -574,7 +574,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 	}
 
 	@Override
-	public int compareTo( @NonNull Node that ) {
+	public int compareTo( @NonNull DataNode that ) {
 		if( comparator == null ) comparator = getNaturalComparator();
 		return comparator.compare( this, that );
 	}
@@ -585,7 +585,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 	 * @param <T> The node type
 	 * @return A node comparator
 	 */
-	public <T extends Node> Comparator<T> getNaturalComparator() {
+	public <T extends DataNode> Comparator<T> getNaturalComparator() {
 		return NodeComparator.of( getNaturalKey() );
 	}
 
@@ -752,47 +752,47 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 		return (Collection<T>)getValues().stream().filter( clazz::isInstance ).collect( Collectors.toUnmodifiableSet() );
 	}
 
-	protected <T extends Node> Set<T> getValues( String key ) {
+	protected <T extends DataNode> Set<T> getValues( String key ) {
 		return exists( key ) ? Collections.unmodifiableSet( getValue( key ) ) : Set.of();
 	}
 
-	protected <T extends Node> List<T> getValueList( String key, Comparator<T> comparator ) {
+	protected <T extends DataNode> List<T> getValueList( String key, Comparator<T> comparator ) {
 		List<T> list = new ArrayList<>( getValues( key ) );
 		list.sort( comparator );
 		return list;
 	}
 
-	protected <T extends Node> void addToSet( String key, T value ) {
+	protected <T extends DataNode> void addToSet( String key, T value ) {
 		if( value == null ) return;
-		getValue( key, () -> doSetValue( key, null, new NodeSet<>( key ) ) ).add( value );
+		getValue( key, () -> doSetValue( key, null, new DataNodeSet<>( key ) ) ).add( value );
 	}
 
-	protected <T extends Node> void removeFromSet( String key, T value ) {
-		NodeSet<T> set = getValue( key );
+	protected <T extends DataNode> void removeFromSet( String key, T value ) {
+		DataNodeSet<T> set = getValue( key );
 		if( set == null ) return;
 		if( set.remove( value ) && set.isNodeSetEmpty() ) doSetValue( key, set, null );
 	}
 
-	protected <T extends Node> void addToSet( String key, Collection<T> values ) {
+	protected <T extends DataNode> void addToSet( String key, Collection<T> values ) {
 		if( values.isEmpty() ) return;
-		getValue( key, () -> doSetValue( key, null, new NodeSet<>( key ) ) ).addAll( values );
+		getValue( key, () -> doSetValue( key, null, new DataNodeSet<>( key ) ) ).addAll( values );
 	}
 
-	protected <T extends Node> void removeFromSet( String key, Collection<T> values ) {
-		NodeSet<T> set = getValue( key );
+	protected <T extends DataNode> void removeFromSet( String key, Collection<T> values ) {
+		DataNodeSet<T> set = getValue( key );
 		if( set == null ) return;
 		if( set.removeAll( values ) && set.isNodeSetEmpty() ) doSetValue( key, set, null );
 	}
 
-	protected <T extends Node> void clearSet( String key ) {
-		NodeSet<T> set = getValue( key );
+	protected <T extends DataNode> void clearSet( String key ) {
+		DataNodeSet<T> set = getValue( key );
 		if( set == null ) return;
 		set.clear();
 		doSetValue( key, set, null );
 	}
 
-	protected void setSetModifyFilter( String key, Function<Node, Boolean> filter ) {
-		getValue( key, () -> doSetValue( key, null, new NodeSet<>( key ) ) ).setSetModifyFilter( filter );
+	protected void setSetModifyFilter( String key, Function<DataNode, Boolean> filter ) {
+		getValue( key, () -> doSetValue( key, null, new DataNodeSet<>( key ) ) ).setSetModifyFilter( filter );
 	}
 
 	/**
@@ -953,11 +953,11 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 	 * node inclusive. If the specified node is this node, then it returns 0. If
 	 * The specified node is not a parent of this node, then it returns -1.
 	 */
-	int distanceTo( Node target ) {
+	int distanceTo( DataNode target ) {
 		if( this == target ) return 0;
 
 		int count = 0;
-		Node node = this;
+		DataNode node = this;
 		while( node != null && node != target ) {
 			count++;
 			node = node.getParent();
@@ -974,18 +974,18 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 	 * @return The parent node or null
 	 */
 	@SuppressWarnings( "unchecked" )
-	public <T extends Node> T getParent() {
-		if( parent instanceof NodeSet ) return parent.getParent();
+	public <T extends DataNode> T getParent() {
+		if( parent instanceof DataNodeSet ) return parent.getParent();
 		return (T)parent;
 	}
 
 	@SuppressWarnings( "unchecked" )
-	<T extends Node> T getTrueParent() {
+	<T extends DataNode> T getTrueParent() {
 		return (T)parent;
 	}
 
 	@SuppressWarnings( "StatementWithEmptyBody" )
-	void doSetParent( Node parent ) {
+	void doSetParent( DataNode parent ) {
 		checkForCircularReference( parent );
 
 		if( this.parent != null ) {
@@ -1000,13 +1000,13 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 		}
 	}
 
-	List<Node> getNodePath() {
+	List<DataNode> getNodePath() {
 		return getNodePath( null );
 	}
 
 	@SuppressWarnings( "SameParameterValue" )
-	List<Node> getNodePath( Node stop ) {
-		List<Node> path = new ArrayList<>();
+	List<DataNode> getNodePath( DataNode stop ) {
+		List<DataNode> path = new ArrayList<>();
 		if( this != stop && parent != null ) path = parent.getNodePath();
 		path.add( this );
 		return path;
@@ -1028,12 +1028,12 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 			if( values == null ) return null;
 			values.remove( key );
 			if( values.isEmpty() ) values = null;
-			if( oldValue instanceof Node ) doRemoveFromParent( (Node)oldValue, true );
+			if( oldValue instanceof DataNode ) doRemoveFromParent( (DataNode)oldValue, true );
 		} else {
 			if( values == null ) values = new ConcurrentHashMap<>();
-			if( newValue instanceof Node ) doRemoveFromParent( (Node)newValue, false );
+			if( newValue instanceof DataNode ) doRemoveFromParent( (DataNode)newValue, false );
 			values.put( key, newValue );
-			if( newValue instanceof Node ) ((Node)newValue).doSetParent( this );
+			if( newValue instanceof DataNode ) ((DataNode)newValue).doSetParent( this );
 		}
 
 		updateInternalModified();
@@ -1041,8 +1041,8 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 		return newValue;
 	}
 
-	private void doRemoveFromParent( Node child, boolean quiet ) {
-		Node parent = child.getParent();
+	private void doRemoveFromParent( DataNode child, boolean quiet ) {
+		DataNode parent = child.getParent();
 		if( parent != null ) {
 			parent.getValueKeys().stream().filter( k -> parent.getValue( k ).equals( child ) ).forEach( k -> {
 				if( quiet ) {
@@ -1055,7 +1055,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 		}
 	}
 
-	private void doSetChildModified( Node child, boolean newModified ) {
+	private void doSetChildModified( DataNode child, boolean newModified ) {
 		// Update the modified children set
 		if( values.containsValue( child ) ) this.modifiedChildren = updateModifiedSet( modifiedChildren, child, newModified );
 		updateInternalModified();
@@ -1090,7 +1090,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 
 	/**
 	 * Dispatch a {@link NodeEvent} to the data node. This method should not be
-	 * called by other classes other than the {@link Node data} class.
+	 * called by other classes other than the {@link DataNode data} class.
 	 *
 	 * @param event The data node event
 	 */
@@ -1122,12 +1122,12 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 		}
 	}
 
-	private void checkForCircularReference( Node parent ) {
+	private void checkForCircularReference( DataNode parent ) {
 		checkForCircularReference( parent, this );
 	}
 
-	private static void checkForCircularReference( Node parent, Node node ) {
-		Node next = parent;
+	private static void checkForCircularReference( DataNode parent, DataNode node ) {
+		DataNode next = parent;
 		while( next != null ) {
 			if( node == next ) throw new CircularReferenceException( "Circular reference detected in parent path: " + node );
 			next = next.getParent();
@@ -1141,25 +1141,25 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 	 * @param event The event
 	 */
 	private void fireHoppingEvent( NodeEvent event ) {
-		Node node = this;
+		DataNode node = this;
 		while( node != null ) {
 			fireTargetedEvent( node, new NodeEvent( node, event.getEventType() ) );
 			node = node.getParent();
 		}
 	}
 
-	private void fireTargetedEvent( Node target, NodeEvent event ) {
+	private void fireTargetedEvent( DataNode target, NodeEvent event ) {
 		target.getEventHub().dispatch( event );
 	}
 
 	private static abstract class NodeTxnOperation extends TxnOperation {
 
-		NodeTxnOperation( Node node ) {
+		NodeTxnOperation( DataNode node ) {
 			super( node );
 		}
 
-		final Node getNode() {
-			return (Node)getTarget();
+		final DataNode getNode() {
+			return (DataNode)getTarget();
 		}
 
 		final void fireEvent( NodeEvent event ) {
@@ -1173,7 +1173,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 		 * @param event The event
 		 */
 		protected final void fireSlidingEvent( NodeEvent event ) {
-			Node node = event.getNode();
+			DataNode node = event.getNode();
 			while( node != null ) {
 				fireTargetedEvent( node, event );
 				node = node.getParent();
@@ -1187,7 +1187,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 		 * @param event The event
 		 */
 		final void fireHoppingEvent( NodeEvent event ) {
-			Node node = getNode();
+			DataNode node = getNode();
 			while( node != null ) {
 				fireTargetedEvent( node, new NodeEvent( node, event.getEventType() ) );
 				node = node.getParent();
@@ -1196,24 +1196,24 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 
 		@SuppressWarnings( "SameParameterValue" )
 		final void fireDroppingEvent( EventType<NodeEvent> type ) {
-			Node source = getNode();
-			Node target = getNode();
+			DataNode source = getNode();
+			DataNode target = getNode();
 
-			if( source instanceof NodeSet ) source = source.getParent();
+			if( source instanceof DataNodeSet ) source = source.getParent();
 			if( source == null ) return;
 
 			fireDroppingEvent( target, new NodeEvent( source, type ) );
 		}
 
-		final void fireDroppingEvent( Node target, NodeEvent event ) {
+		final void fireDroppingEvent( DataNode target, NodeEvent event ) {
 			if( target == null || target.values == null ) return;
 
 			NodeEvent newEvent = new NodeEvent( event.getNode(), event.getEventType() );
 
 			for( Object value : target.values.values() ) {
-				if( value instanceof Node child ) {
-					if( child instanceof NodeSet ) {
-						for( Node setValue : (NodeSet<?>)value ) {
+				if( value instanceof DataNode child ) {
+					if( child instanceof DataNodeSet ) {
+						for( DataNode setValue : (DataNodeSet<?>)value ) {
 							child = setValue;
 							fireTargetedEvent( child, newEvent );
 							fireDroppingEvent( child, newEvent );
@@ -1226,7 +1226,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 			}
 		}
 
-		final void fireTargetedEvent( Node target, NodeEvent event ) {
+		final void fireTargetedEvent( DataNode target, NodeEvent event ) {
 			getResult().addEvent( target, event );
 		}
 
@@ -1238,7 +1238,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 
 		private final boolean newValue;
 
-		SetSelfModifiedOperation( Node node, boolean oldValue, boolean newValue ) {
+		SetSelfModifiedOperation( DataNode node, boolean oldValue, boolean newValue ) {
 			super( node );
 			this.oldValue = oldValue;
 			this.newValue = newValue;
@@ -1254,7 +1254,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 			// Propagate the modified false flag value to children
 			if( !newValue && getNode().values != null ) {
 				// NOTE Cannot use parallelStream here because it causes out-of-order events
-				getNode().values.values().stream().filter( v -> v instanceof Node ).map( v -> (Node)v ).filter( Node::isModified ).forEach( this::doClearChildModifiedFlag );
+				getNode().values.values().stream().filter( v -> v instanceof DataNode ).map( v -> (DataNode)v ).filter( DataNode::isModified ).forEach( this::doClearChildModifiedFlag );
 			}
 
 			if( modifyAllowed ) updateModified.commit();
@@ -1264,7 +1264,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 			return this;
 		}
 
-		private void doClearChildModifiedFlag( Node child ) {
+		private void doClearChildModifiedFlag( DataNode child ) {
 			getResult().addEventsFrom( new SetSelfModifiedOperation( child, child.selfModified, false ).commit() );
 		}
 
@@ -1291,7 +1291,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 
 		private final Object newValue;
 
-		SetValueOperation( Node node, String setKey, String key, Object oldValue, Object newValue ) {
+		SetValueOperation( DataNode node, String setKey, String key, Object oldValue, Object newValue ) {
 			super( node );
 			this.setKey = setKey;
 			this.key = key;
@@ -1307,7 +1307,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 			boolean modifyAllowed = getNode().modifyAllowed( oldValue ) & getNode().modifyAllowed( newValue );
 			UpdateModifiedOperation updateModified = new UpdateModifiedOperation( getNode() );
 			getNode().doSetValue( key, oldValue, newValue );
-			if( newValue instanceof Node && ((Node)newValue).getTrueParent() == null ) throw new RuntimeException( "Node parent not set correctly" );
+			if( newValue instanceof DataNode && ((DataNode)newValue).getTrueParent() == null ) throw new RuntimeException( "Node parent not set correctly" );
 
 			if( modifyAllowed && getNode().isModifyingKey( key ) ) {
 				// If the preValue is null, that means the value for this key has not been modified since the last transaction
@@ -1328,13 +1328,13 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 
 			if( modifyAllowed ) updateModified.commit();
 
-			boolean childAdd = oldValue == null && newValue instanceof Node;
-			boolean childRemove = newValue == null && oldValue instanceof Node;
+			boolean childAdd = oldValue == null && newValue instanceof DataNode;
+			boolean childRemove = newValue == null && oldValue instanceof DataNode;
 			if( childAdd ) {
-				fireTargetedEvent( (Node)newValue, new NodeEvent( (Node)newValue, NodeEvent.ADDED ) );
+				fireTargetedEvent( (DataNode)newValue, new NodeEvent( (DataNode)newValue, NodeEvent.ADDED ) );
 				fireSlidingEvent( new NodeEvent( getNode(), NodeEvent.CHILD_ADDED, setKey, key, null, newValue ) );
 			} else if( childRemove ) {
-				fireTargetedEvent( (Node)oldValue, new NodeEvent( (Node)oldValue, NodeEvent.REMOVED ) );
+				fireTargetedEvent( (DataNode)oldValue, new NodeEvent( (DataNode)oldValue, NodeEvent.REMOVED ) );
 				fireSlidingEvent( new NodeEvent( getNode(), NodeEvent.CHILD_REMOVED, setKey, key, oldValue, null ) );
 			} else {
 				fireDroppingEvent( NodeEvent.PARENT_CHANGED );
@@ -1363,7 +1363,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 	@SuppressWarnings( "unused" )
 	static class RefreshOperation extends NodeTxnOperation {
 
-		RefreshOperation( Node node ) {
+		RefreshOperation( DataNode node ) {
 			super( node );
 		}
 
@@ -1384,7 +1384,7 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 
 		private final boolean oldModified;
 
-		UpdateModifiedOperation( Node node ) {
+		UpdateModifiedOperation( DataNode node ) {
 			super( node );
 			oldModified = node.isModified();
 		}
@@ -1405,8 +1405,8 @@ public class Node implements TxnEventTarget, Cloneable, Comparable<Node> {
 		}
 
 		private void updateParentsModified( boolean newModified ) {
-			Node node = getNode();
-			Node parent = node.getTrueParent();
+			DataNode node = getNode();
+			DataNode parent = node.getTrueParent();
 			while( parent != null ) {
 				if( !parent.modifyAllowed( node ) ) break;
 				boolean oldParentModified = parent.isModified();
