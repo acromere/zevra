@@ -3,7 +3,10 @@ package com.acromere.data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,6 +79,111 @@ public class DataNodeSetTest {
 		assertThat( node.getItems().size() ).isEqualTo( 2 );
 		node.clearItems();
 		assertThat( node.getItems().size() ).isEqualTo( 0 );
+	}
+
+	@Test
+	void testIsEmptyAndIsNodeSetEmpty() {
+		assertThat( set.isEmpty() ).isTrue();
+		assertThat( set.isNodeSetEmpty() ).isTrue();
+
+		MockDataNode node = new MockDataNode( "a" );
+		set.add( node );
+		assertThat( set.isEmpty() ).isFalse();
+		assertThat( set.isNodeSetEmpty() ).isFalse();
+
+		set.clear();
+		assertThat( set.isEmpty() ).isTrue();
+	}
+
+	@Test
+	void testIteratorAndForEach() {
+		MockDataNode a = new MockDataNode( "a" );
+		MockDataNode b = new MockDataNode( "b" );
+		set.addAll( Set.of( a, b ) );
+
+		List<MockDataNode> iterated = new ArrayList<>();
+		for( MockDataNode node : set ) {
+			iterated.add( node );
+		}
+		assertThat( iterated ).containsExactlyInAnyOrder( a, b );
+
+		AtomicInteger count = new AtomicInteger();
+		set.forEach( node -> count.incrementAndGet() );
+		assertThat( count.get() ).isEqualTo( 2 );
+	}
+
+	@Test
+	void testToArray() {
+		MockDataNode a = new MockDataNode( "a" );
+		MockDataNode b = new MockDataNode( "b" );
+		set.addAll( Set.of( a, b ) );
+
+		Object[] arr1 = set.toArray();
+		assertThat( arr1 ).containsExactlyInAnyOrder( a, b );
+
+		MockDataNode[] arr2 = set.toArray( new MockDataNode[0] );
+		assertThat( arr2 ).containsExactlyInAnyOrder( a, b );
+
+		MockDataNode[] arr3 = set.toArray( MockDataNode[]::new );
+		assertThat( arr3 ).containsExactlyInAnyOrder( a, b );
+	}
+
+	@Test
+	void testRetainAll() {
+		MockDataNode a = new MockDataNode( "a" );
+		MockDataNode b = new MockDataNode( "b" );
+		MockDataNode c = new MockDataNode( "c" );
+		set.addAll( Set.of( a, b, c ) );
+
+		boolean changed = set.retainAll( Set.of( a, c ) );
+		assertThat( changed ).isTrue();
+		assertThat( (Set<MockDataNode>)set ).containsExactlyInAnyOrder( a, c );
+
+		boolean unchanged = set.retainAll( Set.of( a, c ) );
+		assertThat( unchanged ).isFalse();
+
+		boolean emptyRetain = set.retainAll( Set.of() );
+		assertThat( emptyRetain ).isTrue();
+		assertThat( (Set<MockDataNode>)set ).isEmpty();
+	}
+
+	@Test
+	void testContainsAll() {
+		MockDataNode a = new MockDataNode( "a" );
+		MockDataNode b = new MockDataNode( "b" );
+		set.addAll( Set.of( a, b ) );
+
+		assertThat( (Set<MockDataNode>)set ).containsAll( Set.of( a, b ) );
+		assertThat( set.containsAll( Set.of( a, new MockDataNode( "c" ) ) ) ).isFalse();
+	}
+
+	@Test
+	void testStreamsAndSpliterator() {
+		MockDataNode a = new MockDataNode( "a" );
+		MockDataNode b = new MockDataNode( "b" );
+		set.addAll( Set.of( a, b ) );
+
+		assertThat( set.stream().toList() ).containsExactlyInAnyOrder( a, b );
+		assertThat( set.parallelStream().toList() ).containsExactlyInAnyOrder( a, b );
+		assertThat( set.spliterator() ).isNotNull();
+	}
+
+	@Test
+	void testToString() {
+		assertThat( set.toString() ).isEqualTo( "DataNodeSet[test]" );
+	}
+
+	@Test
+	void testModifyAllowed() {
+		MockDataNode a = new MockDataNode( "a" );
+		assertThat( set.modifyAllowed( a ) ).isTrue();
+		assertThat( set.modifyAllowed( "non-node" ) ).isTrue();
+
+		set.setSetModifyFilter( node -> "allowed".equals( node.getValue( "tag" ) ) );
+		assertThat( set.modifyAllowed( a ) ).isFalse();
+
+		a.setValue( "tag", "allowed" );
+		assertThat( set.modifyAllowed( a ) ).isTrue();
 	}
 
 }

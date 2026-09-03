@@ -1,13 +1,19 @@
 package com.acromere.data;
 
+import com.acromere.settings.SettingsEvent;
+import com.acromere.settings.SettingsEventAssert;
+import com.acromere.settings.SettingsEventWatcher;
 import com.acromere.transaction.Txn;
 import com.acromere.transaction.TxnOperation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -124,6 +130,59 @@ public class MultiDataDataNodeSettingsTest {
 		assertFalse( node1.exists( "size" ) );
 		assertFalse( node2.exists( "size" ) );
 		assertFalse( node3.exists( "size" ) );
+	}
+
+	@Test
+	void testFlush() {
+		assertThat( settings.flush() ).isEqualTo( settings );
+	}
+
+	@Test
+	void testEmptyNodes() {
+		MultiNodeSettings emptySettings = new MultiNodeSettings( List.of() );
+		assertThat( emptySettings.getKeys() ).isEmpty();
+		assertThat( emptySettings.exists( "color" ) ).isFalse();
+		assertThat( emptySettings.get( "color", "default" ) ).isEqualTo( "default" );
+		assertThat( emptySettings.get( "color" ) ).isNull();
+	}
+
+	@Test
+	void testEventHandling() {
+		SettingsEventWatcher watcher = new SettingsEventWatcher();
+		settings.register( SettingsEvent.CHANGED, watcher );
+		assertThat( watcher.getEvents() ).isEmpty();
+
+		node1.setValue( "color", "red" );
+
+		assertThat( watcher.getEvents() ).hasSize( 1 );
+		SettingsEventAssert.assertThat( watcher.getEvents().get( 0 ) ).hasValues( settings, SettingsEvent.CHANGED, ".", "color", null, "red" );
+
+		settings.unregister( SettingsEvent.CHANGED, watcher );
+		node1.setValue( "color", "green" );
+		assertThat( watcher.getEvents() ).hasSize( 1 );
+	}
+
+	@Test
+	void testGetEventHandlers() {
+		SettingsEventWatcher watcher = new SettingsEventWatcher();
+		settings.register( SettingsEvent.CHANGED, watcher );
+		assertThat( settings.getEventHandlers() ).isNotEmpty();
+	}
+
+	@Test
+	void testUnsupportedOperations() {
+		assertThatThrownBy( () -> settings.nodeExists( "path" ) ).isInstanceOf( UnsupportedOperationException.class );
+		assertThatThrownBy( () -> settings.getNode( "path" ) ).isInstanceOf( UnsupportedOperationException.class );
+		assertThatThrownBy( () -> settings.getNode( "parent", "name" ) ).isInstanceOf( UnsupportedOperationException.class );
+		assertThatThrownBy( () -> settings.getNode( "path", Map.of() ) ).isInstanceOf( UnsupportedOperationException.class );
+		assertThatThrownBy( () -> settings.getNodes() ).isInstanceOf( UnsupportedOperationException.class );
+		assertThatThrownBy( () -> settings.copyFrom( settings ) ).isInstanceOf( UnsupportedOperationException.class );
+		assertThatThrownBy( () -> settings.delete() ).isInstanceOf( UnsupportedOperationException.class );
+		assertThatThrownBy( () -> settings.getDefaultValues() ).isInstanceOf( UnsupportedOperationException.class );
+		assertThatThrownBy( () -> settings.setDefaultValues( Map.of() ) ).isInstanceOf( UnsupportedOperationException.class );
+		assertThatThrownBy( () -> settings.loadDefaultValues( this, "path" ) ).isInstanceOf( UnsupportedOperationException.class );
+		assertThatThrownBy( () -> settings.register( "key", e -> {} ) ).isInstanceOf( UnsupportedOperationException.class );
+		assertThatThrownBy( () -> settings.unregister( "key", e -> {} ) ).isInstanceOf( UnsupportedOperationException.class );
 	}
 
 }

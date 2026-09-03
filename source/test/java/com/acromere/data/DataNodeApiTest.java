@@ -1117,4 +1117,162 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		assertThat( data1.equals( data2 ) ).isEqualTo( true );
 	}
 
+	@Test
+	void testClone() {
+		DataNode original = new DataNode();
+		original.setValue( "name", "John" );
+		original.setValue( "age", 30 );
+		DataNode clone = (DataNode)original.clone();
+		assertThat( clone ).isNotSameAs( original );
+		assertThat( clone.<String> getValue( "name" ) ).isEqualTo( "John" );
+		assertThat( clone.<Integer> getValue( "age" ) ).isEqualTo( 30 );
+	}
+
+	@Test
+	void testCompareToAndNaturalComparator() {
+		NamedDataNode node1 = new NamedDataNode();
+		NamedDataNode node2 = new NamedDataNode();
+		node1.setName( "Alice" );
+		node2.setName( "Bob" );
+		assertThat( node1.compareTo( node2 ) ).isNegative();
+		assertThat( node2.compareTo( node1 ) ).isPositive();
+		assertThat( node1.compareTo( node1 ) ).isEqualTo( 0 );
+
+		Comparator<NamedDataNode> comparator = node1.getNaturalComparator();
+		assertThat( comparator.compare( node1, node2 ) ).isNegative();
+	}
+
+	@Test
+	void testNaturalKey() {
+		MockDataNode node = new MockDataNode();
+		assertThat( node.getNaturalKey() ).isEmpty();
+		node.defineNaturalKey( "firstName", "lastName" );
+		assertThat( node.getNaturalKey() ).containsExactly( "firstName", "lastName" );
+	}
+
+	@Test
+	void testPrimaryKey() {
+		MockDataNode node = new MockDataNode();
+		node.definePrimaryKey( "mock-id" );
+		assertThat( node.getPrimaryKey() ).containsExactly( "mock-id" );
+		assertThat( node.isPrimaryKey( "mock-id" ) ).isTrue();
+		assertThat( node.isPrimaryKey( "other" ) ).isFalse();
+	}
+
+	@Test
+	void testComputeIfPresent() {
+		MockDataNode node = new MockDataNode();
+		assertThat( (Object)node.computeIfPresent( "count", ( k, v ) -> (Integer)v + 1 ) ).isNull();
+		node.setValue( "count", 10 );
+		Integer result = node.computeIfPresent( "count", ( k, v ) -> (Integer)v + 5 );
+		assertThat( result ).isEqualTo( 15 );
+		assertThat( node.<Integer> getValue( "count" ) ).isEqualTo( 15 );
+	}
+
+	@Test
+	void testGetValueList() {
+		MockDataNode parent = new MockDataNode();
+		MockDataNode child1 = new MockDataNode( "c1" );
+		child1.setValue( "name", "Bravo" );
+		MockDataNode child2 = new MockDataNode( "c2" );
+		child2.setValue( "name", "Alpha" );
+		parent.addItem( child1 );
+		parent.addItem( child2 );
+		List<MockDataNode> sorted = parent.getValueList( MockDataNode.ITEMS, DataNodeComparator.of( "name" ) );
+		assertThat( sorted ).containsExactly( child2, child1 );
+	}
+
+	@Test
+	void testNodePathAndTrueParent() {
+		MockDataNode root = new MockDataNode( "root" );
+		MockDataNode middle = new MockDataNode( "middle" );
+		MockDataNode leaf = new MockDataNode( "leaf" );
+
+		root.setValue( "child", middle );
+		middle.setValue( "child", leaf );
+
+		assertThat( (MockDataNode)leaf.getParent() ).isSameAs( middle );
+		assertThat( (MockDataNode)middle.getParent() ).isSameAs( root );
+		assertThat( (MockDataNode)leaf.getTrueParent() ).isSameAs( middle );
+
+		List<DataNode> path = leaf.getNodePath();
+		assertThat( path ).containsExactly( root, middle, leaf );
+
+		List<DataNode> pathStopped = leaf.getNodePath( middle );
+		assertThat( pathStopped ).containsExactly( middle, leaf );
+	}
+
+	@Test
+	void testModifyingKeysAndExcludedKeys() {
+		DataNode node = new DataNode();
+		node.setValue( "k1", "v1" );
+		node.setValue( "k2", "v2" );
+		assertThat( node.getModifyingKeys() ).isEmpty();
+		assertThat( node.getReadOnlyKeys() ).isEmpty();
+
+		node.addModifyingKeys( "k1", "k2" );
+		assertThat( node.getModifyingKeys() ).containsExactlyInAnyOrder( "k1", "k2" );
+		assertThat( node.isModifyingKey( "k1" ) ).isTrue();
+		assertThat( node.isModifyingKey( "k3" ) ).isFalse();
+
+		node.removeModifyingKeys( "k2" );
+		assertThat( node.getModifyingKeys() ).containsExactly( "k1" );
+
+		node.addExcludedModifyingKeys( "k1" );
+		assertThat( node.isModifyingKey( "k1" ) ).isFalse();
+
+		node.removeExcludedModifyingKeys( "k1" );
+		assertThat( node.isModifyingKey( "k1" ) ).isTrue();
+
+		node.defineReadOnly( "roKey" );
+		assertThat( node.isReadOnly( "roKey" ) ).isTrue();
+		assertThat( node.getReadOnlyKeys() ).contains( "roKey" );
+	}
+
+	@Test
+	void testGetEventHubAndHandlers() {
+		DataNode node = new DataNode();
+		assertThat( node.getEventHub() ).isNotNull();
+		assertThat( node.getEventHandlers() ).isNotNull();
+	}
+
+	@Test
+	void testEqualsWithKeys() {
+		MockDataNode a = new MockDataNode();
+		MockDataNode b = new MockDataNode();
+		a.setValue( "k1", "v1" );
+		a.setValue( "k2", "v2" );
+		b.setValue( "k1", "v1" );
+		b.setValue( "k2", "vDiff" );
+
+		assertThat( a.equals( b, "k1" ) ).isTrue();
+		assertThat( a.equals( b, "k2" ) ).isFalse();
+		assertThat( a.equals( b, Set.of( "k1" ) ) ).isTrue();
+		assertThat( a.equals( b, Set.of( "k1", "k2" ) ) ).isFalse();
+	}
+
+	@Test
+	void testToStringWithKeyList() {
+		DataNode node = new DataNode();
+		node.setValue( "a", "1" );
+		node.setValue( "b", "2" );
+		assertThat( node.toString( List.of( "a" ) ) ).isEqualTo( "DataNode{a=1}" );
+		assertThat( node.toString( "a", "b" ) ).isEqualTo( "DataNode{a=1,b=2}" );
+	}
+
+	@Test
+	void testSizeIsEmptyHasKey() {
+		DataNode node = new DataNode();
+		assertThat( node.isEmpty() ).isTrue();
+		assertThat( node.size() ).isEqualTo( 0 );
+		assertThat( node.hasKey( "test" ) ).isFalse();
+		assertThat( node.exists( "test" ) ).isFalse();
+
+		node.setValue( "test", "value" );
+		assertThat( node.isEmpty() ).isFalse();
+		assertThat( node.size() ).isEqualTo( 1 );
+		assertThat( node.hasKey( "test" ) ).isTrue();
+		assertThat( node.exists( "test" ) ).isTrue();
+	}
+
 }

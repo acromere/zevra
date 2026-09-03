@@ -198,14 +198,11 @@ class DataNodeSet<E extends DataNode> extends DataNode implements Set<E> {
 		return modified;
 	}
 
-	@SuppressWarnings( "SuspiciousMethodCalls" )
 	private boolean retainNodes( String setKey, Collection<?> collections ) {
-		if( collections.isEmpty() ) return false;
-		Collection<?> remaining = getValues();
-		int originalSize = remaining.size();
-		remaining.removeAll( collections );
-		removeNodes( setKey, remaining );
-		return remaining.size() != originalSize;
+		Collection<?> toRemove = new HashSet<>( getValues() );
+		toRemove.removeAll( collections );
+		if( toRemove.isEmpty() ) return false;
+		return removeNodes( setKey, toRemove );
 	}
 
 	@Override

@@ -1015,7 +1015,7 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	@SuppressWarnings( "SameParameterValue" )
 	List<DataNode> getNodePath( DataNode stop ) {
 		List<DataNode> path = new ArrayList<>();
-		if( this != stop && parent != null ) path = parent.getNodePath();
+		if( this != stop && parent != null ) path = parent.getNodePath( stop );
 		path.add( this );
 		return path;
 	}
