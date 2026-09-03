@@ -60,4 +60,27 @@ public class DataNodeLinkTest {
 		assertThat( peer.isModified() ).isFalse();
 	}
 
+	@Test
+	void testOf() {
+		MockDataNode node = new MockDataNode( "n" );
+		DataNodeLink<MockDataNode> link = DataNodeLink.of( node );
+		assertThat( link.getNode() ).isSameAs( node );
+	}
+
+	@Test
+	void testToString() {
+		MockDataNode node = new MockDataNode( "n" );
+		DataNodeLink<MockDataNode> link = DataNodeLink.of( node );
+		assertThat( link.toString() ).isEqualTo( "NodeLink@" + node );
+	}
+
+	@Test
+	void testId() {
+		MockDataNode node = new MockDataNode( "n" );
+		DataNodeLink<MockDataNode> link = DataNodeLink.of( node );
+		assertThat( link.getId() ).isNotNull();
+		link.setId( "custom-link-id" );
+		assertThat( link.getId() ).isEqualTo( "custom-link-id" );
+	}
+
 }

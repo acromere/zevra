@@ -2,6 +2,8 @@ package com.acromere.data;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DataDataNodeComparatorTest {
@@ -44,6 +46,39 @@ public class DataDataNodeComparatorTest {
 		a.setName( null );
 		b.setName( "b" );
 		assertThat( comparator.compare( a, b ) ).isEqualTo( 1 );
+	}
+
+	@Test
+	void testOfListAndKeys() {
+		List<String> keys = List.of( "name", "category" );
+		DataNodeComparator<MockDataNode> comparator = DataNodeComparator.of( keys );
+		assertThat( comparator.keys() ).isEqualTo( keys );
+	}
+
+	@Test
+	void testCompareMultipleKeys() {
+		MockDataNode a = new MockDataNode();
+		MockDataNode b = new MockDataNode();
+		DataNodeComparator<MockDataNode> comparator = DataNodeComparator.of( "group", "name" );
+
+		a.setValue( "group", "alpha" );
+		b.setValue( "group", "alpha" );
+		a.setValue( "name", "apple" );
+		b.setValue( "name", "banana" );
+
+		assertThat( comparator.compare( a, b ) ).isNegative();
+		assertThat( comparator.compare( b, a ) ).isPositive();
+
+		b.setValue( "name", "apple" );
+		assertThat( comparator.compare( a, b ) ).isEqualTo( 0 );
+	}
+
+	@Test
+	void testCompareEmptyKeys() {
+		MockDataNode a = new MockDataNode();
+		MockDataNode b = new MockDataNode();
+		DataNodeComparator<MockDataNode> comparator = DataNodeComparator.of( List.of() );
+		assertThat( comparator.compare( a, b ) ).isEqualTo( 0 );
 	}
 
 }
