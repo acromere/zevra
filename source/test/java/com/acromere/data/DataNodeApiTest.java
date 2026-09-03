@@ -262,11 +262,11 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		String key = "key";
 		String value = "value";
 
-		// It is important that these are the same value but not the same object
+		// It is important that these are the same value but different objects
 		String A = new String( value );
 		String B = new String( value );
 
-		// This checks that the two objects are not the same object
+		// This checks that the two objects are different objects
 		assertThat( A ).isNotSameAs( B );
 
 		// This checks that the two objects are the same value
@@ -553,7 +553,7 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 	@Test
 	void testSetClearSetValueInTransaction() throws Exception {
 		data.setValue( "x", 1 );
-		try (Txn t = Txn.create() ) {
+		try (Txn ignored = Txn.create() ) {
 			data.setValue( "x", null );
 			data.setValue( "x", 1 );
 		}
