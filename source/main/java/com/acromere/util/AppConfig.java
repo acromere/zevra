@@ -28,7 +28,7 @@ public class AppConfig {
 
 	public static final String JAVA_OPTIONS_HEADER = "[JavaOptions]";
 
-	public static final String JAVA_OPTIONS = "java-options=";
+	public static final String JAVA_OPTIONS = "java-options";
 
 	public static final String MX = "-Xmx";
 
@@ -123,12 +123,12 @@ public class AppConfig {
 		switch( action ) {
 			case 0:
 				// Nothing
-				lines.set( index, JAVA_OPTIONS + option + value + unit.toLowerCase() );
+				lines.set( index, JAVA_OPTIONS + "=" + option + value + unit.toLowerCase() );
 				break;
 			case 1:
 				// Insert
 				if( index < 0 ) index = javaOptionsIndex + 1;
-				lines.add( index, JAVA_OPTIONS + option + value + unit.toLowerCase() );
+				lines.add( index, JAVA_OPTIONS + "=" + option + value + unit.toLowerCase() );
 				break;
 			case 2:
 				// Remove
@@ -136,7 +136,7 @@ public class AppConfig {
 				break;
 			case 3:
 				// Update
-				lines.set( index, JAVA_OPTIONS + option + value + unit.toLowerCase() );
+				lines.set( index, JAVA_OPTIONS + "=" + option + value + unit.toLowerCase() );
 				break;
 		}
 	}
@@ -161,9 +161,9 @@ public class AppConfig {
 
 	AppConfig load( List<String> lines ) {
 		// Find the min line
-		String minLine = lines.stream().filter( line -> line.startsWith( JAVA_OPTIONS + MS ) ).findFirst().orElse( null );
+		String minLine = lines.stream().filter( line -> line.startsWith( JAVA_OPTIONS ) && line.contains( MS ) ).findFirst().orElse( null );
 		// Find the max line
-		String maxLine = lines.stream().filter( line -> line.startsWith( JAVA_OPTIONS + MX ) ).findFirst().orElse( null );
+		String maxLine = lines.stream().filter( line -> line.startsWith( JAVA_OPTIONS ) && line.contains( MX ) ).findFirst().orElse( null );
 
 		if( minLine != null ) {
 			String[] minOptions = parseHeapOptions( minLine );
@@ -185,12 +185,10 @@ public class AppConfig {
 	}
 
 	String[] parseHeapOptions( String line ) {
-		// This is just for sizing
-		String prefix = JAVA_OPTIONS + MS;
-
-		int index = prefix.length();
+		int start = line.indexOf( "-Xm" ) + 4;
+		int index = start;
 		while( index < line.length() && Character.isDigit( line.charAt( index ) ) ) index++;
-		String value = line.substring( prefix.length(), index );
+		String value = line.substring( start, index );
 		String unit = line.substring( index ).toLowerCase();
 
 		return new String[]{ value, unit };
