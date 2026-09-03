@@ -15,31 +15,6 @@ import java.util.*;
 @CustomLog
 public class OperatingSystem {
 
-	public enum Arch {
-		X86,
-		X64,
-		PPC,
-		UNKNOWN
-	}
-
-	public enum Family {
-		LINUX,
-		MACOS,
-		WINDOWS,
-		UNIX,
-		OS2,
-		UNKNOWN
-	}
-
-	public enum UserFolder {
-		DESKTOP,
-		DOCUMENTS,
-		DOWNLOAD,
-		MUSIC,
-		PHOTOS,
-		VIDEOS
-	}
-
 	public static final String CUSTOM_LAUNCHER_NAME = "java.launcher.name";
 
 	public static final String CUSTOM_LAUNCHER_PATH = "java.launcher.path";
@@ -51,6 +26,8 @@ public class OperatingSystem {
 	static final String NORMAL_PRIVILEGE_VALUE = OperatingSystem.class.getName() + ":process-privilege-normal";
 
 	static final String ELEVATED_PRIVILEGE_VALUE = OperatingSystem.class.getName() + ":process-privilege-elevated";
+
+	private static final Map<UserFolder, Path> userFolderCache = new EnumMap<>( UserFolder.class );
 
 	@Getter
 	@Setter
@@ -113,8 +90,6 @@ public class OperatingSystem {
 	@Getter
 	@Setter
 	private static Path sharedProgramDataFolder;
-
-	private static final Map<UserFolder, Path> userFolderCache = new EnumMap<>( UserFolder.class );
 
 	static {
 		reset();
@@ -471,7 +446,7 @@ public class OperatingSystem {
 	@SuppressWarnings( "unused" )
 	public static Path getJPackageAppPath() {
 		String path = System.getProperty( JPACKAGE_APP_PATH );
-		return path == null ? null : Path.of ( path );
+		return path == null ? null : Path.of( path );
 	}
 
 	/**
@@ -738,6 +713,31 @@ public class OperatingSystem {
 			log.atDebug().log( "Interrupted getting XDG user folder for {}", folder, exception );
 			return null;
 		}
+	}
+
+	public enum Arch {
+		X86,
+		X64,
+		PPC,
+		UNKNOWN
+	}
+
+	public enum Family {
+		LINUX,
+		MACOS,
+		WINDOWS,
+		UNIX,
+		OS2,
+		UNKNOWN
+	}
+
+	public enum UserFolder {
+		DESKTOP,
+		DOCUMENTS,
+		DOWNLOAD,
+		MUSIC,
+		PHOTOS,
+		VIDEOS
 	}
 
 }

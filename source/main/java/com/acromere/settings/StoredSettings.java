@@ -37,9 +37,6 @@ public class StoredSettings extends AbstractSettings {
 
 	private final DelayedAction action;
 
-	// Settings map store in root node
-	private Map<String, StoredSettings> settings;
-
 	private final StoredSettings root;
 
 	private final String path;
@@ -47,6 +44,9 @@ public class StoredSettings extends AbstractSettings {
 	private final Path folder;
 
 	private final Properties values;
+
+	// Settings map store in root node
+	private Map<String, StoredSettings> settings;
 
 	public StoredSettings( Path folder ) {
 		this( folder, null );

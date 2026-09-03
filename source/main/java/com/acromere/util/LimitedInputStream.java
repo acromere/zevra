@@ -115,7 +115,7 @@ public class LimitedInputStream extends InputStream {
 	 */
 	@Override
 	public void close() throws IOException {
-			input.close();
+		input.close();
 	}
 
 	/**

@@ -51,6 +51,29 @@ public class ProgramFormatter extends Formatter {
 	private final String format = getSimpleFormat( ProgramFormatter::getLoggingProperty );
 
 	/**
+	 * Retrieves the simple format string for log messages.
+	 *
+	 * @param defaultPropertyGetter a function that retrieves a property value based on a key
+	 * @return the simple format string for log messages
+	 */
+	private static String getSimpleFormat( Function<String, String> defaultPropertyGetter ) {
+		String format = defaultPropertyGetter.apply( FORMAT_PROPERTY_KEY );
+		if( format == null ) format = getLoggingProperty( FORMAT_PROPERTY_KEY );
+		if( format == null ) format = DEFAULT_FORMAT;
+		return format;
+	}
+
+	/**
+	 * Retrieves the value of the logging property with the given name.
+	 *
+	 * @param name the name of the logging property
+	 * @return the value of the logging property
+	 */
+	private static String getLoggingProperty( String name ) {
+		return LogManager.getLogManager().getProperty( name );
+	}
+
+	/**
 	 * Formats the given LogRecord into a formatted log message.
 	 *
 	 * @param record the LogRecord to format
@@ -135,29 +158,6 @@ public class ProgramFormatter extends Formatter {
 		}
 
 		return result;
-	}
-
-	/**
-	 * Retrieves the simple format string for log messages.
-	 *
-	 * @param defaultPropertyGetter a function that retrieves a property value based on a key
-	 * @return the simple format string for log messages
-	 */
-	private static String getSimpleFormat( Function<String, String> defaultPropertyGetter ) {
-		String format = defaultPropertyGetter.apply( FORMAT_PROPERTY_KEY );
-		if( format == null ) format = getLoggingProperty( FORMAT_PROPERTY_KEY );
-		if( format == null ) format = DEFAULT_FORMAT;
-		return format;
-	}
-
-	/**
-	 * Retrieves the value of the logging property with the given name.
-	 *
-	 * @param name the name of the logging property
-	 * @return the value of the logging property
-	 */
-	private static String getLoggingProperty( String name ) {
-		return LogManager.getLogManager().getProperty( name );
 	}
 
 }

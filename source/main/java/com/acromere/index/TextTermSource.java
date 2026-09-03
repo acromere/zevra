@@ -38,11 +38,13 @@ public class TextTermSource implements TermSource {
 				final String line = text.trim();
 				final int finalLineIndex = lineIndex;
 
-				terms.addAll( Terms.split( line, ( start, end ) -> {
-					int length = end - start;
-					String word = line.substring( start, end ).toLowerCase();
-					return new Term( line, word, length, List.of( finalLineIndex, start ) );
-				} ) );
+				terms.addAll( Terms.split(
+					line, ( start, end ) -> {
+						int length = end - start;
+						String word = line.substring( start, end ).toLowerCase();
+						return new Term( line, word, length, List.of( finalLineIndex, start ) );
+					}
+				) );
 
 				lineIndex++;
 			}

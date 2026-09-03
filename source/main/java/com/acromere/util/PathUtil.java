@@ -14,11 +14,11 @@ public class PathUtil {
 
 	public static final String SELF = ".";
 
-	private static final String DOUBLE_SEPARATOR = SEPARATOR + SEPARATOR;
-
 	public static final String EMPTY = "";
 
 	public static final String ROOT = "/";
+
+	private static final String DOUBLE_SEPARATOR = SEPARATOR + SEPARATOR;
 
 	/**
 	 * Checks if the given path is an absolute path.
@@ -112,7 +112,6 @@ public class PathUtil {
 		if( index < 0 ) return EMPTY;
 		return path.substring( 0, index );
 	}
-
 
 	/**
 	 * Normalize a given path by removing redundant separators, resolving parent

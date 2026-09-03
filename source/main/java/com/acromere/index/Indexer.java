@@ -15,17 +15,21 @@ import java.util.stream.Collectors;
 @CustomLog
 public class Indexer implements Controllable<Indexer> {
 
-	// A thread pool to run indexing tasks
-	private ExecutorService executor;
-
 	// A path to place index files
 	private final Path indexPath;
 
 	private final Map<String, Index> indexes;
 
+	// A thread pool to run indexing tasks
+	private ExecutorService executor;
+
 	public Indexer( Path indexPath ) {
 		this.indexPath = indexPath;
 		this.indexes = new ConcurrentHashMap<>();
+	}
+
+	public static Result<List<Hit>> search( Search search, IndexQuery query, Collection<Index> indexes ) {
+		return search.search( Index.merge( indexes ), query );
 	}
 
 	@Override
@@ -44,10 +48,6 @@ public class Indexer implements Controllable<Indexer> {
 	public Indexer stop() {
 		if( executor != null ) executor.shutdown();
 		return this;
-	}
-
-	public static Result<List<Hit>> search( Search search, IndexQuery query, Collection<Index> indexes ) {
-		return search.search( Index.merge( indexes ), query );
 	}
 
 	public Result<Future<Result<Set<Hit>>>> submit( Document document ) {
@@ -84,8 +84,8 @@ public class Indexer implements Controllable<Indexer> {
 		Index index = indexes.computeIfAbsent( name, k -> new StandardIndex() );
 
 		TermSource parser = switch( document.mediaType() ) {
-			case HTML -> new HtmlTermSource(document);
-			default -> new TextTermSource(document);
+			case HTML -> new HtmlTermSource( document );
+			default -> new TextTermSource( document );
 		};
 
 		return new HitFinder().find( document, parser ).ifSuccess( index::push ).ifFailure( e -> log.atWarn( e ).log( "Unable to parse document: %s", document ) );

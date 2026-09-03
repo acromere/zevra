@@ -9,9 +9,9 @@ import java.nio.file.Path;
 
 public class MockProductB implements Product {
 
-	private ProductCard card;
-
 	private final Product parent;
+
+	private ProductCard card;
 
 	public MockProductB( Product parent ) {
 		this.parent = parent;
@@ -40,7 +40,7 @@ public class MockProductB implements Product {
 	}
 
 	public String getTheme() {
-		return Rb.textOr(this, "test", "theme-color", null );
+		return Rb.textOr( this, "test", "theme-color", null );
 	}
 
 }

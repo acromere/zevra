@@ -15,7 +15,7 @@ public class Logging {
 		Logging.provider = provider;
 	}
 
-	public static Logger create(java.lang.Class<?> clazz ) {
+	public static Logger create( java.lang.Class<?> clazz ) {
 		return new Logger( getLoggingProvider().getLoggerWrapper( clazz.getName() ) );
 	}
 

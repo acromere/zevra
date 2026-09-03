@@ -148,9 +148,7 @@ public class ProcessCommands {
 	 * @param extraCommands Additional commands to be included in the command line.
 	 * @return The command line represented as a list of strings.
 	 */
-	static List<String> forModule(
-		String javaExecutablePath, String modulePath, String mainModule, String mainClass, Parameters parameters, String... extraCommands
-	) {
+	static List<String> forModule( String javaExecutablePath, String modulePath, String mainModule, String mainClass, Parameters parameters, String... extraCommands ) {
 		List<String> commands = forModule( javaExecutablePath, modulePath, mainModule, mainClass );
 		commands.addAll( getParameterCommands( parameters, extraCommands ) );
 		return commands;

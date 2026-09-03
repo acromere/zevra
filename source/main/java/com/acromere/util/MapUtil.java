@@ -19,13 +19,15 @@ public class MapUtil {
 
 	@SuppressWarnings( { "unchecked" } )
 	public static <K, V> Stream<V> flatten( Map<K, ?> map, K treeKey, K valueKey ) {
-		return MapUtil.flatTreeMap( map, m -> {
-			Map<K, ?> children = (Map<K, ?>)m.get( treeKey );
-			return children == null ? Map.of() : children;
-		}, m -> {
-			V value = (V)m.get( valueKey );
-			return value == null ? Stream.of() : Stream.of( value );
-		} );
+		return MapUtil.flatTreeMap(
+			map, m -> {
+				Map<K, ?> children = (Map<K, ?>)m.get( treeKey );
+				return children == null ? Map.of() : children;
+			}, m -> {
+				V value = (V)m.get( valueKey );
+				return value == null ? Stream.of() : Stream.of( value );
+			}
+		);
 	}
 
 	@SuppressWarnings( "unchecked" )

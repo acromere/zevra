@@ -39,15 +39,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @CustomLog
 public class XmlDescriptor {
 
+	private final Map<String, List<String>> attrNames = new ConcurrentHashMap<>();
+
+	private final Map<String, List<String>> names = new ConcurrentHashMap<>();
+
 	/**
 	 * The XML node that is the root of this descriptor.
 	 */
 	@Getter
 	private Node node;
-
-	private final Map<String, List<String>> attrNames = new ConcurrentHashMap<>();
-
-	private final Map<String, List<String>> names = new ConcurrentHashMap<>();
 
 	private List<String> paths;
 
@@ -124,6 +124,138 @@ public class XmlDescriptor {
 	public XmlDescriptor( Node node ) {
 		if( node == null ) return;
 		this.node = node;
+	}
+
+	/**
+	 * Using the specified node as the root, return the node at the give path.
+	 *
+	 * @param node The node to use as the root node
+	 * @param path The node path
+	 * @return The node at the specified path
+	 */
+	public static Node getNode( Node node, String path ) {
+		if( node == null || TextUtil.isEmpty( path ) ) return null;
+
+		Node value = null;
+		try {
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			value = (Node)xpath.evaluate( path, node, XPathConstants.NODE );
+		} catch( XPathExpressionException exception ) {
+			log.atSevere().withCause( new Exception( path, exception ) ).log( "Error evaluating xpath: %s", path );
+		}
+
+		return value;
+	}
+
+	/**
+	 * Using the specified node as the root, return the nodes at the give path.
+	 *
+	 * @param node The node to use as the root node
+	 * @param path The node path
+	 * @return The nodes at the specified path
+	 */
+	public static Node[] getNodes( Node node, String path ) {
+		NodeList nodes = getNodeList( node, path );
+		if( nodes == null ) return null;
+
+		ArrayList<Node> values = new ArrayList<>();
+		int count = nodes.getLength();
+		for( int index = 0; index < count; index++ ) {
+			values.add( nodes.item( index ) );
+		}
+
+		return values.toArray( new Node[ 0 ] );
+	}
+
+	private static NodeList getNodeList( Node node, String path ) {
+		if( node == null || TextUtil.isEmpty( path ) ) return null;
+
+		NodeList nodes = null;
+		XPath xpath = XPathFactory.newInstance().newXPath();
+
+		try {
+			nodes = (NodeList)xpath.evaluate( path, node, XPathConstants.NODESET );
+		} catch( XPathExpressionException exception ) {
+			log.atSevere().withCause( new Exception( path, exception ) ).log( "Error evaluating xpath: %s", path );
+		}
+		return nodes;
+	}
+
+	/**
+	 * Using the specified node as the root, get the text value of the XML node at
+	 * the specified path.
+	 *
+	 * @param node The node to use as the root node
+	 * @param path The value path
+	 * @return The value at the specified path
+	 */
+	public static String getValue( Node node, String path ) {
+		if( node == null || TextUtil.isEmpty( path ) ) return null;
+
+		String value;
+		XPath xpath = XPathFactory.newInstance().newXPath();
+
+		try {
+			value = (String)xpath.evaluate( "normalize-space(" + path + ")", node, XPathConstants.STRING );
+		} catch( XPathExpressionException exception ) {
+			throw new RuntimeException( path, exception );
+		}
+
+		if( TextUtil.isEmpty( value ) ) return null;
+
+		return value;
+	}
+
+	/**
+	 * Using the specified node as the root, get the text value of the XML node at
+	 * the specified path. If the value is empty then use the default value.
+	 *
+	 * @param node The node to use as the root node
+	 * @param path The value path
+	 * @return The value at the specified path
+	 */
+	public static String getValue( Node node, String path, String defaultValue ) {
+		String value = getValue( node, path );
+		if( value == null ) return defaultValue;
+		return value;
+	}
+
+	/**
+	 * Get an array of all the values in the node that have the same path.
+	 *
+	 * @param node The node from which to get values
+	 * @param path The xpath of the values
+	 * @return An array of values with the same path.
+	 */
+	public static String[] getValues( Node node, String path ) {
+		NodeList nodes = getNodeList( node, path );
+		if( nodes == null ) return null;
+
+		XPath xpath = XPathFactory.newInstance().newXPath();
+		ArrayList<String> values = new ArrayList<>();
+		int count = nodes.getLength();
+		for( int index = 0; index < count; index++ ) {
+			try {
+				values.add( (String)xpath.evaluate( "normalize-space()", nodes.item( index ), XPathConstants.STRING ) );
+			} catch( XPathExpressionException exception ) {
+				log.atSevere().withCause( new Exception( path, exception ) ).log( "Error evaluating xpath: %s", path );
+			}
+		}
+
+		return values.toArray( new String[ 0 ] );
+	}
+
+	/**
+	 * Using the specified XML node, get the text value of the attribute with the
+	 * specified name.
+	 *
+	 * @param node The node
+	 * @param name The attribute name
+	 * @return The attribute value
+	 */
+	public static String getAttribute( Node node, String name ) {
+		Node attribute = node.getAttributes().getNamedItem( name );
+		return attribute == null ? null : attribute.getNodeValue();
 	}
 
 	/**
@@ -281,138 +413,6 @@ public class XmlDescriptor {
 	@Override
 	public String toString() {
 		return XmlUtil.toString( node );
-	}
-
-	/**
-	 * Using the specified node as the root, return the node at the give path.
-	 *
-	 * @param node The node to use as the root node
-	 * @param path The node path
-	 * @return The node at the specified path
-	 */
-	public static Node getNode( Node node, String path ) {
-		if( node == null || TextUtil.isEmpty( path ) ) return null;
-
-		Node value = null;
-		try {
-			XPath xpath = XPathFactory.newInstance().newXPath();
-			value = (Node)xpath.evaluate( path, node, XPathConstants.NODE );
-		} catch( XPathExpressionException exception ) {
-			log.atSevere().withCause( new Exception( path, exception ) ).log( "Error evaluating xpath: %s", path );
-		}
-
-		return value;
-	}
-
-	/**
-	 * Using the specified node as the root, return the nodes at the give path.
-	 *
-	 * @param node The node to use as the root node
-	 * @param path The node path
-	 * @return The nodes at the specified path
-	 */
-	public static Node[] getNodes( Node node, String path ) {
-		NodeList nodes = getNodeList( node, path );
-		if( nodes == null ) return null;
-
-		ArrayList<Node> values = new ArrayList<>();
-		int count = nodes.getLength();
-		for( int index = 0; index < count; index++ ) {
-			values.add( nodes.item( index ) );
-		}
-
-		return values.toArray( new Node[ 0 ] );
-	}
-
-	private static NodeList getNodeList( Node node, String path ) {
-		if( node == null || TextUtil.isEmpty( path ) ) return null;
-
-		NodeList nodes = null;
-		XPath xpath = XPathFactory.newInstance().newXPath();
-
-		try {
-			nodes = (NodeList)xpath.evaluate( path, node, XPathConstants.NODESET );
-		} catch( XPathExpressionException exception ) {
-			log.atSevere().withCause( new Exception( path, exception ) ).log( "Error evaluating xpath: %s", path );
-		}
-		return nodes;
-	}
-
-	/**
-	 * Using the specified node as the root, get the text value of the XML node at
-	 * the specified path.
-	 *
-	 * @param node The node to use as the root node
-	 * @param path The value path
-	 * @return The value at the specified path
-	 */
-	public static String getValue( Node node, String path ) {
-		if( node == null || TextUtil.isEmpty( path ) ) return null;
-
-		String value;
-		XPath xpath = XPathFactory.newInstance().newXPath();
-
-		try {
-			value = (String)xpath.evaluate( "normalize-space(" + path + ")", node, XPathConstants.STRING );
-		} catch( XPathExpressionException exception ) {
-			throw new RuntimeException( path, exception );
-		}
-
-		if( TextUtil.isEmpty( value ) ) return null;
-
-		return value;
-	}
-
-	/**
-	 * Using the specified node as the root, get the text value of the XML node at
-	 * the specified path. If the value is empty then use the default value.
-	 *
-	 * @param node The node to use as the root node
-	 * @param path The value path
-	 * @return The value at the specified path
-	 */
-	public static String getValue( Node node, String path, String defaultValue ) {
-		String value = getValue( node, path );
-		if( value == null ) return defaultValue;
-		return value;
-	}
-
-	/**
-	 * Get an array of all the values in the node that have the same path.
-	 *
-	 * @param node The node from which to get values
-	 * @param path The xpath of the values
-	 * @return An array of values with the same path.
-	 */
-	public static String[] getValues( Node node, String path ) {
-		NodeList nodes = getNodeList( node, path );
-		if( nodes == null ) return null;
-
-		XPath xpath = XPathFactory.newInstance().newXPath();
-		ArrayList<String> values = new ArrayList<>();
-		int count = nodes.getLength();
-		for( int index = 0; index < count; index++ ) {
-			try {
-				values.add( (String)xpath.evaluate( "normalize-space()", nodes.item( index ), XPathConstants.STRING ) );
-			} catch( XPathExpressionException exception ) {
-				log.atSevere().withCause( new Exception( path, exception ) ).log( "Error evaluating xpath: %s", path );
-			}
-		}
-
-		return values.toArray( new String[ 0 ] );
-	}
-
-	/**
-	 * Using the specified XML node, get the text value of the attribute with the
-	 * specified name.
-	 *
-	 * @param node The node
-	 * @param name The attribute name
-	 * @return The attribute value
-	 */
-	public static String getAttribute( Node node, String name ) {
-		Node attribute = node.getAttributes().getNamedItem( name );
-		return attribute == null ? null : attribute.getNodeValue();
 	}
 
 	private List<String> listAttributeNames( Node parent ) {

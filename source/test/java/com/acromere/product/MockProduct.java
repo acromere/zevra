@@ -5,7 +5,7 @@ import lombok.experimental.Accessors;
 
 import java.nio.file.Path;
 
-@Accessors(fluent=true)
+@Accessors( fluent = true )
 public class MockProduct implements Product {
 
 	private final Product parent;

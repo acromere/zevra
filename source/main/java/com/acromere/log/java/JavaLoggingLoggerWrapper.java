@@ -53,7 +53,7 @@ public class JavaLoggingLoggerWrapper implements LoggerWrapper {
 	}
 
 	public void flush() {
-		Arrays.stream(logger.getHandlers()  ).forEach( Handler::flush );
+		Arrays.stream( logger.getHandlers() ).forEach( Handler::flush );
 	}
 
 }

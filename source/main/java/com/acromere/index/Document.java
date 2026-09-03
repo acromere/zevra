@@ -26,11 +26,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @CustomLog
 public class Document {
 
-	public enum MediaType {
-		TEXT,
-		HTML
-	}
-
 	/**
 	 * The media type of the document. This is set to SupportedMediaType.TEXT by
 	 * default but should be changed to match the media type of the document. For
@@ -140,6 +135,11 @@ public class Document {
 		}
 
 		return new TokenReplacingReader( reader, values );
+	}
+
+	public enum MediaType {
+		TEXT,
+		HTML
 	}
 
 }

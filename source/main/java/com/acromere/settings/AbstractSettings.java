@@ -28,17 +28,6 @@ public abstract class AbstractSettings implements Settings {
 
 	private static final Map<Class<?>, InboundConverter> inboundConverters;
 
-	private Map<?, ?> defaultValues;
-
-	private boolean deleted;
-
-	// FIXME The settings event hubs are not linked to their parents
-	//  ...but should they?
-	@Getter
-	private final EventHub eventHub;
-
-	private final Map<String, Set<EventHandler<SettingsEvent>>> valueChangeHandlers;
-
 	static {
 		outboundConverters = new HashMap<>();
 		outboundConverters.put( Boolean.class, String::valueOf );
@@ -66,6 +55,17 @@ public abstract class AbstractSettings implements Settings {
 		inboundConverters.put( URI.class, ( value ) -> value == null ? null : URI.create( value ) );
 		inboundConverters.put( File.class, ( value ) -> value == null ? null : new File( URI.create( value ) ) );
 	}
+
+	// FIXME The settings event hubs are not linked to their parents
+	//  ...but should they?
+	@Getter
+	private final EventHub eventHub;
+
+	private final Map<String, Set<EventHandler<SettingsEvent>>> valueChangeHandlers;
+
+	private Map<?, ?> defaultValues;
+
+	private boolean deleted;
 
 	protected AbstractSettings() {
 		this.eventHub = new EventHub();

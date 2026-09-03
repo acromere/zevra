@@ -33,15 +33,15 @@ public class Txn implements AutoCloseable {
 
 	private static final ThreadLocal<Deque<Txn>> transactions = new ThreadLocal<>();
 
+	static {
+		transactions.set( new ArrayDeque<>() );
+	}
+
 	private final ReentrantLock commitLock = new ReentrantLock();
 
 	private final Queue<TxnOperation> operations;
 
 	private final AtomicInteger atomicDepth;
-
-	static {
-		transactions.set( new ArrayDeque<>() );
-	}
 
 	private Txn() {
 		operations = new ConcurrentLinkedQueue<>();
@@ -128,11 +128,6 @@ public class Txn implements AutoCloseable {
 		}
 	}
 
-	@Override
-	public void close() throws TxnException {
-		commit();
-	}
-
 	public static void reset() {
 		Txn transaction = peekTransaction();
 		if( transaction == null ) return;
@@ -146,18 +141,6 @@ public class Txn implements AutoCloseable {
 
 	public static Txn getActiveTransaction() {
 		return peekTransaction();
-	}
-
-	boolean isActive() {
-		return atomicDepth.get() > 0;
-	}
-
-	void incrementDepth() {
-		atomicDepth.incrementAndGet();
-	}
-
-	void decrementDepth() {
-		atomicDepth.decrementAndGet();
 	}
 
 	private static Txn verifyActiveTransaction() throws TxnException {
@@ -185,6 +168,23 @@ public class Txn implements AutoCloseable {
 		Txn transaction = deque.pollFirst();
 		if( deque.isEmpty() ) transactions.set( null );
 		return transaction;
+	}
+
+	@Override
+	public void close() throws TxnException {
+		commit();
+	}
+
+	boolean isActive() {
+		return atomicDepth.get() > 0;
+	}
+
+	void incrementDepth() {
+		atomicDepth.incrementAndGet();
+	}
+
+	void decrementDepth() {
+		atomicDepth.decrementAndGet();
 	}
 
 	private void doCommit() throws TxnException {

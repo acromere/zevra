@@ -71,14 +71,14 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		MockDataNode node = new MockDataNode( "node" );
 		AtomicInteger counter = new AtomicInteger();
 
-		node.register(owner, "key", e -> counter.incrementAndGet() );
+		node.register( owner, "key", e -> counter.incrementAndGet() );
 		assertThat( counter.get() ).isEqualTo( 0 );
 
 		node.setValue( "key", "value1" );
 		assertThat( counter.get() ).isEqualTo( 1 );
 
 		owner = null;
-		assertThat(owner).isNull();
+		assertThat( owner ).isNull();
 
 		// when
 		System.gc();
@@ -553,7 +553,7 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 	@Test
 	void testSetClearSetValueInTransaction() throws Exception {
 		data.setValue( "x", 1 );
-		try (Txn ignored = Txn.create() ) {
+		try( Txn ignored = Txn.create() ) {
 			data.setValue( "x", null );
 			data.setValue( "x", 1 );
 		}
@@ -1080,15 +1080,15 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		String lastName = "Doe";
 
 		data.defineNaturalKey( "firstName", "lastName", "birthDate" );
-		assertThat( data.hashCode() ).isEqualTo( System.identityHashCode( data )  );
+		assertThat( data.hashCode() ).isEqualTo( System.identityHashCode( data ) );
 
 		// Test the primary key
 		data.setValue( MockDataNode.MOCK_ID, key );
-		assertThat( data.hashCode() ).isEqualTo( key.hashCode()  );
+		assertThat( data.hashCode() ).isEqualTo( key.hashCode() );
 
 		// Test the natural key
 		data.setValue( "lastName", lastName );
-		assertThat( data.hashCode() ).isEqualTo( key.hashCode() ^ lastName.hashCode()  );
+		assertThat( data.hashCode() ).isEqualTo( key.hashCode() ^ lastName.hashCode() );
 	}
 
 	@Test
@@ -1100,21 +1100,21 @@ public class DataNodeApiTest extends BaseDataNodeTest {
 		data1.defineNaturalKey( "firstName", "lastName", "birthDate" );
 		MockDataNode data2 = new MockDataNode();
 		data2.defineNaturalKey( "firstName", "lastName", "birthDate" );
-		assertThat( data1.equals( data2 ) ).isEqualTo( true  );
+		assertThat( data1.equals( data2 ) ).isEqualTo( true );
 
 		// Test the primary key
 		data1.setValue( MockDataNode.MOCK_ID, key );
-		assertThat( data1.equals( data2 ) ).isEqualTo( false  );
+		assertThat( data1.equals( data2 ) ).isEqualTo( false );
 
 		data2.setValue( MockDataNode.MOCK_ID, key );
-		assertThat( data1.equals( data2 ) ).isEqualTo( true  );
+		assertThat( data1.equals( data2 ) ).isEqualTo( true );
 
 		// Test the natural key
 		data1.setValue( "lastName", lastName );
-		assertThat( data1.equals( data2 ) ).isEqualTo( false  );
+		assertThat( data1.equals( data2 ) ).isEqualTo( false );
 
 		data2.setValue( "lastName", lastName );
-		assertThat( data1.equals( data2 ) ).isEqualTo( true  );
+		assertThat( data1.equals( data2 ) ).isEqualTo( true );
 	}
 
 }

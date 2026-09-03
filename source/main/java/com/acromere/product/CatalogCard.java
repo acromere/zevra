@@ -31,6 +31,10 @@ public class CatalogCard extends RepoCard {
 
 	public CatalogCard() {}
 
+	public static CatalogCard fromJson( InputStream input ) throws IOException {
+		return new ObjectMapper().readerFor( new TypeReference<CatalogCard>() {} ).readValue( input );
+	}
+
 	public void setProducts( Set<String> products ) {
 		this.products = products == null ? Set.of() : new HashSet<>( products );
 	}
@@ -42,10 +46,6 @@ public class CatalogCard extends RepoCard {
 		((CatalogCard)card).setTimestamp( timestamp );
 		((CatalogCard)card).setProducts( products );
 		return this;
-	}
-
-	public static CatalogCard fromJson( InputStream input ) throws IOException {
-		return new ObjectMapper().readerFor( new TypeReference<CatalogCard>() {} ).readValue( input );
 	}
 
 }

@@ -4,15 +4,6 @@ import java.util.Comparator;
 
 public class ProductCardComparator implements Comparator<ProductCard> {
 
-	public enum Field {
-		KEY,
-		NAME,
-		GROUP,
-		ARTIFACT,
-		RELEASE,
-		VERSION
-	}
-
 	private final Field field;
 
 	public ProductCardComparator( Field field ) {
@@ -41,6 +32,15 @@ public class ProductCardComparator implements Comparator<ProductCard> {
 				return card1.getName().compareTo( card2.getName() );
 			}
 		}
+	}
+
+	public enum Field {
+		KEY,
+		NAME,
+		GROUP,
+		ARTIFACT,
+		RELEASE,
+		VERSION
 	}
 
 }

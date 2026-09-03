@@ -10,9 +10,9 @@ public class NonBlockingReader {
 
 	private final BlockingQueue<String> lines = new LinkedBlockingQueue<>();
 
-	private Thread readerThread;
-
 	private final BufferedReader source;
+
+	private Thread readerThread;
 
 	private IOException ioexception;
 

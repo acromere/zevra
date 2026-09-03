@@ -11,13 +11,13 @@ public class DataNodeLink<T extends DataNode> extends IdDataNode {
 		this.node = node;
 	}
 
+	public static <T extends DataNode> DataNodeLink<T> of( T node ) {
+		return new DataNodeLink<>( node );
+	}
+
 	@Override
 	public String toString() {
 		return "NodeLink@" + node;
-	}
-
-	public static <T extends DataNode> DataNodeLink<T> of( T node ) {
-		return new DataNodeLink<>( node );
 	}
 
 }

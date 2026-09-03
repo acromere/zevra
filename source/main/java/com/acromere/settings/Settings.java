@@ -70,6 +70,15 @@ import java.util.Set;
  */
 public interface Settings {
 
+	@SuppressWarnings( "unused" )
+	static void print( Settings settings ) {
+		System.out.println( "settings( " + settings.getPath() + " ) {" );
+		for( String key : settings.getKeys() ) {
+			System.out.println( "  " + key + " = " + settings.get( key ) );
+		}
+		System.out.println( "}" );
+	}
+
 	/**
 	 * Get the name of the settings node.
 	 *
@@ -302,14 +311,5 @@ public interface Settings {
 	}
 
 	Map<EventType<? extends Event>, Collection<? extends EventHandler<? extends Event>>> getEventHandlers();
-
-	@SuppressWarnings( "unused" )
-	static void print( Settings settings ) {
-		System.out.println( "settings( " + settings.getPath() + " ) {" );
-		for( String key : settings.getKeys() ) {
-			System.out.println( "  " + key + " = " + settings.get( key ) );
-		}
-		System.out.println( "}" );
-	}
 
 }

@@ -2,7 +2,10 @@ package com.acromere.index;
 
 import com.acromere.result.Result;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -97,6 +100,14 @@ public class FuzzySearch implements Search {
 			this.hit = hit;
 		}
 
+		static List<HitMatchWrapper> wrap( List<Hit> hits ) {
+			return hits.stream().map( HitMatchWrapper::new ).collect( Collectors.toList() );
+		}
+
+		static List<Hit> unwrap( List<HitMatchWrapper> wrappers ) {
+			return wrappers.stream().map( w -> w.hit ).collect( Collectors.toList() );
+		}
+
 		public int hashCode() {
 			return this.hit.getDocument().hashCode();
 		}
@@ -108,14 +119,6 @@ public class FuzzySearch implements Search {
 			//if( !Objects.equals( this.hit.line(), that.hit.line() ) ) return false;
 			//if( !Objects.equals( this.hit.context(), that.hit.context() ) ) return false;
 			return Objects.equals( this.hit.getDocument(), that.hit.getDocument() );
-		}
-
-		static List<HitMatchWrapper> wrap( List<Hit> hits ) {
-			return hits.stream().map( HitMatchWrapper::new ).collect( Collectors.toList() );
-		}
-
-		static List<Hit> unwrap( List<HitMatchWrapper> wrappers ) {
-			return wrappers.stream().map( w -> w.hit ).collect( Collectors.toList() );
 		}
 
 	}

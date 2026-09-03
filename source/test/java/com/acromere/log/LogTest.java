@@ -1,7 +1,6 @@
 package com.acromere.log;
 
 import com.acromere.util.LogFlag;
-import com.acromere.util.OperatingSystem;
 import com.acromere.util.Parameters;
 import lombok.CustomLog;
 import org.junit.jupiter.api.Test;

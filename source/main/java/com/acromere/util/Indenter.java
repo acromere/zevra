@@ -24,7 +24,7 @@ public class Indenter {
 		if( size < 1 ) return "";
 
 		int length = indent.length();
-		char[] buffer = new char[size];
+		char[] buffer = new char[ size ];
 		char[] chars = indent.toCharArray();
 		for( int index = 0; index < count; index++ ) {
 			System.arraycopy( chars, 0, buffer, index * length, length );
@@ -70,7 +70,7 @@ public class Indenter {
 		String text = createIndent( size, indent );
 
 		String line;
-		while( ( line = parser.next() ) != null ) {
+		while( (line = parser.next()) != null ) {
 			builder.append( text );
 			builder.append( line );
 			builder.append( parser.getTerminator() );
@@ -116,7 +116,7 @@ public class Indenter {
 		String text = createIndent( size, indent );
 
 		String line;
-		while( ( line = parser.next() ) != null ) {
+		while( (line = parser.next()) != null ) {
 			if( ignoreBlanks && "".equals( line ) ) continue;
 			if( !line.startsWith( text ) ) return false;
 		}
@@ -140,7 +140,7 @@ public class Indenter {
 		String text = createIndent( size, indent );
 
 		String line;
-		while( ( line = parser.next() ) != null ) {
+		while( (line = parser.next()) != null ) {
 			if( line.startsWith( text ) ) builder.append( line.substring( text.length() ) );
 			builder.append( parser.getTerminator() );
 		}
@@ -155,15 +155,15 @@ public class Indenter {
 		int start = 0;
 		int end = length - 1;
 		char c;
-		char[] value = new char[length];
-		char[] trims = new char[trimChars.length()];
+		char[] value = new char[ length ];
+		char[] trims = new char[ trimChars.length() ];
 
 		content.getChars( 0, value.length, value, 0 );
 		trimChars.getChars( 0, trims.length, trims, 0 );
 
 		boolean left = true;
 		while( left & start <= end ) {
-			c = value[start];
+			c = value[ start ];
 			boolean found = false;
 			for( char trim : trims ) {
 				if( c == trim ) {
@@ -177,7 +177,7 @@ public class Indenter {
 
 		boolean right = true;
 		while( right & end >= start ) {
-			c = value[end];
+			c = value[ end ];
 			boolean found = false;
 			for( char trim : trims ) {
 				if( c == trim ) {
@@ -190,7 +190,7 @@ public class Indenter {
 		}
 
 		String result = content;
-		if( ( start > 0 ) || ( end < length - 1 ) ) {
+		if( (start > 0) || (end < length - 1) ) {
 			result = new String( value, start, end - start + 1 );
 		}
 

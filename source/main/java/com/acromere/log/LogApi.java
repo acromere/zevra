@@ -366,8 +366,8 @@ public interface LogApi<API extends LogApi<API>> {
 		//			return noOp();
 		//		}
 
-				@Override
-				public final void logVarargs( String message, Object[] params ) {}
+		@Override
+		public final void logVarargs( String message, Object[] params ) {}
 
 		@Override
 		public final void log() {}

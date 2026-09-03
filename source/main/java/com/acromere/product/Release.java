@@ -43,6 +43,29 @@ public record Release(Version version, Date timestamp) implements Comparable<Rel
 		return new Release( new Version( version ), DateUtil.parse( timestamp, DateUtil.DEFAULT_DATE_FORMAT ) );
 	}
 
+	@NonNull
+	public static String encode( Release release ) {
+		StringBuilder builder = new StringBuilder( release.version.toString() );
+		if( release.timestamp != null ) {
+			builder.append( ENCODE_DELIMITER );
+			builder.append( release.timestamp.getTime() );
+		}
+
+		return builder.toString();
+	}
+
+	@NonNull
+	public static Release decode( String release ) {
+		if( release == null ) return new Release( new Version() );
+
+		int index = release.indexOf( ENCODE_DELIMITER );
+		if( index < 0 ) return new Release( new Version( release ) );
+
+		Version version = new Version( release.substring( 0, index ) );
+		Date timestamp = new Date( Long.parseLong( release.substring( index + ENCODE_DELIMITER.length() ) ) );
+		return new Release( version, timestamp );
+	}
+
 	public String getTimestampString() {
 		return getTimestampString( DateUtil.DEFAULT_TIME_ZONE );
 	}
@@ -66,29 +89,6 @@ public record Release(Version version, Date timestamp) implements Comparable<Rel
 	@NonNull
 	public String toHumanString( TimeZone zone ) {
 		return format( version.toHumanString(), zone );
-	}
-
-	@NonNull
-	public static String encode( Release release ) {
-		StringBuilder builder = new StringBuilder( release.version.toString() );
-		if( release.timestamp != null ) {
-			builder.append( ENCODE_DELIMITER );
-			builder.append( release.timestamp.getTime() );
-		}
-
-		return builder.toString();
-	}
-
-	@NonNull
-	public static Release decode( String release ) {
-		if( release == null ) return new Release( new Version() );
-
-		int index = release.indexOf( ENCODE_DELIMITER );
-		if( index < 0 ) return new Release( new Version( release ) );
-
-		Version version = new Version( release.substring( 0, index ) );
-		Date timestamp = new Date( Long.parseLong( release.substring( index + ENCODE_DELIMITER.length() ) ) );
-		return new Release( version, timestamp );
 	}
 
 	@Override

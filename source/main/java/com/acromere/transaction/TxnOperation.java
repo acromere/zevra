@@ -7,15 +7,6 @@ package com.acromere.transaction;
  */
 public abstract class TxnOperation {
 
-	public enum Status {
-		WAITING,
-		COMMITTING,
-		COMMITTED,
-		REVERTING,
-		REVERTED,
-		FAILED
-	}
-
 	private final TxnEventTarget target;
 
 	private final TxnOperationResult result;
@@ -70,6 +61,15 @@ public abstract class TxnOperation {
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + "[" + System.identityHashCode( this ) + "]";
+	}
+
+	public enum Status {
+		WAITING,
+		COMMITTING,
+		COMMITTED,
+		REVERTING,
+		REVERTED,
+		FAILED
 	}
 
 }

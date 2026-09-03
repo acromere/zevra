@@ -172,6 +172,15 @@ public class Parameters {
 		return new Parameters( commands, resolved, flags, values, uris );
 	}
 
+	private static String removePrefix( String flag ) {
+		if( flag.startsWith( DOUBLE ) ) {
+			return flag.substring( DOUBLE.length() );
+		} else if( flag.startsWith( SINGLE ) ) {
+			return flag.substring( SINGLE.length() );
+		}
+		return flag;
+	}
+
 	public int size() {
 		return values.size();
 	}
@@ -321,15 +330,6 @@ public class Parameters {
 		}
 
 		return true;
-	}
-
-	private static String removePrefix( String flag ) {
-		if( flag.startsWith( DOUBLE ) ) {
-			return flag.substring( DOUBLE.length() );
-		} else if( flag.startsWith( SINGLE ) ) {
-			return flag.substring( SINGLE.length() );
-		}
-		return flag;
 	}
 
 }

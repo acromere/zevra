@@ -1,29 +1,35 @@
 {
-  "group": "com.example",
-  "artifact": "rebrand",
-  "version": "0.0",
-  "timestamp": "2026-01-01 00:00:00",
-  "osSpecific": true,
-  "iconUri": "rebrand",
-	"icons": [ "rebrand", "https://example.com/images/rebrand.png" ],
-  "name": "Rebrand",
-  "provider": "Rebrand Group",
-  "providerUrl": "https:example.com",
-  "inception": "2026",
-  "summary": "Rebranded application",
-  "description": "Rebranded application description",
-  "copyrightSummary": "All rights reserved.",
-  "licenseSummary": "Rebrand comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions.",
-  "javaVersion": "25",
-  "maintainers": [
-  {
-    "name": "Rebrand Project Lead",
-    "email": "project.lead@example.com",
-    "timezone": null,
-    "organization": "Rebrand Group",
-    "organizationUrl": "https://example.com",
-    "roles": [ "Architect", "Developer" ]
-  }
-  ],
-  "contributors": []
+	"group": "com.example",
+	"artifact": "rebrand",
+	"version": "0.0",
+	"timestamp": "2026-01-01 00:00:00",
+	"osSpecific": true,
+	"iconUri": "rebrand",
+	"icons": [
+		"rebrand",
+		"https://example.com/images/rebrand.png"
+	],
+	"name": "Rebrand",
+	"provider": "Rebrand Group",
+	"providerUrl": "https:example.com",
+	"inception": "2026",
+	"summary": "Rebranded application",
+	"description": "Rebranded application description",
+	"copyrightSummary": "All rights reserved.",
+	"licenseSummary": "Rebrand comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions.",
+	"javaVersion": "25",
+	"maintainers": [
+		{
+			"name": "Rebrand Project Lead",
+			"email": "project.lead@example.com",
+			"timezone": null,
+			"organization": "Rebrand Group",
+			"organizationUrl": "https://example.com",
+			"roles": [
+				"Architect",
+				"Developer"
+			]
+		}
+	],
+	"contributors": []
 }

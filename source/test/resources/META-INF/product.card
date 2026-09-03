@@ -1,38 +1,48 @@
 {
-  "group": "com.acromere",
-  "artifact": "zevra",
-  "version": "0.0-SNAPSHOT",
-  "timestamp": "2018-01-01 00:00:00",
-  "packaging": "lib",
-  "packagingVersion": "2.7",
-	"icons": [ "library", "https://acromere.com/download/latest/zevra/product/icon" ],
-  "name": "Zevra",
-  "provider": "Acromere",
-  "providerUrl": "https://www.acromere.com",
-  "inception": "2018",
-  "summary": "Utility library",
-  "description": "A utility library for Acromere applications.",
-  "copyrightSummary": "All rights reserved.",
-  "licenseSummary": "Zevra comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions.",
-  "javaVersion": "11",
-  "maintainers": [
-  {
-    "name": "Sole Maintainer",
-    "email": "sole.maintainer@example.com",
-    "timezone": null,
-    "organization": "Example",
-    "organizationUrl": "https://www.example.com",
-    "roles": [ "Maintainer", "Developer" ]
-  }
-  ],
-  "contributors": [
-  {
-    "name": "John Doe",
-    "roles": [ "Just John" ]
-  },
-  {
-    "name": "Jane Doe",
-    "roles": [ "Just Jane" ]
-  }
-  ]
+	"group": "com.acromere",
+	"artifact": "zevra",
+	"version": "0.0-SNAPSHOT",
+	"timestamp": "2018-01-01 00:00:00",
+	"packaging": "lib",
+	"packagingVersion": "2.7",
+	"icons": [
+		"library",
+		"https://acromere.com/download/latest/zevra/product/icon"
+	],
+	"name": "Zevra",
+	"provider": "Acromere",
+	"providerUrl": "https://www.acromere.com",
+	"inception": "2018",
+	"summary": "Utility library",
+	"description": "A utility library for Acromere applications.",
+	"copyrightSummary": "All rights reserved.",
+	"licenseSummary": "Zevra comes with ABSOLUTELY NO WARRANTY. This is open software, and you are welcome to redistribute it under certain conditions.",
+	"javaVersion": "11",
+	"maintainers": [
+		{
+			"name": "Sole Maintainer",
+			"email": "sole.maintainer@example.com",
+			"timezone": null,
+			"organization": "Example",
+			"organizationUrl": "https://www.example.com",
+			"roles": [
+				"Maintainer",
+				"Developer"
+			]
+		}
+	],
+	"contributors": [
+		{
+			"name": "John Doe",
+			"roles": [
+				"Just John"
+			]
+		},
+		{
+			"name": "Jane Doe",
+			"roles": [
+				"Just Jane"
+			]
+		}
+	]
 }

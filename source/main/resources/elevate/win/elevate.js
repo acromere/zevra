@@ -26,7 +26,7 @@ var Shell = new ActiveXObject("Shell.Application");
 var Application = WScript.Arguments(0);
 
 var Arguments = "";
-for ( var Index = 1; Index < WScript.Arguments.Length; Index += 1) {
+for (var Index = 1; Index < WScript.Arguments.Length; Index += 1) {
 	if (Index > 1) Arguments += " ";
 	var Arg = WScript.Arguments(Index);
 	if (fso.FileExists(Arg)) Arg = getUniversalPath(Arg);

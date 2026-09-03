@@ -19,6 +19,18 @@ public class AppConfigTest {
 
 	private final Path path = Paths.get( "source/test/resources/Application.cfg" );
 
+	public static Stream<Arguments> parseHeapOptions() {
+		return Stream.of(
+			Arguments.of( "java-options=-Xmx2", 2, "" ),
+			Arguments.of( "java-options=-Xmx2k", 2, "k" ),
+			Arguments.of( "java-options=-Xmx2m", 2, "m" ),
+			Arguments.of( "java-options=-Xmx2g", 2, "g" ),
+			Arguments.of( "java-options=-Xmx2K", 2, "k" ),
+			Arguments.of( "java-options=-Xmx2M", 2, "m" ),
+			Arguments.of( "java-options=-Xmx2G", 2, "g" )
+		);
+	}
+
 	@BeforeEach
 	void setup() {
 		assertThat( path ).exists();
@@ -200,18 +212,6 @@ public class AppConfigTest {
 		String[] result = config.parseHeapOptions( line );
 		assertThat( result[ 0 ] ).isEqualTo( String.valueOf( expectedValue ) );
 		assertThat( result[ 1 ] ).isEqualTo( expectedUnit );
-	}
-
-	public static Stream<Arguments> parseHeapOptions() {
-		return Stream.of(
-			Arguments.of( "java-options=-Xmx2", 2, "" ),
-			Arguments.of( "java-options=-Xmx2k", 2, "k" ),
-			Arguments.of( "java-options=-Xmx2m", 2, "m" ),
-			Arguments.of( "java-options=-Xmx2g", 2, "g" ),
-			Arguments.of( "java-options=-Xmx2K", 2, "k" ),
-			Arguments.of( "java-options=-Xmx2M", 2, "m" ),
-			Arguments.of( "java-options=-Xmx2G", 2, "g" )
-		);
 	}
 
 	private List<String> getDefaultConfigLines() {

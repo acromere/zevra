@@ -38,16 +38,6 @@ public class Version implements Comparable<Version> {
 
 	private static final Map<String, String> expansions = new ConcurrentHashMap<>();
 
-	private String human;
-
-	private String version;
-
-	private String canonical;
-
-	private ListItem items;
-
-	private List<Part> parts;
-
 	static {
 		expansions.put( "a", "Alpha" );
 		expansions.put( ALPHA, "Alpha" );
@@ -67,6 +57,16 @@ public class Version implements Comparable<Version> {
 		expansions.put( UNKNOWN, "UNKNOWN" );
 	}
 
+	private String human;
+
+	private String version;
+
+	private String canonical;
+
+	private ListItem items;
+
+	private List<Part> parts;
+
 	/**
 	 * Create an empty version.
 	 */
@@ -81,6 +81,30 @@ public class Version implements Comparable<Version> {
 	 */
 	public Version( String version ) {
 		parse( version == null ? UNKNOWN : version );
+	}
+
+	/**
+	 * Compare two versions.
+	 *
+	 * @param version1 The first version
+	 * @param version2 The second version
+	 * @return -1, 0 or 1
+	 * @see #compareTo(Version)
+	 */
+	public static int compare( String version1, String version2 ) {
+		return new Version( version1 ).compareTo( new Version( version2 ) );
+	}
+
+	/**
+	 * Compare two versions.
+	 *
+	 * @param version1 The first version
+	 * @param version2 The second version
+	 * @return -1, 0 or 1
+	 * @see #compareTo(Version)
+	 */
+	public static int compare( Version version1, Version version2 ) {
+		return version1.compareTo( version2 );
 	}
 
 	/**
@@ -155,30 +179,6 @@ public class Version implements Comparable<Version> {
 	@Override
 	public int hashCode() {
 		return canonical.hashCode();
-	}
-
-	/**
-	 * Compare two versions.
-	 *
-	 * @param version1 The first version
-	 * @param version2 The second version
-	 * @return -1, 0 or 1
-	 * @see #compareTo(Version)
-	 */
-	public static int compare( String version1, String version2 ) {
-		return new Version( version1 ).compareTo( new Version( version2 ) );
-	}
-
-	/**
-	 * Compare two versions.
-	 *
-	 * @param version1 The first version
-	 * @param version2 The second version
-	 * @return -1, 0 or 1
-	 * @see #compareTo(Version)
-	 */
-	public static int compare( Version version1, Version version2 ) {
-		return version1.compareTo( version2 );
 	}
 
 	private void parse( String version ) {
@@ -382,6 +382,13 @@ public class Version implements Comparable<Version> {
 
 		private static final Map<String, String> ALIASES = new HashMap<>();
 
+		/**
+		 * A comparable value for the empty-string qualifier. This one is used to
+		 * determine if a given qualifier makes the version older than one without a
+		 * qualifier, or more recent.
+		 */
+		private static final String RELEASE_VERSION_INDEX = String.valueOf( QUALIFIERS.indexOf( "" ) );
+
 		static {
 			ALIASES.put( "ga", "" );
 			ALIASES.put( "final", "" );
@@ -389,13 +396,6 @@ public class Version implements Comparable<Version> {
 			ALIASES.put( "patch", "sp" );
 			ALIASES.put( "update", "sp" );
 		}
-
-		/**
-		 * A comparable value for the empty-string qualifier. This one is used to
-		 * determine if a given qualifier makes the version older than one without a
-		 * qualifier, or more recent.
-		 */
-		private static final String RELEASE_VERSION_INDEX = String.valueOf( QUALIFIERS.indexOf( "" ) );
 
 		private String value;
 
@@ -430,16 +430,6 @@ public class Version implements Comparable<Version> {
 			if( this.value == null ) this.value = value;
 		}
 
-		@Override
-		public int getType() {
-			return STRING_ITEM;
-		}
-
-		@Override
-		public boolean isNull() {
-			return (comparableQualifier( value ).compareTo( RELEASE_VERSION_INDEX ) == 0);
-		}
-
 		/**
 		 * Returns a comparable value for a qualifier. This method takes into
 		 * account both the ordering of known qualifiers and lexical ordering
@@ -455,6 +445,16 @@ public class Version implements Comparable<Version> {
 		private static String comparableQualifier( String qualifier ) {
 			int index = QUALIFIERS.indexOf( qualifier );
 			return index == -1 ? QUALIFIERS.size() + "-" + qualifier : String.valueOf( index );
+		}
+
+		@Override
+		public int getType() {
+			return STRING_ITEM;
+		}
+
+		@Override
+		public boolean isNull() {
+			return (comparableQualifier( value ).compareTo( RELEASE_VERSION_INDEX ) == 0);
 		}
 
 		@Override

@@ -11,6 +11,14 @@ import java.util.List;
  */
 public record DataNodeComparator<T extends DataNode>(List<String> keys) implements Comparator<T> {
 
+	public static <T extends DataNode> DataNodeComparator<T> of( String... keys ) {
+		return new DataNodeComparator<>( List.of( keys ) );
+	}
+
+	public static <T extends DataNode> DataNodeComparator<T> of( List<String> keys ) {
+		return new DataNodeComparator<>( keys );
+	}
+
 	@Override
 	public int compare( T a, T b ) {
 		for( String key : keys ) {
@@ -23,14 +31,6 @@ public record DataNodeComparator<T extends DataNode>(List<String> keys) implemen
 			if( comparison != 0 ) return comparison;
 		}
 		return 0;
-	}
-
-	public static <T extends DataNode> DataNodeComparator<T> of( String... keys ) {
-		return new DataNodeComparator<>( List.of( keys ) );
-	}
-
-	public static <T extends DataNode> DataNodeComparator<T> of( List<String> keys ) {
-		return new DataNodeComparator<>( keys );
 	}
 
 }

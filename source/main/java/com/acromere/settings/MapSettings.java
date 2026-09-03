@@ -8,15 +8,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MapSettings extends AbstractSettings {
 
-	// The map of settings. Should only be stored in the root node
-	private Map<String, Settings> settings;
-
 	private final MapSettings root;
 
 	private final String path;
 
 	// The settings node values
 	private final Map<String, String> values;
+
+	// The map of settings. Should only be stored in the root node
+	private Map<String, Settings> settings;
 
 	// The settings defaults.
 	private Map<String, Object> defaultValues;

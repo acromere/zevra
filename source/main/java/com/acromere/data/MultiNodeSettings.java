@@ -34,9 +34,11 @@ public class MultiNodeSettings implements Settings {
 		this.eventHub = new EventHub();
 
 		// NodeEvent.VALUE_CHANGED events need to be mapped to SettingsEvent.CHANGED events
-		nodes.forEach( n -> n.register( DataNodeEvent.VALUE_CHANGED, e -> {
-			if( nodes.contains( e.getNode() ) )eventHub.dispatch( new SettingsEvent( this, SettingsEvent.CHANGED, ".", e.getKey(), e.getNewValue() ) );
-		} ) );
+		nodes.forEach( n -> n.register(
+			DataNodeEvent.VALUE_CHANGED, e -> {
+				if( nodes.contains( e.getNode() ) ) eventHub.dispatch( new SettingsEvent( this, SettingsEvent.CHANGED, ".", e.getKey(), e.getNewValue() ) );
+			}
+		) );
 	}
 
 	@Override

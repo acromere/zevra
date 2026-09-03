@@ -7,12 +7,12 @@ import java.util.Objects;
 
 public class SettingsEventAssert extends AbstractAssert<SettingsEventAssert, SettingsEvent> {
 
-	public static SettingsEventAssert assertThat( SettingsEvent actual ) {
-		return new SettingsEventAssert( actual );
-	}
-
 	protected SettingsEventAssert( SettingsEvent actual ) {
 		super( actual, SettingsEventAssert.class );
+	}
+
+	public static SettingsEventAssert assertThat( SettingsEvent actual ) {
+		return new SettingsEventAssert( actual );
 	}
 
 	public SettingsEventAssert hasValues( Settings source, EventType<SettingsEvent> type, String path, String key, Object oldValue, Object newValue ) {

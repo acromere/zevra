@@ -86,7 +86,7 @@ public abstract class AbstractLogger<API extends LogApi<API>> {
 	/**
 	 * Flushes any buffered log data.
 	 */
-	public void flush(){
+	public void flush() {
 		provider.flush();
 	}
 

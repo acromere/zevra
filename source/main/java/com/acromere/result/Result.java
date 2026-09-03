@@ -112,12 +112,12 @@ public class Result<T> {
 		return this;
 	}
 
-	public Result<T> ifSuccess(Consumer<? super T> action ) {
+	public Result<T> ifSuccess( Consumer<? super T> action ) {
 		if( isPresent() && isSuccessful() ) action.accept( value );
 		return this;
 	}
 
-	public Result<T> ifFailure(Consumer<Exception> action ) {
+	public Result<T> ifFailure( Consumer<Exception> action ) {
 		if( isFailed() ) action.accept( exception );
 		return this;
 	}
@@ -335,7 +335,7 @@ public class Result<T> {
 	}
 
 	@SuppressWarnings( "unchecked" )
-	public <S> Result<S> andThen(Function<Result<T>, Result<S>> function ) {
+	public <S> Result<S> andThen( Function<Result<T>, Result<S>> function ) {
 		if( function != null ) return function.apply( this );
 		return (Result<S>)EMPTY;
 	}

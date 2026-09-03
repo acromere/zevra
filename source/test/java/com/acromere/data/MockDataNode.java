@@ -79,8 +79,8 @@ class MockDataNode extends DataNode {
 		return this;
 	}
 
-	public Event event(int index ) {
-		return watcher.getEvents().get(index);
+	public Event event( int index ) {
+		return watcher.getEvents().get( index );
 	}
 
 	public NodeWatcher getWatcher() {

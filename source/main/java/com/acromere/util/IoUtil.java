@@ -80,7 +80,7 @@ public class IoUtil {
 	}
 
 	public static void write( String data, OutputStream output, Charset encoding ) throws IOException {
-		write( data.toCharArray(), output,  encoding );
+		write( data.toCharArray(), output, encoding );
 	}
 
 	public static void write( char[] data, OutputStream output, Charset encoding ) throws IOException {

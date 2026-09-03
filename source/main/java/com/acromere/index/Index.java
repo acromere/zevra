@@ -8,16 +8,6 @@ public interface Index {
 
 	String DEFAULT = "default";
 
-	Set<String> getDictionary();
-
-	Set<Hit> getHits( String word );
-
-	Index push( Collection<Hit> hits );
-
-	default Set<Hit> getHits() {
-		return getDictionary().stream().flatMap( t -> getHits( t ).stream() ).collect( Collectors.toSet() );
-	}
-
 	static Index merge( Collection<Index> indexes ) {
 		return indexes.stream().reduce( new StandardIndex(), Index::merge );
 	}
@@ -27,6 +17,16 @@ public interface Index {
 		merged.push( a.getHits() );
 		merged.push( b.getHits() );
 		return merged;
+	}
+
+	Set<String> getDictionary();
+
+	Set<Hit> getHits( String word );
+
+	Index push( Collection<Hit> hits );
+
+	default Set<Hit> getHits() {
+		return getDictionary().stream().flatMap( t -> getHits( t ).stream() ).collect( Collectors.toSet() );
 	}
 
 }

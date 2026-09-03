@@ -26,6 +26,15 @@ class FileUtilTest {
 
 	private static final String PREFIX = "com-acromere-unit-test-";
 
+	private static Stream<Arguments> getNextIndexedNameTestData() {
+		return Stream.of(
+			Arguments.of( "test", List.of(), "test" ),
+			Arguments.of( "test", List.of( "test" ), "test(1)" ),
+			Arguments.of( "test.txt", List.of( "test.txt", "test(1).txt" ), "test(2).txt" ),
+			Arguments.of( "test", List.of( "test", "test(1)", "test(3)", "test(4)" ), "test(5)" )
+		);
+	}
+
 	@BeforeEach
 	void setup() throws Exception {
 		removeTempFiles();
@@ -552,15 +561,6 @@ class FileUtilTest {
 
 		FileUtil.waitToExist( path, 400, TimeUnit.MILLISECONDS );
 		assertThat( path ).exists();
-	}
-
-	private static Stream<Arguments> getNextIndexedNameTestData() {
-		return Stream.of(
-			Arguments.of( "test", List.of(), "test" ),
-			Arguments.of( "test", List.of( "test" ), "test(1)" ),
-			Arguments.of( "test.txt", List.of( "test.txt", "test(1).txt" ), "test(2).txt" ),
-			Arguments.of( "test", List.of( "test", "test(1)", "test(3)", "test(4)" ), "test(5)" )
-		);
 	}
 
 	private void assertFileCopy( long time, Path source, Path target ) throws IOException {

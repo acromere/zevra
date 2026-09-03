@@ -97,7 +97,7 @@ public class MultiDataDataNodeSettingsTest {
 		try( Txn ignored = Txn.create( true ) ) {
 			settings.set( "temp", "temp-value" );
 			settings.set( "count", 37 );
-			Txn.submit( new TxnOperation( e -> { } ) {
+			Txn.submit( new TxnOperation( e -> {} ) {
 
 				@Override
 				protected TxnOperation commit() {

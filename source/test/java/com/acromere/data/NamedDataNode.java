@@ -6,7 +6,7 @@ class NamedDataNode extends MockDataNode {
 		defineNaturalKey( "name" );
 	}
 
-	public String getName(){
+	public String getName() {
 		return getValue( "name" );
 	}
 

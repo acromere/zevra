@@ -27,9 +27,11 @@ public class DataNodeSettings implements Settings {
 	public DataNodeSettings( DataNode node ) {
 		this.node = node;
 		this.eventHub = new EventHub();
-		node.register( DataNodeEvent.VALUE_CHANGED, e -> {
-			if( e.getNode() == node ) eventHub.dispatch( new SettingsEvent( this, SettingsEvent.CHANGED, this.getPath(), e.getKey(), e.getOldValue(), e.getNewValue() ) );
-		} );
+		node.register(
+			DataNodeEvent.VALUE_CHANGED, e -> {
+				if( e.getNode() == node ) eventHub.dispatch( new SettingsEvent( this, SettingsEvent.CHANGED, this.getPath(), e.getKey(), e.getOldValue(), e.getNewValue() ) );
+			}
+		);
 	}
 
 	@Override

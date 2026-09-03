@@ -225,6 +225,14 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		this.valueChangeHandlers = new WeakHashMap<>();
 	}
 
+	private static void checkForCircularReference( DataNode parent, DataNode node ) {
+		DataNode next = parent;
+		while( next != null ) {
+			if( node == next ) throw new CircularReferenceException( "Circular reference detected in parent path: " + node );
+			next = next.getParent();
+		}
+	}
+
 	/**
 	 * Set or clear the modified flag. Usually this method is used to clear the
 	 * modified flag by setting the value to false. But it is also allowed to
@@ -1124,14 +1132,6 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 
 	private void checkForCircularReference( DataNode parent ) {
 		checkForCircularReference( parent, this );
-	}
-
-	private static void checkForCircularReference( DataNode parent, DataNode node ) {
-		DataNode next = parent;
-		while( next != null ) {
-			if( node == next ) throw new CircularReferenceException( "Circular reference detected in parent path: " + node );
-			next = next.getParent();
-		}
 	}
 
 	/**

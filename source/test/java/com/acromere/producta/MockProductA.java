@@ -14,7 +14,7 @@ public class MockProductA implements Product {
 	private Product parent;
 
 	public MockProductA() {
-		Rb.init(this);
+		Rb.init( this );
 	}
 
 	@Override

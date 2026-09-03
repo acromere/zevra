@@ -254,12 +254,12 @@ class DataNodeSet<E extends DataNode> extends DataNode implements Set<E> {
 		super.doSetParent( parent );
 	}
 
-	void setSetModifyFilter( Function<DataNode, Boolean> filter ) {
-		setValue( NODE_SET_MODIFY_FILTER, filter );
-	}
-
 	private Function<DataNode, Boolean> getSetModifyFilter() {
 		return getValue( NODE_SET_MODIFY_FILTER );
+	}
+
+	void setSetModifyFilter( Function<DataNode, Boolean> filter ) {
+		setValue( NODE_SET_MODIFY_FILTER, filter );
 	}
 
 	@SuppressWarnings( "unchecked" )

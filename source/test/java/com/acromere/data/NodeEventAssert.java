@@ -8,16 +8,16 @@ import java.util.Objects;
 
 public class NodeEventAssert extends AbstractAssert<NodeEventAssert, Event> {
 
+	protected NodeEventAssert( Event actual ) {
+		super( actual, NodeEventAssert.class );
+	}
+
 	public static NodeEventAssert assertThat( Event actual ) {
 		return new NodeEventAssert( actual );
 	}
 
 	public static NodeEventAssert assertThat( MockDataNode node, int index ) {
 		return new NodeEventAssert( node.getWatcher().getEvents().get( index ) );
-	}
-
-	protected NodeEventAssert( Event actual ) {
-		super( actual, NodeEventAssert.class );
 	}
 
 	public NodeEventAssert hasEventState( EventType<? extends Event> type ) {

@@ -154,65 +154,47 @@ public abstract class LogContext<LOGGER extends AbstractLogger<API>, API extends
 	}
 
 	@Override
-	public final void log(
-		String message, Object p1, Object p2, Object p3
-	) {
+	public final void log( String message, Object p1, Object p2, Object p3 ) {
 		if( shouldLog() ) doLog( message, p1, p2, p3 );
 	}
 
 	@Override
-	public final void log(
-		String message, Object p1, Object p2, Object p3, Object p4
-	) {
+	public final void log( String message, Object p1, Object p2, Object p3, Object p4 ) {
 		if( shouldLog() ) doLog( message, p1, p2, p3, p4 );
 	}
 
 	@Override
-	public final void log(
-		String msg, Object p1, Object p2, Object p3, Object p4, Object p5
-	) {
+	public final void log( String msg, Object p1, Object p2, Object p3, Object p4, Object p5 ) {
 		if( shouldLog() ) doLog( msg, p1, p2, p3, p4, p5 );
 	}
 
 	@Override
-	public final void log(
-		String msg, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6
-	) {
+	public final void log( String msg, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6 ) {
 		if( shouldLog() ) doLog( msg, p1, p2, p3, p4, p5, p6 );
 	}
 
 	@Override
-	public final void log(
-		String msg, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7
-	) {
+	public final void log( String msg, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7 ) {
 		if( shouldLog() ) doLog( msg, p1, p2, p3, p4, p5, p6, p7 );
 	}
 
 	@Override
-	public final void log(
-		String msg, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8
-	) {
+	public final void log( String msg, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8 ) {
 		if( shouldLog() ) doLog( msg, p1, p2, p3, p4, p5, p6, p7, p8 );
 	}
 
 	@Override
-	public final void log(
-		String msg, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9
-	) {
+	public final void log( String msg, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9 ) {
 		if( shouldLog() ) doLog( msg, p1, p2, p3, p4, p5, p6, p7, p8, p9 );
 	}
 
 	@Override
-	public final void log(
-		String msg, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9, Object p10
-	) {
+	public final void log( String msg, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9, Object p10 ) {
 		if( shouldLog() ) doLog( msg, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 );
 	}
 
 	@Override
-	public final void log(
-		String msg, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9, Object p10, Object... rest
-	) {
+	public final void log( String msg, Object p1, Object p2, Object p3, Object p4, Object p5, Object p6, Object p7, Object p8, Object p9, Object p10, Object... rest ) {
 		if( shouldLog() ) {
 			// Manually create a new varargs array and copy the parameters in.
 			Object[] params = new Object[ rest.length + 10 ];

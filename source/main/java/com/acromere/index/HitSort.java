@@ -7,11 +7,9 @@ class HitSort implements Comparator<Hit> {
 	@Override
 	public int compare( Hit hit1, Hit hit2 ) {
 
-		return Comparator
-			.comparingInt( o -> ((Hit)o).getPoints() ).reversed()
+		return Comparator.comparingInt( o -> ((Hit)o).getPoints() ).reversed()
 			//.thenComparingInt( o -> ((Hit)o).getPriority() )
-			.thenComparing( ( o ) -> ((Hit)o).getDocument().title() )
-			.compare( hit1, hit2 );
+			.thenComparing( ( o ) -> ((Hit)o).getDocument().title() ).compare( hit1, hit2 );
 	}
 
 }

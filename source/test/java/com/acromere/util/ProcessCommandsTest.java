@@ -35,15 +35,15 @@ class ProcessCommandsTest {
 
 		// Assert all the commands
 		int index = 0;
-		assertThat( commands.get( index++ )).isEqualTo( javaPath );
+		assertThat( commands.get( index++ ) ).isEqualTo( javaPath );
 		for( String command : runtimeCommands ) {
-			assertThat( commands.get( index++ )).isEqualTo( command );
+			assertThat( commands.get( index++ ) ).isEqualTo( command );
 		}
-		assertThat( commands.get( index++ )).isEqualTo( "-p" );
-		assertThat( commands.get( index++ )).isEqualTo( modulePath );
-		assertThat( commands.get( index++ )).isEqualTo( "-m" );
-		assertThat( commands.get( index++ )).isEqualTo( moduleMain + "/" + moduleMainClass );
-		assertThat( commands.size()).isEqualTo( index );
+		assertThat( commands.get( index++ ) ).isEqualTo( "-p" );
+		assertThat( commands.get( index++ ) ).isEqualTo( modulePath );
+		assertThat( commands.get( index++ ) ).isEqualTo( "-m" );
+		assertThat( commands.get( index++ ) ).isEqualTo( moduleMain + "/" + moduleMainClass );
+		assertThat( commands.size() ).isEqualTo( index );
 	}
 
 	@Test
@@ -60,17 +60,17 @@ class ProcessCommandsTest {
 
 		// Assert all the commands
 		int index = 0;
-		assertThat( commands.get( index++ )).isEqualTo( javaPath );
+		assertThat( commands.get( index++ ) ).isEqualTo( javaPath );
 		for( String command : runtimeCommands ) {
-			assertThat( commands.get( index++ )).isEqualTo( command );
+			assertThat( commands.get( index++ ) ).isEqualTo( command );
 		}
-		assertThat( commands.get( index++ )).isEqualTo( "-p" );
-		assertThat( commands.get( index++ )).isEqualTo( modulePath );
-		assertThat( commands.get( index++ )).isEqualTo( "-m" );
-		assertThat( commands.get( index++ )).isEqualTo( moduleMain + "/" + moduleMainClass );
-		assertThat( commands.get( index++ )).isEqualTo( "-flag" );
-		assertThat( commands.get( index++ )).isEqualTo( "value" );
-		assertThat( commands.size()).isEqualTo( index );
+		assertThat( commands.get( index++ ) ).isEqualTo( "-p" );
+		assertThat( commands.get( index++ ) ).isEqualTo( modulePath );
+		assertThat( commands.get( index++ ) ).isEqualTo( "-m" );
+		assertThat( commands.get( index++ ) ).isEqualTo( moduleMain + "/" + moduleMainClass );
+		assertThat( commands.get( index++ ) ).isEqualTo( "-flag" );
+		assertThat( commands.get( index++ ) ).isEqualTo( "value" );
+		assertThat( commands.size() ).isEqualTo( index );
 	}
 
 	@Test
@@ -87,18 +87,18 @@ class ProcessCommandsTest {
 
 		// Assert all the commands
 		int index = 0;
-		assertThat( commands.get( index++ )).isEqualTo( javaPath );
+		assertThat( commands.get( index++ ) ).isEqualTo( javaPath );
 		for( String command : runtimeCommands ) {
-			assertThat( commands.get( index++ )).isEqualTo( command );
+			assertThat( commands.get( index++ ) ).isEqualTo( command );
 		}
-		assertThat( commands.get( index++ )).isEqualTo( "-p" );
-		assertThat( commands.get( index++ )).isEqualTo( modulePath );
-		assertThat( commands.get( index++ )).isEqualTo( "-m" );
-		assertThat( commands.get( index++ )).isEqualTo( moduleMain + "/" + moduleMainClass );
-		assertThat( commands.get( index++ )).isEqualTo( "-flag" );
-		assertThat( commands.get( index++ )).isEqualTo( "value" );
-		assertThat( commands.get( index++ )).isEqualTo( "-hello" );
-		assertThat( commands.size()).isEqualTo( index );
+		assertThat( commands.get( index++ ) ).isEqualTo( "-p" );
+		assertThat( commands.get( index++ ) ).isEqualTo( modulePath );
+		assertThat( commands.get( index++ ) ).isEqualTo( "-m" );
+		assertThat( commands.get( index++ ) ).isEqualTo( moduleMain + "/" + moduleMainClass );
+		assertThat( commands.get( index++ ) ).isEqualTo( "-flag" );
+		assertThat( commands.get( index++ ) ).isEqualTo( "value" );
+		assertThat( commands.get( index++ ) ).isEqualTo( "-hello" );
+		assertThat( commands.size() ).isEqualTo( index );
 	}
 
 	private List<String> getRuntimeCommands() {

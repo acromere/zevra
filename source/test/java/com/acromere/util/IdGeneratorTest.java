@@ -36,7 +36,6 @@ class IdGeneratorTest {
 		assertThat( IdGenerator.getId( 0xffffffff ) ).isEqualTo( "ssssssssssssssss" );
 	}
 
-
 	@Test
 	void testGetIdWithLong() {
 		assertThat( IdGenerator.getId( 0x0000000000000000L ) ).isEqualTo( "mmmmmmmmmmmmmmmm" );

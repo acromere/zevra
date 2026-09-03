@@ -27,7 +27,7 @@ public class HitFinder {
 
 	}
 
-	@SuppressWarnings("SameParameterValue")
+	@SuppressWarnings( "SameParameterValue" )
 	private Set<Hit> findHits( Document document, Set<String> content, int priority ) {
 		return content.stream().flatMap( t -> findHits( document, t, priority ).stream() ).collect( Collectors.toSet() );
 	}
