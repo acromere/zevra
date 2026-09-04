@@ -2,6 +2,7 @@ package com.acromere.log;
 
 import com.acromere.log.provider.LoggingProvider;
 import com.acromere.util.JavaUtil;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -15,6 +16,7 @@ public abstract class LogContext<LOGGER extends AbstractLogger<API>, API extends
 
 	private final long timestampNanos;
 
+	@Getter
 	private String message;
 
 	private Object[] messageParameters;
@@ -36,7 +38,7 @@ public abstract class LogContext<LOGGER extends AbstractLogger<API>, API extends
 	 * Creates a logging context with the specified level and timestamp. This constructor is provided
 	 * only for testing when timestamps need to be injected. In general, subclasses would only need
 	 * to call this constructor when testing additional API methods which require timestamps (e.g.
-	 * additional rate limiting functionality). Most unit tests for logger subclasses should not
+	 * additional rate-limiting functionality). Most unit tests for logger subclasses should not
 	 * test the value of the timestamp at all, since this is already well tested elsewhere.
 	 *
 	 * @param level the log level for this log statement.
@@ -50,7 +52,7 @@ public abstract class LogContext<LOGGER extends AbstractLogger<API>, API extends
 	}
 
 	/**
-	 * Returns the current API (which is just the concrete sub-type of this instance). This is
+	 * Returns the current API (which is just the concrete subtype of this instance). This is
 	 * returned by fluent methods to continue the fluent call chain.
 	 */
 	protected abstract API api();
@@ -92,10 +94,6 @@ public abstract class LogContext<LOGGER extends AbstractLogger<API>, API extends
 		return metadata != null && Boolean.TRUE.equals( metadata.get( LogData.FORCED ) );
 	}
 
-	public String getMessage() {
-		return message;
-	}
-
 	public Object[] getMessageParameters() {
 		return messageParameters == null ? new Object[ 0 ] : messageParameters;
 	}
@@ -128,9 +126,10 @@ public abstract class LogContext<LOGGER extends AbstractLogger<API>, API extends
 	}
 
 	/*
-	 * Note that while all log statements look almost identical to each other, it is vital that we
-	 * keep the 'shouldLog()' call outside of the call to 'logImpl()' so we can decide whether or not
-	 * to abort logging before we do any varargs creation.
+	 * Note that while all log statements look almost identical to each other, it
+	 * is vital that we keep the 'shouldLog()' call outside of the call to
+	 * 'logImpl()', so we can decide whether to abort logging before we do any
+	 * varargs creation.
 	 */
 
 	@Override

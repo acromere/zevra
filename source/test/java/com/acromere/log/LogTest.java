@@ -4,8 +4,11 @@ import com.acromere.util.LogFlag;
 import com.acromere.util.Parameters;
 import lombok.CustomLog;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.util.logging.Level;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -61,6 +64,34 @@ public class LogTest {
 
 		Log.configureLogging( this, Parameters.parse( LogFlag.LOG_FILE, name ) );
 		assertThat( Log.getLogFile() ).isEqualTo( expected );
+	}
+
+	@Test
+	void testConfigureWithLogFolderAndAppend( @TempDir Path tempDir ) {
+		String logFile = "app.%u.log";
+		Log.configureLogging( this, Parameters.parse( LogFlag.LOG_APPEND ), tempDir, logFile );
+		assertThat( Log.getLogFile() ).isNotNull();
+	}
+
+	@Test
+	void testSetBaseLogLevel() {
+		Log.setBaseLogLevel( Level.WARNING );
+		assertThat( java.util.logging.Logger.getLogger( "" ).getLevel() ).isEqualTo( Level.WARNING );
+
+		Log.setBaseLogLevel( LogFlag.INFO );
+		assertThat( java.util.logging.Logger.getLogger( "" ).getLevel() ).isEqualTo( Level.INFO );
+	}
+
+	@Test
+	void testSetPackageLogLevel() {
+		Log.setPackageLogLevel( "com.acromere.custom", LogFlag.DEBUG );
+		assertThat( java.util.logging.Logger.getLogger( "com.acromere.custom" ).getLevel() ).isEqualTo( Level.FINE );
+	}
+
+	@Test
+	void testFlushAndReset() {
+		Log.flush();
+		Log.reset();
 	}
 
 	@Test
