@@ -417,7 +417,12 @@ class ParametersTest {
 	@Test
 	void testHashCode() {
 		String[] commands = new String[]{ "-flag", "-key", "value", "file" };
-		assertThat( Parameters.parse( commands ).hashCode() ).isEqualTo( Parameters.parse( commands ).hashCode() );
+		Parameters a = Parameters.parse( commands );
+		Parameters b = Parameters.parse( commands );
+		Parameters c = Parameters.parse( "-other" );
+
+		assertThat( a.hashCode() ).isEqualTo( b.hashCode() );
+		assertThat( a.hashCode() ).isNotEqualTo( c.hashCode() );
 	}
 
 	@Test

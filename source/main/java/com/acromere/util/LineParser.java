@@ -1,5 +1,7 @@
 package com.acromere.util;
 
+import lombok.Getter;
+
 public class LineParser {
 
 	private final String content;
@@ -8,6 +10,7 @@ public class LineParser {
 
 	private int next;
 
+	@Getter
 	private String line;
 
 	private String term;
@@ -23,10 +26,6 @@ public class LineParser {
 
 	public String next() {
 		parseNextLine();
-		return line;
-	}
-
-	public String getLine() {
 		return line;
 	}
 

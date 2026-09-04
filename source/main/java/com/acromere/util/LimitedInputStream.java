@@ -1,5 +1,7 @@
 package com.acromere.util;
 
+import org.jspecify.annotations.NonNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -57,7 +59,7 @@ public class LimitedInputStream extends InputStream {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int read( final byte[] b ) throws IOException {
+	public int read( final byte @NonNull [] b ) throws IOException {
 		return this.read( b, 0, b.length );
 	}
 
@@ -65,7 +67,7 @@ public class LimitedInputStream extends InputStream {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int read( final byte[] b, final int off, final int len ) throws IOException {
+	public int read( final byte @NonNull [] b, final int off, final int len ) throws IOException {
 		if( limit >= 0 && position >= limit ) {
 			return EOF;
 		}
@@ -131,8 +133,8 @@ public class LimitedInputStream extends InputStream {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized void mark( final int readlimit ) {
-		input.mark( readlimit );
+	public synchronized void mark( final int limit ) {
+		input.mark( limit );
 		mark = position;
 	}
 

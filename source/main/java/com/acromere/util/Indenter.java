@@ -101,13 +101,13 @@ public class Indenter {
 
 	/**
 	 * Check if a block of lines can be unindented. A line can be unindented if it
-	 * is empty (no spaces, tabs or other characters before the line termination)
+	 * is empty (no spaces, tabs, or other characters before the line termination)
 	 * or it starts with the indent string.
 	 *
 	 * @param content The content to check
 	 * @param size The size of the indent
 	 * @param indent The indent string
-	 * @return True if all line in the content can be unindented, false otherwise.
+	 * @return True if all lines in the content can be unindented, false otherwise.
 	 */
 	public static boolean canUnindent( String content, int size, String indent, boolean ignoreBlanks ) {
 		if( content == null ) return false;
@@ -117,7 +117,7 @@ public class Indenter {
 
 		String line;
 		while( (line = parser.next()) != null ) {
-			if( ignoreBlanks && "".equals( line ) ) continue;
+			if( ignoreBlanks && line.isEmpty() ) continue;
 			if( !line.startsWith( text ) ) return false;
 		}
 
@@ -149,7 +149,7 @@ public class Indenter {
 	}
 
 	public static String trim( String content, String trimChars ) {
-		if( content == null || content.length() == 0 ) return content;
+		if( content == null || content.isEmpty() ) return content;
 
 		int length = content.length();
 		int start = 0;
@@ -198,7 +198,7 @@ public class Indenter {
 	}
 
 	public static String trimLines( String content, String trimChars ) {
-		if( content == null || content.length() == 0 ) return content;
+		if( content == null || content.isEmpty() ) return content;
 
 		StringBuilder builder = new StringBuilder();
 		StringReader stringReader = new StringReader( content );
@@ -209,7 +209,7 @@ public class Indenter {
 		try {
 			lineNumber++;
 			String line = bufferedReader.readLine();
-			while( line != null && line.length() == 0 ) {
+			while( line != null && line.isEmpty() ) {
 				builder.append( trim( "\n", trimChars ) );
 				line = bufferedReader.readLine();
 			}

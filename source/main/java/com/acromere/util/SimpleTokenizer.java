@@ -41,9 +41,9 @@ public class SimpleTokenizer {
 	}
 
 	/**
-	 * Retrieves the next token from the string.
-	 * Tokens are delimited by whitespace unless enclosed in double quotes.
-	 * If there are no more tokens, null is returned.
+	 * Retrieves the next token from the string. Tokens are delimited by
+	 * whitespace unless enclosed in double quotes. If there are no more tokens,
+	 * null is returned.
 	 *
 	 * @return The next token as a String, or null if there are no more tokens.
 	 */

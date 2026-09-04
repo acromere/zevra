@@ -60,7 +60,7 @@ public class TestUtil {
 	private static void printClasses() {
 		Map<Thread, StackTraceElement[]> stacks = Thread.getAllStackTraces();
 		for( Thread thread : stacks.keySet() ) {
-			if( thread.getId() == 1 ) {
+			if( thread.threadId() == 1 ) {
 				StackTraceElement[] elements = stacks.get( thread );
 				for( StackTraceElement element : elements ) {
 					System.out.println( element.getClassName() );

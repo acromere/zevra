@@ -1,5 +1,7 @@
 package com.acromere.util;
 
+import lombok.Getter;
+
 import java.security.InvalidParameterException;
 import java.util.*;
 
@@ -52,7 +54,7 @@ import java.util.*;
  * <h2>Validation</h2>
  * The Parameters class can validate command line parameters by passing a set of
  * valid parameters to the parse() method. If a parameter is specified in the
- * command line that does not match the valid set an InvalidParameterException
+ * command line that does not match the valid set, an InvalidParameterException
  * is thrown.
  *
  * @author Mark Soderquist
@@ -65,14 +67,18 @@ public class Parameters {
 
 	private static final String EQUALS = "=";
 
+	@Getter
 	private final List<String> originalCommands;
 
+	@Getter
 	private final List<String> resolvedCommands;
 
+	@Getter
 	private final Set<String> flags;
 
 	private final Map<String, List<String>> values;
 
+	@Getter
 	private final List<String> uris;
 
 	private Parameters( List<String> originalCommands, List<String> resolvedCommands, Set<String> flags, Map<String, List<String>> values, List<String> uris ) {
@@ -144,7 +150,7 @@ public class Parameters {
 						valueList.add( value );
 						index++;
 					}
-					if( valueList.size() == 0 ) valueList.add( "true" );
+					if( valueList.isEmpty() ) valueList.add( "true" );
 				}
 
 				flags.add( command );
@@ -158,7 +164,7 @@ public class Parameters {
 					valueList.add( commands.get( index + 1 ) );
 					index++;
 				}
-				if( valueList.size() == 0 ) valueList.add( "true" );
+				if( valueList.isEmpty() ) valueList.add( "true" );
 
 				flags.add( command );
 				values.put( removePrefix( command ), valueList );
@@ -209,7 +215,7 @@ public class Parameters {
 
 	public String get( String flag ) {
 		List<String> values = this.values.get( removePrefix( flag ) );
-		return values == null ? null : values.get( 0 );
+		return values == null ? null : values.getFirst();
 	}
 
 	public String get( String flag, String defaultValue ) {
@@ -221,21 +227,22 @@ public class Parameters {
 	 * Returns the parameter value as a boolean. The boolean returned represents the value true if the parameter value is not null and is equal, ignoring case, to
 	 * the string "true".
 	 *
-	 * @param flag
-	 * @return
+	 * @param flag The parameter flag name
+	 * @return The parameter value as a boolean
 	 */
 	public boolean isTrue( String flag ) {
 		return Boolean.parseBoolean( get( flag ) );
 	}
 
 	/**
-	 * Returns the parameter value as a boolean if it was defined on the command line. The boolean returned represents the value true if the parameter value is
+	 * Returns the parameter value as a boolean if it was defined on the command line. 
+	 * The boolean returned represents the value true if the parameter value is
 	 * not null and is equal, ignoring case, to the string "true". If the parameter was
-	 * not specified on the command line then the default value is returned.
+	 * not specified on the command line, then the default value is returned.
 	 *
-	 * @param flag
-	 * @param defaultValue
-	 * @return
+	 * @param flag The parameter flag name
+	 * @param defaultValue The default value to return if not specified
+	 * @return The parameter value as a boolean, or the default value if not specified
 	 */
 	public boolean isSet( String flag, boolean defaultValue ) {
 		String value = get( flag );
@@ -245,8 +252,8 @@ public class Parameters {
 	/**
 	 * Returns whether the parameter was specified on the command line.
 	 *
-	 * @param flag
-	 * @return
+	 * @param flag The parameter flag name
+	 * @return True if the parameter was specified on the command line, false otherwise
 	 */
 	public boolean isSet( String flag ) {
 		return get( flag ) != null;
@@ -263,10 +270,6 @@ public class Parameters {
 		return false;
 	}
 
-	public Set<String> getFlags() {
-		return flags;
-	}
-
 	public List<String> getValues( String flag ) {
 		List<String> list = getValuesFromMap( flag );
 		//		if( list == null ) {
@@ -279,18 +282,6 @@ public class Parameters {
 
 	private List<String> getValuesFromMap( String flag ) {
 		return values.get( removePrefix( flag ) );
-	}
-
-	public List<String> getUris() {
-		return uris;
-	}
-
-	public List<String> getOriginalCommands() {
-		return originalCommands;
-	}
-
-	public List<String> getResolvedCommands() {
-		return resolvedCommands;
 	}
 
 	@Override
@@ -310,7 +301,7 @@ public class Parameters {
 		int code = 0;
 
 		for( String command : resolvedCommands ) {
-			code &= command.hashCode();
+			code |= command.hashCode();
 		}
 
 		return code;
@@ -318,9 +309,7 @@ public class Parameters {
 
 	@Override
 	public boolean equals( Object object ) {
-		if( !(object instanceof Parameters) ) return false;
-
-		Parameters that = (Parameters)object;
+		if( !(object instanceof Parameters that) ) return false;
 
 		if( this.resolvedCommands.size() != that.resolvedCommands.size() ) return false;
 

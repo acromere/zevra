@@ -26,7 +26,7 @@ public abstract class TypeReference<T> implements Comparable<TypeReference<T>> {
 
 	/**
 	 * This constructor is for use in circumstances where a new TypeReference
-	 * subclass is defined in order to reference the parameterized type at
+	 * subclass is defined to reference the parameterized type at
 	 * runtime. The TypeReference must have the parameterized type in it, the
 	 * diamond operator cannot be used.
 	 */

@@ -1,5 +1,7 @@
 package com.acromere.util;
 
+import org.jspecify.annotations.NonNull;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -13,7 +15,7 @@ public class ThreadUtil {
 
 	/**
 	 * Pause a thread for a specific amount of time. If an InterruptedException
-	 * occurs the method returns immediately.
+	 *  occurs, the method returns immediately.
 	 *
 	 * @param duration The pause duration in milliseconds
 	 */
@@ -152,7 +154,7 @@ public class ThreadUtil {
 	 */
 	private static final class DaemonThreadFactory implements ThreadFactory {
 
-		public Thread newThread( Runnable runnable ) {
+		public Thread newThread( @NonNull Runnable runnable ) {
 			Thread thread = Executors.defaultThreadFactory().newThread( runnable );
 			thread.setDaemon( true );
 			return thread;

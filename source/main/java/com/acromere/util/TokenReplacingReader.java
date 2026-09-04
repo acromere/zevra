@@ -1,5 +1,7 @@
 package com.acromere.util;
 
+import org.jspecify.annotations.NonNull;
+
 import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.Reader;
@@ -105,12 +107,12 @@ public class TokenReplacingReader extends Reader {
 		return this.tokenValue.charAt( this.tokenValueIndex++ );
 	}
 
-	public int read( char[] buffer ) throws IOException {
+	public int read( char @NonNull [] buffer ) throws IOException {
 		return read( buffer, 0, buffer.length );
 	}
 
 	@Override
-	public int read( char[] buffer, int offset, int length ) throws IOException {
+	public int read( char @NonNull [] buffer, int offset, int length ) throws IOException {
 		int result = 0;
 
 		for( int i = 0; i < length; i++ ) {
@@ -126,7 +128,7 @@ public class TokenReplacingReader extends Reader {
 		return result;
 	}
 
-	public int read( CharBuffer target ) throws IOException {
+	public int read( @NonNull CharBuffer target ) throws IOException {
 		throw new UnsupportedOperationException();
 	}
 

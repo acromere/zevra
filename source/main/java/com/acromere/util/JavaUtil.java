@@ -210,7 +210,7 @@ public final class JavaUtil {
 		StringTokenizer tokenizer = new StringTokenizer( classpath, " " );
 		while( tokenizer.hasMoreTokens() ) {
 			String path = tokenizer.nextToken();
-			urls.add( new URL( base.resolve( path ).toString() ) );
+			urls.add( base.resolve( path ).toURL() );
 		}
 
 		return urls;

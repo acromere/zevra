@@ -116,9 +116,9 @@ public final class UriUtil {
 	/**
 	 * Resolve an absolute URI from a string. The string may be in any of the following formats: <ul> <li>Absolute URI</li> <li>Relative URI</li> <li>Windows Path
 	 * (Windows only)</li> <li>Windows UNC (Windows only)</li> </ul> Every reasonable
-	 * attempt is made to create a valid URI from the string. If a valid absolute URI cannot be created directly from the string then a File object is used to
+	 * attempt is made to create a valid URI from the string. If a valid absolute URI cannot be created directly from the string, then a File object is used to
 	 * generate a URI based on the string under the following situations: <ul> <li>The URI
-	 * is malformed</li> <li>The URI is relative because scheme is missing</li> <li>The URI is a drive letter because the scheme is only one character long </li>
+	 * is malformed</li> <li>The URI is relative because the scheme is missing</li> <li>The URI is a drive letter because the scheme is only one character long </li>
 	 * </ul>
 	 *
 	 * @param string A string to resolve into a URI
@@ -167,7 +167,7 @@ public final class UriUtil {
 
 	/**
 	 * Convenience method to resolve a string against a URI and return the result
-	 * as a string. This method URL encodes the string before resolving it and
+	 * as a string. This method URL encodes the string before resolving it, and
 	 * URL decodes the result before returning it.
 	 *
 	 * @param uri The URI to resolve against
@@ -219,7 +219,7 @@ public final class UriUtil {
 	}
 
 	/**
-	 * Does the URI represent a root path.
+	 * Determine if the URI represent a root path.
 	 */
 	public static boolean isRoot( URI uri ) {
 		return PathUtil.isRoot( uri.normalize().getPath() );
@@ -335,7 +335,7 @@ public final class UriUtil {
 	 *
 	 * @param a A URI to compare
 	 * @param b A URI to compare
-	 * @return A match score with 0 being an exact match and higher number a worse match
+	 * @return A match score with 0 being an exact match and the higher number a worse match
 	 */
 	public static int getMatchScore( URI a, URI b ) {
 		List<String> partsA = getParts( a );

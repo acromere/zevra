@@ -12,8 +12,8 @@ import java.util.Map;
  * Convenience class to generate command line values for processes.
  * </p>
  * <p>
- * Prior to Java 14 the only official way to start a Java VM was to use the java
- * (or javaw) launchers provided with the Java runtime. Starting with Java 14
+ * Prior to Java 14, the only official way to start a Java VM was to use the java
+ * (or javaw) launchers provided with the Java runtime. Starting with Java 14,
  * there is an official way to generate platform custom runtime launchers that
  * are usually named for the product.
  * </p>
@@ -162,7 +162,7 @@ public class ProcessCommands {
 	 * @param mainModule The main module.
 	 * @param mainClass The main class.
 	 * @return The command line represented as a list of strings.
-	 * @throws NullPointerException If mainModule or mainClass is null.
+	 * @throws NullPointerException If the mainModule or mainClass is null.
 	 */
 	public static List<String> forModule( String javaLauncherPath, String modulePath, String mainModule, String mainClass ) {
 		List<String> commands = new ArrayList<>();
@@ -221,7 +221,7 @@ public class ProcessCommands {
 		for( String flag : flags.keySet() ) {
 			List<String> values = flags.get( flag );
 			commands.add( flag );
-			if( values.size() > 1 || !"true".equals( values.get( 0 ) ) ) commands.addAll( values );
+			if( values.size() > 1 || !"true".equals( values.getFirst() ) ) commands.addAll( values );
 		}
 
 		// Add the collected URIs

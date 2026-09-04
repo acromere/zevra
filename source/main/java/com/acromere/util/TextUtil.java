@@ -234,7 +234,7 @@ public final class TextUtil {
 
 	/**
 	 * Returns a string representation of the specified array, starting from the
-	 * specified offset, and using the specified delimiter to separate the elements.
+	 * specified offset and using the specified delimiter to separate the elements.
 	 *
 	 * @param array the array to convert to a string
 	 * @param delimiter the delimiter to use between array elements
@@ -509,8 +509,8 @@ public final class TextUtil {
 	 * <p>
 	 * Security note: Objects of type String are immutable, meaning there are no methods defined that allow you to change (overwrite) or zero out the contents of
 	 * a String after usage. This feature makes String objects unsuitable for storing
-	 * security sensitive information, such as passwords. The String objects can easily be discovered using standard debugging tools or other methods that can
-	 * inspect the JVM memory. Security sensitive information should always be collected
+	 * security-sensitive information, such as passwords. The String objects can easily be discovered using standard debugging tools or other methods that can
+	 * inspect the JVM memory. Security-sensitive information should always be collected
 	 * and stored in a char array instead.
 	 *
 	 * @param chars The characters to hex encode
@@ -578,10 +578,10 @@ public final class TextUtil {
 	}
 
 	/**
-	 * Determines if the given string can be parsed as a long.
+	 * Determines if the given string can be parsed as a long value.
 	 *
 	 * @param text the string to be checked
-	 * @return true if the string can be parsed as a long, false otherwise.
+	 * @return true if the string can be parsed as a long value, false otherwise.
 	 */
 	public static boolean isLong( String text ) {
 		if( text == null ) return false;
@@ -698,7 +698,7 @@ public final class TextUtil {
 	}
 
 	/**
-	 * Pads a string with default padding character up to the specified width.
+	 * Pads a string with the default padding character up to the specified width.
 	 *
 	 * @param width The desired width of the padded string.
 	 * @return The padded string.
@@ -754,7 +754,7 @@ public final class TextUtil {
 	 * @param width the desired width of the resultant string
 	 * @param chr the padding character to be used
 	 * @param pad the length of the padding
-	 * @return the left justified string with the specified width, padding character, and pad length
+	 * @return The left justified string with the specified width, padding character, and pad length
 	 */
 	public static String leftJustify( String text, int width, char chr, int pad ) {
 		if( text == null ) return pad( width );
@@ -881,8 +881,8 @@ public final class TextUtil {
 	}
 
 	/**
-	 * This method takes a string as input and splits it into separate lines.
-	 * Each line is added to a list and the list is returned.
+	 * This method takes a string as the input and splits it into separate lines.
+	 * Each line is added to a list, and the list is returned.
 	 *
 	 * @param text the input string to be split into lines
 	 * @return a list of strings representing the lines in the input string,

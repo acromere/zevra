@@ -4,7 +4,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 /**
- * Implementation found at: https://stackoverflow.com/questions/7085990/java-enumeration-from-setstring
+ * Implementation found at: <a href="https://stackoverflow.com/questions/7085990/java-enumeration-from-setstring">https://stackoverflow.com/questions/7085990/java-enumeration-from-setstring</a>
  */
 public class IteratorEnumerator<E> implements Enumeration<E> {
 

@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * calling getValue("/config/threads/max") would return "8".
  * <p/>
  * Other methods are provided for creating descriptors, getting attribute
- * values and getting other information from the descriptor.
+ * values, and getting other information from the descriptor.
  */
 @CustomLog
 public class XmlDescriptor {
@@ -208,7 +208,7 @@ public class XmlDescriptor {
 
 	/**
 	 * Using the specified node as the root, get the text value of the XML node at
-	 * the specified path. If the value is empty then use the default value.
+	 * the specified path. If the value is empty, then use the default value.
 	 *
 	 * @param node The node to use as the root node
 	 * @param path The value path
@@ -260,7 +260,7 @@ public class XmlDescriptor {
 
 	/**
 	 * Get the parent XML document of this descriptor if this descriptor was
-	 * created from a node. If the descriptor node is the parent document then it
+	 * created from a node. If the descriptor node is the parent document, then it
 	 * is returned.
 	 */
 	public Document getDocument() {
@@ -326,7 +326,7 @@ public class XmlDescriptor {
 	 * &lt;/config&gt;</pre>
 	 * calling <code>getPaths()</code> returns a List&lt;String&gt; with only
 	 * "/config/thread/max". Because the path "/config/thread/min" does not have
-	 * a non-empty value it is not returned in the list.
+	 * a non-empty value, it is not returned in the list.
 	 *
 	 * @return The list of paths with non-empty values
 	 */
@@ -376,7 +376,7 @@ public class XmlDescriptor {
 
 	/**
 	 * Get the text value of the XML node at the specified path. If the value is
-	 * empty then return the default value. For example, given the XML document
+	 * empty, then return the default value. For example, given the XML document
 	 * <pre>
 	 * &lt;config&gt;
 	 *   &lt;threads&gt;

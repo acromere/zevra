@@ -131,7 +131,7 @@ public class PathUtil {
 	 * @param source The source path
 	 * @param target The target path
 	 * @return The relative path from source to target, or null if either source or target is null
-	 * @throws IllegalArgumentException If target is a different type of path (absolute or relative) than source
+	 * @throws IllegalArgumentException If the target is a different type of path (absolute or relative) than the source
 	 */
 	public static String relativize( String source, String target ) {
 		if( source == null || target == null ) return null;

@@ -47,8 +47,8 @@ public class DateUtil {
 	/**
 	 * Parse a date string with the default format using the standard time zone.
 	 *
-	 * @param data
-	 * @return
+	 * @param data The date string to parse
+	 * @return The parsed date or null if there is a parsing error
 	 */
 	public static Date parse( String data ) {
 		return parse( data, DEFAULT_DATE_FORMAT, DEFAULT_TIME_ZONE );
@@ -57,9 +57,9 @@ public class DateUtil {
 	/**
 	 * Parse a date string with the given format using the standard time zone.
 	 *
-	 * @param data
-	 * @param format
-	 * @return
+	 * @param data The date string to parse
+	 * @param format The date format of the data
+	 * @return The parsed date or null if there is a parsing error
 	 */
 	public static Date parse( String data, String format ) {
 		return parse( data, format, DEFAULT_TIME_ZONE );
@@ -68,10 +68,10 @@ public class DateUtil {
 	/**
 	 * Parse a date string with the given format and time zone.
 	 *
-	 * @param data
-	 * @param format
-	 * @param timeZone
-	 * @return
+	 * @param data The date string to parse
+	 * @param format The date format of the data
+	 * @param timeZone The timezone of the data
+	 * @return The parsed date or null if there is a parsing error
 	 */
 	public static Date parse( String data, String format, String timeZone ) {
 		return parse( data, format, timeZone == null ? null : TimeZone.getTimeZone( timeZone ) );
@@ -101,8 +101,8 @@ public class DateUtil {
 	/**
 	 * Format a date with the given format using the standard time zone.
 	 *
-	 * @param date
-	 * @return
+	 * @param date The date to format
+	 * @return The formatted date string
 	 */
 	public static String format( Date date ) {
 		return format( date, DEFAULT_DATE_FORMAT, DEFAULT_TIME_ZONE );
@@ -111,9 +111,9 @@ public class DateUtil {
 	/**
 	 * Format a date with the given format using the standard time zone.
 	 *
-	 * @param date
-	 * @param format
-	 * @return
+	 * @param date The date to format
+	 * @param format The date format
+	 * @return The formatted date string
 	 */
 	public static String format( Date date, String format ) {
 		return format( date, format, DEFAULT_TIME_ZONE );
@@ -122,10 +122,10 @@ public class DateUtil {
 	/**
 	 * Format a date with the given format and time zone.
 	 *
-	 * @param date
-	 * @param format
-	 * @param timeZone
-	 * @return
+	 * @param date The date to format
+	 * @param format The date format
+	 * @param timeZone The timezone
+	 * @return The formatted date string
 	 */
 	public static String format( Date date, String format, String timeZone ) {
 		return format( date, format, TimeZone.getTimeZone( timeZone ) );
@@ -134,10 +134,10 @@ public class DateUtil {
 	/**
 	 * Format a date with the given format and time zone.
 	 *
-	 * @param date
-	 * @param format
-	 * @param zone
-	 * @return
+	 * @param date The date to format
+	 * @param format The date format
+	 * @param zone The timezone
+	 * @return The formatted date string
 	 */
 	public static String format( Date date, String format, TimeZone zone ) {
 		SimpleDateFormat formatter = new SimpleDateFormat( format );

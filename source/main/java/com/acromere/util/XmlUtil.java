@@ -82,7 +82,7 @@ public class XmlUtil {
 	}
 
 	/**
-	 * Query an DOM node by path expression for a DOM node. This method returns
+	 * Query a DOM node by path expression for a DOM node. This method returns
 	 * the first DOM node that matches the path expression.
 	 *
 	 * @param node The DOM node to query

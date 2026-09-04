@@ -16,7 +16,7 @@ import java.util.logging.LogRecord;
  * the log messages according to a specific format. It extends the Formatter
  * class provided by the Java logging framework. The format of the log messages
  * can be customized by changing the value of the FORMAT_PROPERTY_KEY property
- * in the logging configuration, or by setting a system property with the same
+ * in the logging configuration or by setting a system property with the same
  * name. If no format is specified, the default format is used.
  * <p>
  * The format of the log messages is specified using a format string containing

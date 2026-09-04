@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * A POJO that is a simple representation of a person that is intended to
- * be marshalled and unmarshalled.
+ * be marshaled and unmarshalled.
  */
 @Setter
 @Getter

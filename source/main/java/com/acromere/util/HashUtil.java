@@ -78,17 +78,7 @@ public class HashUtil {
 
 	}
 
-	private static final class DigestStrategy implements HashStrategy {
-
-		private DigestWrapper digest;
-
-		public DigestStrategy( DigestWrapper digest ) {
-			setDigest( digest );
-		}
-
-		protected void setDigest( DigestWrapper digest ) {
-			this.digest = digest;
-		}
+	private record DigestStrategy(DigestWrapper digest) implements HashStrategy {
 
 		@Override
 		public String hash( InputStream input ) {
