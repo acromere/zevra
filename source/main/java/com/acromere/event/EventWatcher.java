@@ -7,11 +7,11 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeoutException;
 
-public class EventWatcher implements EventHandler<Event> {
+public class EventWatcher<T extends Event> implements EventHandler<T> {
 
 	public static final long DEFAULT_WAIT_TIMEOUT = 5000;
 
-	private final Queue<Event> events = new ConcurrentLinkedQueue<>();
+	private final Queue<T> events = new ConcurrentLinkedQueue<>();
 
 	@Getter
 	private final long timeout;
@@ -30,18 +30,18 @@ public class EventWatcher implements EventHandler<Event> {
 
 	@Override
 	@SuppressWarnings( "java:S106" )
-	public synchronized void handle( Event event ) {
+	public synchronized void handle( T event ) {
 		if( printEventCapture ) System.out.println( "Captured event: type=" + event.getEventType() );
 		events.offer( event );
 		notifyAll();
 	}
 
-	public void waitForEvent( EventType<? extends Event> type ) throws InterruptedException, TimeoutException {
+	public void waitForEvent( EventType<T> type ) throws InterruptedException, TimeoutException {
 		waitForEvent( type, timeout );
 	}
 
 	@SuppressWarnings( "unused" )
-	public void waitForNextEvent( EventType<? extends Event> type ) throws InterruptedException, TimeoutException {
+	public void waitForNextEvent( EventType<T> type ) throws InterruptedException, TimeoutException {
 		waitForNextEvent( type, timeout );
 	}
 
@@ -55,7 +55,7 @@ public class EventWatcher implements EventHandler<Event> {
 	 * @param timeout How long, in milliseconds, to wait for the event
 	 * @throws InterruptedException If the timeout is exceeded
 	 */
-	public synchronized void waitForEvent( EventType<? extends Event> type, long timeout ) throws InterruptedException, TimeoutException {
+	public synchronized void waitForEvent( EventType<T> type, long timeout ) throws InterruptedException, TimeoutException {
 		boolean shouldWait = timeout > 0;
 		long start = System.currentTimeMillis();
 		long expiration = start + timeout;
@@ -80,12 +80,12 @@ public class EventWatcher implements EventHandler<Event> {
 	 * @param timeout How long, in milliseconds, to wait for the event
 	 * @throws InterruptedException If the timeout is exceeded
 	 */
-	public synchronized void waitForNextEvent( EventType<? extends Event> type, long timeout ) throws InterruptedException, TimeoutException {
+	public synchronized void waitForNextEvent( EventType<T> type, long timeout ) throws InterruptedException, TimeoutException {
 		findNext( type );
 		waitForEvent( type, timeout );
 	}
 
-	private Event findNext( EventType<? extends Event> type ) {
+	private Event findNext( EventType<T> type ) {
 		Event event;
 		while( (event = events.poll()) != null ) {
 			if( event.getEventType() == type ) return event;
