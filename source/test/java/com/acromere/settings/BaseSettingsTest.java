@@ -1,9 +1,12 @@
 package com.acromere.settings;
 
+import com.acromere.event.EventHandler;
 import com.acromere.util.PathUtil;
 import com.acromere.util.TypeReference;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
@@ -499,6 +502,158 @@ public abstract class BaseSettingsTest {
 		assertThat( settings.nodeExists( "test" ) ).isTrue();
 		test.delete();
 		assertThat( settings.nodeExists( "test" ) ).isFalse();
+	}
+
+	@Test
+	void testSetCharacterAndGetCharacter() {
+		String key = "charKey";
+		assertThat( settings.get( key, Character.class ) ).isNull();
+
+		settings.set( key, 'A' );
+		assertThat( settings.get( key, Character.class ) ).isEqualTo( 'A' );
+		assertThat( settings.get( key ) ).isEqualTo( "A" );
+
+		settings.set( key, "B" );
+		assertThat( settings.get( key, Character.class ) ).isEqualTo( 'B' );
+
+		settings.set( key, null );
+		assertThat( settings.get( key, Character.class ) ).isNull();
+	}
+
+	@Test
+	void testSetByteAndGetByte() {
+		String key = "byteKey";
+		assertThat( settings.get( key, Byte.class ) ).isNull();
+
+		settings.set( key, (byte)42 );
+		assertThat( settings.get( key, Byte.class ) ).isEqualTo( (byte)42 );
+		assertThat( settings.get( key ) ).isEqualTo( "42" );
+
+		settings.set( key, "100" );
+		assertThat( settings.get( key, Byte.class ) ).isEqualTo( (byte)100 );
+
+		settings.set( key, null );
+		assertThat( settings.get( key, Byte.class ) ).isNull();
+	}
+
+	@Test
+	void testSetShortAndGetShort() {
+		String key = "shortKey";
+		assertThat( settings.get( key, Short.class ) ).isNull();
+
+		settings.set( key, (short)1024 );
+		assertThat( settings.get( key, Short.class ) ).isEqualTo( (short)1024 );
+		assertThat( settings.get( key ) ).isEqualTo( "1024" );
+
+		settings.set( key, "2048" );
+		assertThat( settings.get( key, Short.class ) ).isEqualTo( (short)2048 );
+
+		settings.set( key, null );
+		assertThat( settings.get( key, Short.class ) ).isNull();
+	}
+
+	@Test
+	void testSetFileAndGetFile() {
+		String key = "fileKey";
+		File file = new File( "/tmp/test.txt" ).getAbsoluteFile();
+		assertThat( settings.get( key, File.class ) ).isNull();
+
+		settings.set( key, file );
+		assertThat( settings.get( key, File.class ) ).isEqualTo( file );
+		assertThat( settings.get( key ) ).isEqualTo( file.toURI().toString() );
+
+		settings.set( key, null );
+		assertThat( settings.get( key, File.class ) ).isNull();
+	}
+
+	@Test
+	void testSetArrayAndGetArray() {
+		MockBean bean1 = new MockBean();
+		bean1.setIntegerPrimitiveProperty( 10 );
+		bean1.setStringProperty( "first" );
+
+		MockBean bean2 = new MockBean();
+		bean2.setIntegerPrimitiveProperty( 20 );
+		bean2.setStringProperty( "second" );
+
+		MockBean[] beans = new MockBean[]{ bean1, bean2 };
+
+		assertThat( settings.get( "beanArray", MockBean[].class ) ).isNull();
+
+		settings.set( "beanArray", beans );
+		assertThat( settings.get( "beanArray", MockBean[].class ) ).isNotNull();
+
+		Object[] result = settings.get( "beanArray", MockBean[].class );
+		assertThat( result ).hasSize( 2 );
+		assertThat( result[ 0 ] ).isEqualTo( bean1 );
+		assertThat( result[ 1 ] ).isEqualTo( bean2 );
+	}
+
+	@Test
+	void testRemove() {
+		settings.set( "removeKey", "testValue" );
+		assertThat( settings.exists( "removeKey" ) ).isTrue();
+		assertThat( settings.get( "removeKey" ) ).isEqualTo( "testValue" );
+
+		settings.remove( "removeKey" );
+		assertThat( settings.exists( "removeKey" ) ).isFalse();
+		assertThat( settings.get( "removeKey" ) ).isNull();
+	}
+
+	@Test
+	void testLoadDefaultValues() throws IOException {
+		settings.loadDefaultValues( this, "/com/acromere/settings/test-default.properties" );
+		assertThat( settings.get( "defaultKey" ) ).isEqualTo( "defaultValue" );
+		assertThat( settings.get( "numberKey", Integer.class ) ).isEqualTo( 42 );
+		assertThat( settings.get( "boolKey", Boolean.class ) ).isTrue();
+	}
+
+	@Test
+	void testRegisterAndUnregisterKeyHandler() {
+		SettingsEventWatcher watcher = new SettingsEventWatcher();
+		settings.register( "keyX", watcher );
+
+		settings.set( "keyX", "val1" );
+		assertThat( watcher.getEvents() ).hasSize( 1 );
+
+		settings.unregister( "keyX", watcher );
+		settings.set( "keyX", "val2" );
+		assertThat( watcher.getEvents() ).hasSize( 1 );
+	}
+
+	@Test
+	void testRegisterAndUnregisterEvent() {
+		EventHandler<SettingsEvent> handler = event -> {};
+		settings.register( SettingsEvent.SAVED, handler );
+		assertThat( settings.getEventHandlers() ).isNotEmpty();
+
+		settings.unregister( SettingsEvent.SAVED, handler );
+	}
+
+	@Test
+	void testGetNodeWithInitialValues() {
+		Map<String, String> initialValues = new HashMap<>();
+		initialValues.put( "prop1", "val1" );
+		initialValues.put( "prop2", "val2" );
+
+		Settings child = settings.getNode( "childWithInit", initialValues );
+		assertThat( child.get( "prop1" ) ).isEqualTo( "val1" );
+		assertThat( child.get( "prop2" ) ).isEqualTo( "val2" );
+	}
+
+	@Test
+	void testGetWithGenericTypeReferenceAndDefaultValue() {
+		TypeReference<List<String>> listType = new TypeReference<>() {};
+		List<String> defaultList = List.of( "alpha", "beta" );
+
+		assertThat( settings.get( "nonExistingList", listType, defaultList ) ).isEqualTo( defaultList );
+	}
+
+	@Test
+	void testUnmarshallErrorHandling() {
+		settings.set( "corruptJson", "---not-a-valid-json---" );
+		assertThat( settings.get( "corruptJson", MockBean.class ) ).isNull();
+		assertThat( settings.get( "corruptJson", new TypeReference<List<MockBean>>() {} ) ).isNull();
 	}
 
 }
