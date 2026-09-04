@@ -26,7 +26,6 @@ module com.acromere.zevra {
 	exports com.acromere.result;
 	exports com.acromere.settings;
 	exports com.acromere.skill;
-	exports com.acromere.test;
 	exports com.acromere.transaction;
 	exports com.acromere.util;
 
