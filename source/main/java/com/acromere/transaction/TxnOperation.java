@@ -1,5 +1,7 @@
 package com.acromere.transaction;
 
+import lombok.Getter;
+
 /**
  * A single Txn operation that is processed during the commit process and
  * generates a result that is collected and published when the commit
@@ -7,8 +9,10 @@ package com.acromere.transaction;
  */
 public abstract class TxnOperation {
 
+	@Getter
 	private final TxnEventTarget target;
 
+	@Getter
 	private final TxnOperationResult result;
 
 	private TxnOperation.Status status;
@@ -22,14 +26,6 @@ public abstract class TxnOperation {
 	protected abstract TxnOperation commit() throws TxnException;
 
 	protected abstract TxnOperation revert() throws TxnException;
-
-	public TxnEventTarget getTarget() {
-		return target;
-	}
-
-	public TxnOperationResult getResult() {
-		return result;
-	}
 
 	Status getStatus() {
 		return status;

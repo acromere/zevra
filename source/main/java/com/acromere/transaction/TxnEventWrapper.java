@@ -1,24 +1,10 @@
 package com.acromere.transaction;
 
-class TxnEventWrapper {
+record TxnEventWrapper(TxnEventTarget target, TxnEvent event) {
 
-	private final TxnEventTarget target;
-
-	private final TxnEvent event;
-
-	TxnEventWrapper( TxnEventTarget target, TxnEvent event ) {
+	TxnEventWrapper {
 		if( target == null ) throw new NullPointerException( "Target cannot be null" );
 		if( event == null ) throw new NullPointerException( "Event cannot be null" );
-		this.target = target;
-		this.event = event;
-	}
-
-	public TxnEventTarget getTarget() {
-		return target;
-	}
-
-	public TxnEvent getEvent() {
-		return event;
 	}
 
 }

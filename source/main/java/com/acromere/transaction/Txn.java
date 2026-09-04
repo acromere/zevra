@@ -3,6 +3,7 @@ package com.acromere.transaction;
 import com.acromere.event.EventType;
 import com.acromere.skill.Actionable;
 import lombok.CustomLog;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -166,7 +167,7 @@ public class Txn implements AutoCloseable {
 		Deque<Txn> deque = transactions.get();
 		if( deque == null ) return null;
 		Txn transaction = deque.pollFirst();
-		if( deque.isEmpty() ) transactions.set( null );
+		if( deque.isEmpty() ) transactions.remove();
 		return transaction;
 	}
 
@@ -202,28 +203,7 @@ public class Txn implements AutoCloseable {
 
 			// Go through each operation result and collect the events by target
 			// This process also removes duplicate events and puts them in the correct order
-			Map<TxnEventTarget, List<TxnEvent>> txnEvents = new HashMap<>();
-			for( TxnOperationResult operationResult : operationResults ) {
-				for( TxnEventWrapper wrapper : operationResult.getEvents() ) {
-					TxnEventTarget target = wrapper.getTarget();
-					TxnEvent event = wrapper.getEvent();
-					List<TxnEvent> events = txnEvents.computeIfAbsent( target, k -> new ArrayList<>() );
-					if( event.collapseUp() ) {
-						// Collapse equal events to the first instance of the event
-						int index = events.indexOf( event );
-						if( index < 0 ) {
-							events.add( event );
-						} else {
-							events.remove( index );
-							events.add( index, event );
-						}
-					} else {
-						// Collapse equal events to the last instance of the event
-						events.remove( event );
-						events.add( event );
-					}
-				}
-			}
+			Map<TxnEventTarget, List<TxnEvent>> txnEvents = getTxnEventTargets( operationResults );
 
 			// Dispatch the events to the targets
 			txnEvents.forEach( ( target, events ) -> events.forEach( event -> {
@@ -244,6 +224,33 @@ public class Txn implements AutoCloseable {
 			commitLock.unlock();
 			log.atFiner().log( "Txn %s unlocked by: %s", System.identityHashCode( this ), Thread.currentThread() );
 		}
+	}
+
+	@NonNull
+	private Map<TxnEventTarget, List<TxnEvent>> getTxnEventTargets( List<TxnOperationResult> operationResults ) {
+		Map<TxnEventTarget, List<TxnEvent>> txnEvents = new HashMap<>();
+		for( TxnOperationResult operationResult : operationResults ) {
+			for( TxnEventWrapper wrapper : operationResult.getEvents() ) {
+				TxnEventTarget target = wrapper.target();
+				TxnEvent event = wrapper.event();
+				List<TxnEvent> events = txnEvents.computeIfAbsent( target, k -> new ArrayList<>() );
+				if( event.collapseUp() ) {
+					// Collapse equal events to the first instance of the event
+					int index = events.indexOf( event );
+					if( index < 0 ) {
+						events.add( event );
+					} else {
+						events.remove( index );
+						events.add( index, event );
+					}
+				} else {
+					// Collapse equal events to the last instance of the event
+					events.remove( event );
+					events.add( event );
+				}
+			}
+		}
+		return txnEvents;
 	}
 
 	/**

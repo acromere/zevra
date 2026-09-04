@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * The results of a completed transaction operation. These results are collected
- * as part of the commit operation and the events are distributed when the
+ * as part of the commit operation, and the events are distributed when the
  * commit is successful.
  */
 public class TxnOperationResult {
