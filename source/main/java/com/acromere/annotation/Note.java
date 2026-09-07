@@ -23,7 +23,7 @@ public @interface Note {
 	 * Indicates that any thread may safely access this method and assumptions
 	 * about thread-safe execution will be managed by the method implementation.
 	 */
-	String THREAD_SAFE = "any-thread";
+	String ANY_THREAD = "any-thread";
 
 	/**
 	 * This field or method is intended to be used only for testing purposes.
