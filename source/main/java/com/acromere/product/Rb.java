@@ -1,13 +1,11 @@
 package com.acromere.product;
 
 import com.acromere.util.JavaUtil;
+import com.acromere.util.TextUtil;
 import lombok.CustomLog;
 
 import java.text.MessageFormat;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @CustomLog
@@ -60,6 +58,25 @@ public class Rb {
 
 	public static String textOr( Product product, String rbKey, String valueKey, String other, Object... values ) {
 		return doGetText( product, DEFAULT_PATH, rbKey, valueKey, true, other, values );
+	}
+
+	public static List<String> localizedPaths( String resourcePath, String resourceSuffix ) {
+		List<String> names = new ArrayList<>();
+
+		String localeSuffix = "_" + Locale.getDefault().toString();
+
+		while( TextUtil.isNotEmpty( localeSuffix ) ) {
+			// Add name
+			names.add( resourcePath + localeSuffix + resourceSuffix );
+
+			// Trim suffix
+			localeSuffix = localeSuffix.substring( 0, localeSuffix.lastIndexOf( "_" ) );
+		}
+
+		// Add remaining name
+		names.add( resourcePath + localeSuffix + resourceSuffix );
+
+		return names;
 	}
 
 	private static String doGetText( Product product, String path, String rbKey, String valueKey, boolean useOther, String other, Object... values ) {

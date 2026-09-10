@@ -4,6 +4,8 @@ import com.acromere.producta.MockProductA;
 import com.acromere.productb.MockProductB;
 import org.junit.jupiter.api.Test;
 
+import java.util.Locale;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RbTest {
@@ -47,6 +49,35 @@ public class RbTest {
 		// Now check that the productA theme-color can be retrieved using productB
 		productB = new MockProductB( productA );
 		assertThat( productB.getTheme() ).isEqualTo( "blue" );
+	}
+
+	@Test
+	void testLocalizedPaths() {
+		Locale original = Locale.getDefault();
+		try {
+			Locale.setDefault( Locale.of( "en", "US" ) );
+			assertThat( Rb.localizedPaths( "path/to/resource", ".txt" ) ).containsExactly(
+				"path/to/resource_en_US.txt",
+				"path/to/resource_en.txt",
+				"path/to/resource.txt"
+			);
+
+			Locale.setDefault( Locale.of( "en" ) );
+			assertThat( Rb.localizedPaths( "path/to/resource", ".txt" ) ).containsExactly(
+				"path/to/resource_en.txt",
+				"path/to/resource.txt"
+			);
+
+			Locale.setDefault( Locale.of( "en", "US", "variant" ) );
+			assertThat( Rb.localizedPaths( "path/to/resource", ".txt" ) ).containsExactly(
+				"path/to/resource_en_US_variant.txt",
+				"path/to/resource_en_US.txt",
+				"path/to/resource_en.txt",
+				"path/to/resource.txt"
+			);
+		} finally {
+			Locale.setDefault( original );
+		}
 	}
 
 }
