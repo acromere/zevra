@@ -1,6 +1,5 @@
 package com.acromere.index;
 
-import com.acromere.util.TextUtil;
 import com.acromere.util.TokenReplacingReader;
 import lombok.CustomLog;
 import lombok.Data;
@@ -129,8 +128,7 @@ public class Document {
 			reader = new InputStreamReader( url.openStream(), StandardCharsets.UTF_8 );
 		} else if( content != null ) {
 			reader = new StringReader( content );
-			if( TextUtil.isEmpty( content ) ) log.atConfig().log( "Document reader has empty content: " + uri() );
-		} else  {
+		} else {
 			return null;
 		}
 
