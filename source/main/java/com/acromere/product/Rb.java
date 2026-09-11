@@ -60,6 +60,10 @@ public class Rb {
 		return doGetText( product, DEFAULT_PATH, rbKey, valueKey, true, other, values );
 	}
 
+	public static List<String> localizedPaths( String resourcePath ) {
+		return localizedPaths( resourcePath, "" );
+	}
+
 	public static List<String> localizedPaths( String resourcePath, String resourceSuffix ) {
 		List<String> names = new ArrayList<>();
 
