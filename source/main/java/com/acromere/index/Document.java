@@ -76,7 +76,7 @@ public class Document {
 
 	/**
 	 * The document properties. These properties have no special meaning to the
-	 * indexer but are available to store meta-data regarding the document.
+	 * indexer but are available to store metadata regarding the document.
 	 */
 	private Map<String, Object> properties;
 
@@ -125,12 +125,12 @@ public class Document {
 	public Reader reader() throws IOException {
 		Reader reader;
 
-		if( content != null ) {
-			if( TextUtil.isEmpty( content ) ) log.atConfig().log( "Document reader has empty content: " + uri() );
-			reader = new StringReader( content );
-		} else if( url != null ) {
+		if( url != null ) {
 			reader = new InputStreamReader( url.openStream(), StandardCharsets.UTF_8 );
-		} else {
+		} else if( content != null ) {
+			reader = new StringReader( content );
+			if( TextUtil.isEmpty( content ) ) log.atConfig().log( "Document reader has empty content: " + uri() );
+		} else  {
 			return null;
 		}
 
