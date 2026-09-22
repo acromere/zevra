@@ -912,15 +912,15 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	/**
 	 * Remove all values from this node.
 	 */
-	protected void clear() {
+	public void clear() {
 		Txn.run( () -> getValueKeys().stream().sorted().forEach( k -> setValue( k, null ) ) );
 	}
 
-	protected boolean isEmpty() {
+	public boolean isEmpty() {
 		return values == null || values.isEmpty();
 	}
 
-	protected int size() {
+	public int size() {
 		return values == null ? 0 : values.size();
 	}
 
