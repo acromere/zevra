@@ -724,7 +724,7 @@ public class OperatingSystem {
 
 	public enum Family {
 		LINUX,
-		// When MACOSX was changed to just MACOS, it broke some things
+		// When MACOSX was changed to just MACOS, this broke some things
 		MACOSX,
 		WINDOWS,
 		UNIX,
