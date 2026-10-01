@@ -96,7 +96,7 @@ class OperatingSystemTest {
 	void testMac() {
 		OperatingSystem.reset();
 		OperatingSystem.setName( "Mac OS X" );
-		OperatingSystem.setFamily( OperatingSystem.Family.MACOS );
+		OperatingSystem.setFamily( OperatingSystem.Family.MACOSX );
 		OperatingSystem.setArch( OperatingSystem.Arch.PPC );
 		OperatingSystem.setVersion( "10" );
 		OperatingSystem.setUserHomeFolder( Paths.get( UNIX_USER_HOME ) );
@@ -110,7 +110,7 @@ class OperatingSystemTest {
 		assertThat( OperatingSystem.isUnix() ).isTrue();
 		assertThat( OperatingSystem.isWindows() ).isFalse();
 		assertThat( OperatingSystem.getName() ).isEqualTo( "Mac OS X" );
-		assertThat( OperatingSystem.getFamily() ).isEqualTo( OperatingSystem.Family.MACOS );
+		assertThat( OperatingSystem.getFamily() ).isEqualTo( OperatingSystem.Family.MACOSX );
 		assertThat( OperatingSystem.getArch() ).isEqualTo( OperatingSystem.Arch.PPC );
 		assertThat( OperatingSystem.getVersion() ).isEqualTo( "10" );
 		assertThat( OperatingSystem.getJavaLauncherName() ).isEqualTo( "java" );

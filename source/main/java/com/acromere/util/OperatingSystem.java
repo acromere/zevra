@@ -204,7 +204,7 @@ public class OperatingSystem {
 		} else if( osName.contains( "SunOS" ) | osName.contains( "Solaris" ) | osName.contains( "HP-UX" ) | osName.contains( "AIX" ) | osName.contains( "FreeBSD" ) ) {
 			family = Family.UNIX;
 		} else if( osName.contains( "Mac OS" ) ) {
-			family = Family.MACOS;
+			family = Family.MACOSX;
 		} else {
 			family = Family.UNKNOWN;
 		}
@@ -243,7 +243,7 @@ public class OperatingSystem {
 	private static Path deriveUserDataFolder( Family family ) {
 		return switch( family ) {
 			case WINDOWS -> Paths.get( System.getenv( "appdata" ) );
-			case MACOS -> Paths.get( System.getProperty( "user.home" ), "/Library/Application Support" );
+			case MACOSX -> Paths.get( System.getProperty( "user.home" ), "/Library/Application Support" );
 			case LINUX -> Paths.get( System.getProperty( "user.home" ), ".config" );
 			default -> Paths.get( System.getProperty( "user.home" ) );
 		};
@@ -252,7 +252,7 @@ public class OperatingSystem {
 	private static Path deriveProgramDataFolder( Family family ) {
 		return switch( family ) {
 			case WINDOWS -> Paths.get( System.getenv( "allusersprofile" ) );
-			case MACOS -> Paths.get( "/Library/Application Support" );
+			case MACOSX -> Paths.get( "/Library/Application Support" );
 			case LINUX -> Paths.get( "/usr/local/share/data" );
 			default -> Paths.get( System.getProperty( "user.home" ) );
 		};
@@ -264,7 +264,7 @@ public class OperatingSystem {
 				String xdgDesktop = System.getenv( "XDG_CURRENT_DESKTOP" );
 				return xdgDesktop == null ? "UNKNOWN" : xdgDesktop.toUpperCase();
 			}
-			case MACOS -> {
+			case MACOSX -> {
 				return "MAC";
 			}
 			case WINDOWS -> {
@@ -318,7 +318,7 @@ public class OperatingSystem {
 	public static String getProvider() {
 		return switch( family ) {
 			case WINDOWS -> "Microsoft";
-			case MACOS -> "Apple";
+			case MACOSX -> "Apple";
 			case LINUX -> "Community";
 			case OS2 -> "IBM";
 			default -> "Unknown";
@@ -326,7 +326,7 @@ public class OperatingSystem {
 	}
 
 	public static boolean isPosix() {
-		return family == Family.LINUX || family == Family.MACOS || family == Family.UNIX;
+		return family == Family.LINUX || family == Family.MACOSX || family == Family.UNIX;
 	}
 
 	public static boolean isLinux() {
@@ -334,11 +334,11 @@ public class OperatingSystem {
 	}
 
 	public static boolean isMac() {
-		return family == Family.MACOS;
+		return family == Family.MACOSX;
 	}
 
 	public static boolean isUnix() {
-		return family == Family.LINUX || family == Family.MACOS || family == Family.UNIX;
+		return family == Family.LINUX || family == Family.MACOSX || family == Family.UNIX;
 	}
 
 	public static boolean isWindows() {
@@ -523,7 +523,7 @@ public class OperatingSystem {
 	 */
 	public static Path getUserProgramDataFolder( String identifier, String name ) {
 		return switch( family ) {
-			case MACOS, WINDOWS -> getUserProgramDataFolder().resolve( name );
+			case MACOSX, WINDOWS -> getUserProgramDataFolder().resolve( name );
 			case LINUX -> getUserProgramDataFolder().resolve( identifier );
 			default -> getUserProgramDataFolder().resolve( "." + identifier );
 		};
@@ -542,7 +542,7 @@ public class OperatingSystem {
 	 */
 	public static Path getSharedProgramDataFolder( String identifier, String name ) {
 		return switch( family ) {
-			case MACOS, WINDOWS -> getSharedProgramDataFolder().resolve( name );
+			case MACOSX, WINDOWS -> getSharedProgramDataFolder().resolve( name );
 			case LINUX -> getSharedProgramDataFolder().resolve( identifier );
 			default -> getSharedProgramDataFolder().resolve( "." + identifier );
 		};
@@ -579,7 +579,7 @@ public class OperatingSystem {
 	private static String mapLibraryName( String libname ) {
 		return switch( family ) {
 			case LINUX -> "lib" + libname + ".so";
-			case MACOS -> "lib" + libname + ".jnilib";
+			case MACOSX -> "lib" + libname + ".jnilib";
 			case WINDOWS -> libname + ".dll";
 			default -> System.mapLibraryName( libname );
 		};
@@ -724,7 +724,8 @@ public class OperatingSystem {
 
 	public enum Family {
 		LINUX,
-		MACOS,
+		// When MACOSX was changed to just MACOS, it broke some things
+		MACOSX,
 		WINDOWS,
 		UNIX,
 		OS2,
