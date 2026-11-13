@@ -110,14 +110,42 @@ public class Txn implements AutoCloseable {
 		return transaction;
 	}
 
+	/**
+	 * Submit an operation to the currently active transaction. The operation
+	 * will be executed during the transaction's commit.
+	 *
+	 * @param operation The operation to submit
+	 * @throws TxnException if there is no active transaction
+	 */
 	public static void submit( TxnOperation operation ) throws TxnException {
 		verifyActiveTransaction().operations.offer( operation );
 	}
 
+	/**
+	 * Submit a simple operation to the currently active transaction using a
+	 * lambda expression. The consumer will be called during the transaction's
+	 * commit, providing access to the event target.
+	 *
+	 * @param target   The event target for this operation
+	 * @param consumer The operation to execute on commit
+	 * @throws TxnException if there is no active transaction
+	 */
 	public static void submit( TxnEventTarget target, Consumer<TxnEventTarget> consumer ) throws TxnException {
 		submit( new ConsumerTxnOperation( target, consumer ) );
 	}
 
+	/**
+	 * Commit the currently active transaction. All submitted operations will
+	 * be executed in the order they were submitted. If any operation fails,
+	 * all previously completed operations will be reverted.
+	 * <p>
+	 * Transaction lifecycle events are dispatched at various points during
+	 * the commit process: {@link TxnEvent#COMMIT_BEGIN},
+	 * {@link TxnEvent#COMMIT_SUCCESS} or {@link TxnEvent#COMMIT_FAIL}, and
+	 * finally {@link TxnEvent#COMMIT_END}.
+	 *
+	 * @throws TxnException if there is no active transaction or if commit fails
+	 */
 	public static void commit() throws TxnException {
 		Txn transaction = verifyActiveTransaction();
 		transaction.decrementDepth();
@@ -129,6 +157,12 @@ public class Txn implements AutoCloseable {
 		}
 	}
 
+	/**
+	 * Reset (discard) the currently active transaction without committing.
+	 * All submitted operations will be abandoned. This is typically called
+	 * when a transaction should not be committed, such as when an error
+	 * occurs before the intended commit point.
+	 */
 	public static void reset() {
 		Txn transaction = peekTransaction();
 		if( transaction == null ) return;
@@ -140,6 +174,11 @@ public class Txn implements AutoCloseable {
 		}
 	}
 
+	/**
+	 * Get the currently active transaction, if any.
+	 *
+	 * @return The active transaction, or null if no transaction is active
+	 */
 	public static Txn getActiveTransaction() {
 		return peekTransaction();
 	}
@@ -171,6 +210,16 @@ public class Txn implements AutoCloseable {
 		return transaction;
 	}
 
+	/**
+	 * Commit the transaction. This enables use with try-with-resources:
+	 * <pre>
+	 *   try( Txn ignored = Txn.create() ) {
+	 *       // submit operations
+	 *   }
+	 * </pre>
+	 *
+	 * @throws TxnException if commit fails
+	 */
 	@Override
 	public void close() throws TxnException {
 		commit();
