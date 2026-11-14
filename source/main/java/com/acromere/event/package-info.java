@@ -7,5 +7,15 @@
  * class. {@link com.acromere.event.EventHandler Handlers} can be registered to
  * handle only the event types it can handle and use of lambdas as the handler
  * implementation is encouraged.
+ * <p>
+ * Example:
+ * <pre>
+ *   EventHub hub = new EventHub();
+ *   hub.register(EventType.class, event -> {
+ *       System.out.println("Received event: " + event);
+ *   });
+ *   hub.dispatch(new MyEvent());
+ * </pre>
+ * </p>
  */
 package com.acromere.event;

@@ -7,6 +7,19 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeoutException;
 
+/**
+ * A utility for waiting for specific events to occur.
+ * <p>
+ * {@code EventWatcher} can be registered as an {@link com.acromere.event.EventHandler} 
+ * and used to block until a specific event type is received. It supports waiting 
+ * for an event that has already occurred, or waiting for the next occurrence 
+ * of an event within a specified timeout.
+ * </p>
+ *
+ * @param <T> The type of event that this watcher observes.
+ * @see com.acromere.event.EventHub
+ * @see com.acromere.event.EventHandler
+ */
 public class EventWatcher<T extends Event> implements EventHandler<T> {
 
 	public static final long DEFAULT_WAIT_TIMEOUT = 5000;
@@ -28,6 +41,11 @@ public class EventWatcher<T extends Event> implements EventHandler<T> {
 		this.timeout = timeout;
 	}
 
+	/**
+	 * Handles an event by adding it to the internal queue and notifying waiting threads.
+	 *
+	 * @param event The event to handle
+	 */
 	@Override
 	@SuppressWarnings( "java:S106" )
 	public synchronized void handle( T event ) {
@@ -36,10 +54,25 @@ public class EventWatcher<T extends Event> implements EventHandler<T> {
 		notifyAll();
 	}
 
+	/**
+	 * Waits for an event of a specific type to occur, or until the specified timeout is reached.
+	 *
+	 * @param type The event type to wait for
+	 * @throws InterruptedException If the thread is interrupted while waiting
+	 * @throws TimeoutException If the timeout is exceeded before the event occurs
+	 */
 	public void waitForEvent( EventType<T> type ) throws InterruptedException, TimeoutException {
 		waitForEvent( type, timeout );
 	}
 
+	/**
+	 * Waits for the next occurrence of an event of a specific type, or until the specified timeout is reached.
+	 * This method always waits for at least one event, even if one has already occurred.
+	 *
+	 * @param type The event type to wait for
+ * @throws InterruptedException If the thread is interrupted while waiting
+ * @throws TimeoutException If the timeout is exceeded before the event occurs
+	 */
 	@SuppressWarnings( "unused" )
 	public void waitForNextEvent( EventType<T> type ) throws InterruptedException, TimeoutException {
 		waitForNextEvent( type, timeout );
