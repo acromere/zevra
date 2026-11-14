@@ -5,6 +5,17 @@ import com.acromere.log.provider.LoggerWrapper;
 import java.util.Objects;
 import java.util.logging.Level;
 
+/**
+ * Abstract base class for loggers.
+ * <p>
+ * Provides common functionality for logger implementations, including
+ * convenience methods for logging at specific levels (e.g., {@link #atInfo()},
+ * {@link #atDebug()}, {@link #atError(Throwable)}).
+ * <p>
+ * Subclasses must implement {@link #at(Level)} to create logging contexts.
+ *
+ * @param <API> the specific API type for fluent method chaining
+ */
 public abstract class AbstractLogger<API extends LogApi<API>> {
 
 	private final LoggerWrapper provider;

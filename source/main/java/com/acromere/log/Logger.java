@@ -4,6 +4,20 @@ import com.acromere.log.provider.LoggerWrapper;
 
 import java.util.logging.Level;
 
+/**
+ * The primary logger class providing the fluent logging API.
+ * <p>
+ * Use {@link Logging#create(Class)} to obtain a logger instance.
+ * <p>
+ * Example usage:
+ * <pre>{@code
+ * Logger log = Logging.create(MyClass.class);
+ * log.atInfo().log("Processing item %s", item.getName());
+ * log.atError(e).with("id", id).log("Failed to process item");
+ * }</pre>
+ * <p>
+ * This logger is thread-safe and can be shared across threads.
+ */
 public final class Logger extends AbstractLogger<Logger.Api> {
 
 	// Singleton instance of the no-op API. This variable is purposefully declared
