@@ -2,6 +2,16 @@ package com.acromere.annotation;
 
 import java.lang.annotation.*;
 
+/**
+ * A source-level annotation for attaching notes or hints to code elements.
+ *
+ * <p>This annotation is repeatable via the {@link Notes} container annotation and
+ * is retained only at source level, making it useful for static analysis tools
+ * and documentation purposes. The annotation supports a variety of predefined
+ * thread-safety and usage constants.</p>
+ *
+ * @see Notes
+ */
 @Target( { ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE, ElementType.CONSTRUCTOR, ElementType.ANNOTATION_TYPE, ElementType.PACKAGE, ElementType.MODULE, ElementType.RECORD_COMPONENT, ElementType.TYPE_PARAMETER, ElementType.TYPE_USE } )
 @Retention( RetentionPolicy.SOURCE )
 @Repeatable( Notes.class )
@@ -30,6 +40,12 @@ public @interface Note {
 	 */
 	String TESTING_ONLY = "testing-only";
 
+	/**
+	 * The note text. Use one of the predefined constants for thread-safety
+	 * annotations, or provide custom text for other purposes.
+	 *
+	 * @return the note text
+	 */
 	String value();
 
 }

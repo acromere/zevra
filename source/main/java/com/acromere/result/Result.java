@@ -45,16 +45,36 @@ public class Result<T> {
 		this.exception = exception;
 	}
 
+	/**
+	 * Returns a {@code Result} describing the given value.
+	 *
+	 * @param <T> the type of value
+	 * @param value the value, which may be {@code null}
+	 * @return a {@code Result} describing the value
+	 */
 	@SuppressWarnings( "unchecked" )
 	public static <T> Result<T> of( T value ) {
 		return value == null ? (Result<T>)EMPTY : new Result<>( value );
 	}
 
+	/**
+	 * Returns a failed {@code Result} describing the given exception.
+	 *
+	 * @param <T> the type of value
+	 * @param exception the exception, which may be {@code null}
+	 * @return a failed {@code Result} with the given exception
+	 */
 	@SuppressWarnings( "unchecked" )
 	public static <T> Result<T> of( Exception exception ) {
 		return exception == null ? (Result<T>)EMPTY : new Result<>( null, exception );
 	}
 
+	/**
+	 * Returns an empty {@code Result}.
+	 *
+	 * @param <T> the type of value
+	 * @return an empty {@code Result}
+	 */
 	@SuppressWarnings( "unchecked" )
 	public static <T> Result<T> empty() {
 		return (Result<T>)EMPTY;
@@ -91,10 +111,22 @@ public class Result<T> {
 		return value == null;
 	}
 
+	/**
+	 * Returns {@code true} if this {@code Result} represents a successful
+	 * outcome (no exception), {@code false} otherwise.
+	 *
+	 * @return {@code true} if successful, {@code false} otherwise
+	 */
 	public boolean isSuccessful() {
 		return exception == null;
 	}
 
+	/**
+	 * Returns {@code true} if this {@code Result} represents a failure
+	 * (exception present), {@code false} otherwise.
+	 *
+	 * @return {@code true} if failed, {@code false} otherwise
+	 */
 	public boolean isFailed() {
 		return exception != null;
 	}
@@ -112,11 +144,29 @@ public class Result<T> {
 		return this;
 	}
 
+	/**
+	 * If a value is present and the result is successful, performs the given
+	 * action with the value, otherwise does nothing.
+	 *
+	 * @param action the action to be performed, if value is present and successful
+	 * @return this {@code Result}
+	 * @throws NullPointerException if value is present and successful, and the
+	 * given action is {@code null}
+	 */
 	public Result<T> ifSuccess( Consumer<? super T> action ) {
 		if( isPresent() && isSuccessful() ) action.accept( value );
 		return this;
 	}
 
+	/**
+	 * If the result has failed, performs the given action with the exception,
+	 * otherwise does nothing.
+	 *
+	 * @param action the action to be performed, if the result has failed
+	 * @return this {@code Result}
+	 * @throws NullPointerException if the result has failed, and the given
+	 * action is {@code null}
+	 */
 	public Result<T> ifFailure( Consumer<Exception> action ) {
 		if( isFailed() ) action.accept( exception );
 		return this;
@@ -334,16 +384,36 @@ public class Result<T> {
 		}
 	}
 
+	/**
+	 * If this {@code Result} is successful, applies the given function and
+	 * returns its {@code Result} value. Otherwise returns this {@code Result}.
+	 *
+	 * @param <S> the return type of the given function
+	 * @param function the function to apply if successful
+	 * @return the {@code Result} returned by the function, or this {@code Result}
+	 * if unsuccessful
+	 */
 	@SuppressWarnings( "unchecked" )
 	public <S> Result<S> andThen( Function<Result<T>, Result<S>> function ) {
 		if( function != null ) return function.apply( this );
 		return (Result<S>)EMPTY;
 	}
 
+	/**
+	 * Returns the exception held by this {@code Result}, or {@code null} if
+	 * the result is successful.
+	 *
+	 * @return the exception, or {@code null} if successful
+	 */
 	public Exception getException() {
 		return exception;
 	}
 
+	/**
+	 * If this {@code Result} holds an exception, throws it; otherwise returns.
+	 *
+	 * @throws Exception the exception held by this {@code Result}, if any
+	 */
 	public void tryException() throws Exception {
 		if( exception == null ) return;
 		throw exception;
