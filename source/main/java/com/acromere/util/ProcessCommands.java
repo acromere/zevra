@@ -92,10 +92,11 @@ public class ProcessCommands {
 
 	/**
 	 * Retrieves the command line representation for the current module. This
-	 * method uses the system properties <code>jdk.module.path</code> and
-	 * <code>jdk.module.main.class</code> to determine the module path and main
-	 * module class. It calls the private
-	 * {@link #forModule(String, String, String, String)} method to get the
+	 * method uses the system properties <code>jdk.module.path</code>,
+	 * <code>jdk.module.main</code>, and
+	 * <code>jdk.module.main.class</code> to determine the module path, main
+	 * module, and main module class. It calls the
+	 * {@link #forModule( String, String, String, String )} method to get the
 	 * command line representation.
 	 *
 	 * @return The command line represented as a list of strings.

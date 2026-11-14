@@ -8,14 +8,29 @@ import java.util.List;
  */
 public class PathUtil {
 
+	/**
+	 * The path separator character.
+	 */
 	public static final String SEPARATOR = "/";
 
+	/**
+	 * The name of the parent folder.
+	 */
 	public static final String PARENT = "..";
 
+	/**
+	 * The name of the current folder.
+	 */
 	public static final String SELF = ".";
 
+	/**
+	 * The empty path.
+	 */
 	public static final String EMPTY = "";
 
+	/**
+	 * The root path.
+	 */
 	public static final String ROOT = "/";
 
 	private static final String DOUBLE_SEPARATOR = SEPARATOR + SEPARATOR;
@@ -100,7 +115,8 @@ public class PathUtil {
 	 * NOTE: This method does not normalize the path.
 	 *
 	 * @param path The path
-	 * @return The parent directory path, or null if the input is null or the path has no parent
+	 * @return The parent directory path; the empty string if the path is a single
+	 * relative name, and null if the input is null, the root path, or the empty path
 	 */
 	public static String getParent( String path ) {
 		path = cleanTrailingSeparator( path );

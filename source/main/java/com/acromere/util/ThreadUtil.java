@@ -15,7 +15,7 @@ public class ThreadUtil {
 
 	/**
 	 * Pause a thread for a specific amount of time. If an InterruptedException
-	 *  occurs, the method returns immediately.
+	 * occurs, the method returns immediately.
 	 *
 	 * @param duration The pause duration in milliseconds
 	 */
@@ -24,10 +24,13 @@ public class ThreadUtil {
 	}
 
 	/**
-	 * Pause a thread for a specific amount of time with the given unit. If an
-	 * InterruptedException occurs, the method returns immediately.
+	 * Pause a thread for a specific amount of time. The duration is always
+	 * interpreted as milliseconds, so the unit parameter does not change the
+	 * length of the pause. If an InterruptedException occurs, the method
+	 * returns immediately.
 	 *
-	 * @param duration The pause duration in TimeUnits
+	 * @param duration The pause duration in milliseconds
+	 * @param unit The time unit, which does not affect the length of the pause
 	 */
 	public static void pause( long duration, TimeUnit unit ) {
 		try {
@@ -61,9 +64,10 @@ public class ThreadUtil {
 	}
 
 	/**
-	 * Check if the calling method was called from a different method. Class names
-	 * are compared both by the simple name and by the full name. For example,
-	 * both of the following calls will return true:
+	 * Check if the specified class and method are present in the current
+	 * thread's stack trace. Class names are compared both by the simple name
+	 * and by the fully qualified name. For example, both of the following
+	 * calls will return true:
 	 * <p>
 	 * <blockquote>
 	 * <code>ThreadUtil.calledFrom( "Thread", "run" );</code><br/>
@@ -91,7 +95,8 @@ public class ThreadUtil {
 	 *
 	 * @param source The source throwable
 	 * @param target The target throwable
-	 * @return The target throwable with the stack trace appended
+	 * @return The target throwable with the stack trace appended, the source
+	 * throwable if the target is null, or null if both are null
 	 */
 	public static Throwable appendStackTrace( Throwable source, Throwable target ) {
 		if( source == null ) return target;
@@ -100,11 +105,12 @@ public class ThreadUtil {
 	}
 
 	/**
-	 * Append stack trace to the target throwable.
+	 * Append the stack trace to the target throwable.
 	 *
-	 * @param trace The stack trace to append
+	 * @param trace The stack trace to append, ignored if null
 	 * @param target The target throwable
-	 * @return The target throwable with the stack trace appended
+	 * @return The target throwable with the stack trace appended, or null if
+	 * the target is null
 	 */
 	public static Throwable appendStackTrace( StackTraceElement[] trace, Throwable target ) {
 		if( target == null ) return null;
@@ -119,16 +125,16 @@ public class ThreadUtil {
 	}
 
 	/**
-	 * <p>
-	 * Returns the current execution stack as an array of classes. This is useful
-	 * to determine the calling class.
+	 * Returns the current execution stack as an array of class names. This
+	 * is useful to determine the calling class.
 	 * <p>
 	 * The length of the array is the number of methods on the execution stack
-	 * before this method is called. The element at index 0 is the calling class
-	 * of this method, the element at index 1 is the calling class of the method
-	 * in the previous class, and so on.
+	 * before this method is called. The element at index 0 is the class that
+	 * called this method, the element at index 1 is the class that called
+	 * the method at index 0, and so on.
 	 *
-	 * @return A class array of the execution stack before this method was called.
+	 * @return An array of class names of the execution stack before this
+	 * method was called.
 	 */
 	public static String[] getStackClasses() {
 		StackTraceElement[] elements = Thread.currentThread().getStackTrace();

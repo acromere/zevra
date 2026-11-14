@@ -92,9 +92,9 @@ public final class UriUtil {
 	/**
 	 * Removes the query and fragment from the given URI.
 	 *
-	 * @param uri The URI from which to remove the query and fragment. Cannot be null.
-	 * @return The modified URI without the query and fragment. Returns null if
-	 * the input URI is null or if there is an error resolving the URI.
+	 * @param uri The URI from which to remove the query and fragment, or null
+	 * @return The modified URI without the query and fragment, or null if the
+	 * input URI is null or if there is an error resolving the URI
 	 */
 	public static URI removeQueryAndFragment( URI uri ) {
 		if( uri == null ) return null;
@@ -219,7 +219,10 @@ public final class UriUtil {
 	}
 
 	/**
-	 * Determine if the URI represent a root path.
+	 * Determine if the URI represents a root path.
+	 *
+	 * @param uri The URI to check
+	 * @return true if the path of the URI is a root path
 	 */
 	public static boolean isRoot( URI uri ) {
 		return PathUtil.isRoot( uri.normalize().getPath() );

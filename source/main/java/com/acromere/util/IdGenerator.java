@@ -6,6 +6,14 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Random;
 
+/**
+ * Generates short, human-friendly identifier strings.
+ *
+ * <p>IDs are encoded using a fixed set of 16 consonant letters with no
+ * descenders, which keeps the generated strings compact and easy to read
+ * when spoken or written by hand. A 64-bit value produces a 16-character
+ * ID and a 32-bit value produces an 8-character slug.</p>
+ */
 @CustomLog
 public class IdGenerator {
 
@@ -15,10 +23,22 @@ public class IdGenerator {
 	// List of consonant letters with no descenders in no particular order
 	private static final char[] map = "mhnflcdtvkxzrwbs".toCharArray();
 
+	/**
+	 * Generates a random 16-character ID.
+	 *
+	 * @return A random 16-character ID
+	 */
 	public static String getId() {
 		return getId( System.currentTimeMillis() ^ RANDOM.nextLong() );
 	}
 
+	/**
+	 * Converts a 64-bit value to a 16-character ID by mapping each 4-bit
+	 * nibble to a character from the character map.
+	 *
+	 * @param value The value to convert
+	 * @return A 16-character ID
+	 */
 	public static String getId( long value ) {
 		StringBuilder builder = new StringBuilder();
 
@@ -30,6 +50,14 @@ public class IdGenerator {
 		return builder.toString();
 	}
 
+	/**
+	 * Derives a 16-character ID from a string. The string is hashed with
+	 * SHA-256 and the digest is reduced to a 64-bit value, which is then
+	 * converted to an ID.
+	 *
+	 * @param string The string to derive the ID from
+	 * @return A 16-character ID that is stable for the same input string
+	 */
 	public static String getId( String string ) {
 		long id = 0;
 

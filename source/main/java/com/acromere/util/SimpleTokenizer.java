@@ -4,16 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The SimpleTokenizer class provides a simple tokenization functionality for a given string.
+ * The SimpleTokenizer class provides simple tokenization functionality for a
+ * given string. Tokens are delimited by whitespace unless they are enclosed
+ * in double quotes, which allows a token to contain whitespace. Escaped
+ * double quotes inside a quoted token are converted to regular double
+ * quotes.
  */
 public class SimpleTokenizer {
 
+	/**
+	 * The string to tokenize.
+	 */
 	private final String string;
 
+	/**
+	 * The length of the string.
+	 */
 	private final int count;
 
+	/**
+	 * The current index in the string.
+	 */
 	private int index;
 
+	/**
+	 * Whether the current token is enclosed in double quotes.
+	 */
 	private boolean quoted;
 
 	/**

@@ -6,7 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * An implementation of InputStream that will provide bytes up to a certain limit.
+ * An input stream that provides bytes from a wrapped input stream up to a
+ * certain limit. Once the limit is reached, the end of the stream is
+ * signaled even if the wrapped stream has more data. A negative limit
+ * disables the limit, in which case the stream behaves like the wrapped
+ * stream.
  */
 public class LimitedInputStream extends InputStream {
 
