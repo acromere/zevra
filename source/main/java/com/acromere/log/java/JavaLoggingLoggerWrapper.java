@@ -10,6 +10,12 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+/**
+ * A {@link LoggerWrapper} implementation that wraps Java's {@code java.util.logging.Logger}.
+ * <p>
+ * This wrapper converts Zevra log data into {@link LogRecord} instances that are
+ * passed to the underlying Java logger for output.
+ */
 public class JavaLoggingLoggerWrapper implements LoggerWrapper {
 
 	private static final long ONE_BILLION = 1000000000;

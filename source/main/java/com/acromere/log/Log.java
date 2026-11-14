@@ -17,8 +17,20 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 
+/**
+ * Utility class for configuring JVM logging.
+ * <p>
+ * Provides methods for setting up logging handlers, formats, and log levels
+ * for the Java logging framework.
+ */
 public class Log {
 
+	/**
+	 * Configures general logging for this JVM using the specified parameters.
+	 *
+	 * @param source the object configuring the logging
+	 * @param parameters command line parameters that may contain log parameters
+	 */
 	public static void configureLogging( Object source, com.acromere.util.Parameters parameters ) {
 		configureLogging( source, parameters, null, null );
 	}
@@ -161,19 +173,37 @@ public class Log {
 		}
 	}
 
+	/**
+	 * Sets the base log level for all loggers.
+	 *
+	 * @param level the log level to apply
+	 */
 	public static void setBaseLogLevel( Level level ) {
 		java.util.logging.Logger.getLogger( "" ).setLevel( level );
 	}
 
+	/**
+	 * Sets the base log level for all loggers.
+	 *
+	 * @param levelName the name of the log level
+	 */
 	@SuppressWarnings( "unused" )
 	public static void setBaseLogLevel( String levelName ) {
 		setBaseLogLevel( LogFlag.toLogLevel( levelName ) );
 	}
 
+	/**
+	 * Returns the current log file pattern.
+	 *
+	 * @return the log file pattern, or null if not configured
+	 */
 	public static String getLogFile() {
 		return LogManager.getLogManager().getProperty( "java.util.logging.FileHandler.pattern" );
 	}
 
+	/**
+	 * Flushes all log handlers.
+	 */
 	public static void flush() {
 		LogManager manager = LogManager.getLogManager();
 		manager.getLoggerNames().asIterator().forEachRemaining( name -> {
@@ -182,6 +212,9 @@ public class Log {
 		} );
 	}
 
+	/**
+	 * Resets the logging configuration to defaults.
+	 */
 	public static void reset() {
 		LogManager.getLogManager().reset();
 	}
