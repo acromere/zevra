@@ -1,5 +1,20 @@
 package com.acromere.product;
 
+/**
+ * An executable program product.
+ *
+ * <p>A {@code Program} is a {@link ProgramProduct} that can be launched and
+ * that owns a user interface. In addition to the {@link Product} contract,
+ * implementations expose the running program instance through
+ * {@link #getProgram()}. Most of the program lifecycle methods (initialization,
+ * exit handling, shutdown, and update management) are defined in this
+ * interface's history and are currently commented out while the program
+ * lifecycle is being reworked; only the {@link #getProgram()} contract from
+ * {@link ProgramProduct} is active at present.</p>
+ *
+ * @see ProgramProduct
+ * @see Product
+ */
 public interface Program extends ProgramProduct {
 
 	//	// THREAD JavaFX-Launcher

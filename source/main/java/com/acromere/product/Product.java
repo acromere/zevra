@@ -4,6 +4,24 @@ import com.acromere.settings.Settings;
 
 import java.nio.file.Path;
 
+/**
+ * The core interface for a running product.
+ *
+ * <p>A product is an installable or runnable unit of software that is
+ * described by a {@link ProductCard} and that has its own settings and a
+ * shared data folder. Implementations of this interface are the entry points
+ * through which other products and tools access a product's metadata and
+ * runtime resources.</p>
+ *
+ * <p>Products may form a hierarchy: a product can have a parent product, and
+ * {@link #getParent()} returns it. This is used, for example, by
+ * {@link Rb} to fall back to the parent's resource bundles when a value is
+ * missing.</p>
+ *
+ * @see ProductCard
+ * @see ProgramProduct
+ * @see Program
+ */
 public interface Product {
 
 	/**

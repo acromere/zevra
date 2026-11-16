@@ -46,81 +46,186 @@ public class ProductCard extends BaseCard {
 
 	private static final String REBRAND_CARD = "lib/app/rebrand.card";
 
+	/**
+	 * The unique key of the product, formed from the group and artifact.
+	 */
 	@Getter
 	@JsonIgnore
 	@Accessors( chain = true )
 	private String productKey;
 
+	/**
+	 * The group of the product.
+	 */
 	private String group;
 
+	/**
+	 * The artifact of the product.
+	 */
 	private String artifact;
 
+	/**
+	 * The version of the product.
+	 */
 	private String version;
 
+	/**
+	 * The timestamp of the product release.
+	 */
 	private String timestamp;
 
+	/**
+	 * The packaging of the product, such as the packaging type used to
+	 * install the product.
+	 */
 	private String packaging;
 
+	/**
+	 * The version of the packaging.
+	 */
 	private String packagingVersion;
 
+	/**
+	 * The release of the product, formed from the version and timestamp.
+	 */
 	@JsonIgnore
 	private Release release;
 
+	/**
+	 * The icons of the product.
+	 */
 	private List<String> icons;
 
+	/**
+	 * The display name of the product.
+	 */
 	private String name;
 
+	/**
+	 * The name of the provider of the product.
+	 */
 	private String provider;
 
+	/**
+	 * The url of the provider of the product.
+	 */
 	private String providerUrl;
 
+	/**
+	 * The year the product was first released.
+	 */
 	private int inception;
 
+	/**
+	 * A short description of the product.
+	 */
 	private String summary;
 
+	/**
+	 * A full description of the product.
+	 */
 	private String description;
 
+	/**
+	 * A summary of the copyright for the product.
+	 */
 	private String copyrightSummary;
 
+	/**
+	 * A summary of the license for the product.
+	 */
 	private String licenseSummary;
 
+	/**
+	 * The uri of the product pack, if the card was loaded from a remote source.
+	 */
 	@JsonIgnore
 	private String productUri;
 
+	/**
+	 * The Java version required by the product.
+	 */
 	private String javaVersion;
 
+	/**
+	 * The folder the product is installed in.
+	 */
 	private Path installFolder;
 
+	/**
+	 * The people maintaining the product.
+	 */
 	private List<Maintainer> maintainers;
 
+	/**
+	 * The people contributing to the product.
+	 */
 	private List<Contributor> contributors;
 
+	/**
+	 * The rebrand settings for the product, if the product has been rebranded.
+	 */
 	private Rebrand rebrand;
 
 	// --- For program use only ---
 
+	/**
+	 * Whether the product is enabled.
+	 */
 	private boolean enabled;
 
+	/**
+	 * Whether the product can be removed.
+	 */
 	private boolean removable;
 
+	/**
+	 * The repository the product was loaded from.
+	 */
 	@JsonIgnore
 	private RepoCard repo;
 
+	/**
+	 * Additional resources for the product.
+	 */
 	@JsonIgnore
 	private Map<String, String> resources;
 
+	/**
+	 * Create an empty card.
+	 */
 	public ProductCard() {}
 
+	/**
+	 * Load the product card from the specified folder.
+	 *
+	 * @param path The folder containing the product card
+	 * @return The product card
+	 * @throws IOException If an I/O error occurs while reading the card
+	 */
 	public static ProductCard card( Path path ) throws IOException {
 		try( FileInputStream input = new FileInputStream( path.resolve( PRODUCT_CARD ).toFile() ) ) {
 			return new ProductCard().fromJson( input );
 		}
 	}
 
+	/**
+	 * Load the product card of the specified product.
+	 *
+	 * @param product The product whose card should be loaded
+	 * @return The product card of the product
+	 */
 	public static ProductCard card( Product product ) {
 		return card( product.getClass() );
 	}
 
+	/**
+	 * Load the product card associated with the specified class.
+	 *
+	 * @param source The class used to locate the product card resource
+	 * @return The product card
+	 * @throws RuntimeException If an I/O error occurs while loading the card
+	 */
 	public static ProductCard card( Class<?> source ) {
 		try {
 			return new ProductCard().fromJson( source );
@@ -184,6 +289,15 @@ public class ProductCard extends BaseCard {
 		return fromJson( input, null );
 	}
 
+	/**
+	 * Read a card from a JSON stream and copy it into this card.
+	 *
+	 * @param input The stream containing the card JSON
+	 * @param source The source of the stream, or null
+	 * @return This card, populated with the values read from the stream
+	 * @throws IOException If an I/O error occurs while reading the stream
+	 * @throws NullPointerException If the input stream is null
+	 */
 	public ProductCard fromJson( InputStream input, URI source ) throws IOException {
 		if( input == null ) throw new NullPointerException( "InputStream cannot be null" );
 		ProductCard card = new ObjectMapper().readerFor( new TypeReference<ProductCard>() {} ).readValue( input );
@@ -191,6 +305,16 @@ public class ProductCard extends BaseCard {
 		return copyFrom( card );
 	}
 
+	/**
+	 * Copy the fields of the specified card into this card.
+	 * <p>
+	 * The product key and release are recomputed from the copied group,
+	 * artifact, version, and timestamp.
+	 * </p>
+	 *
+	 * @param card The card to copy from
+	 * @return This card
+	 */
 	public ProductCard copyFrom( ProductCard card ) {
 		this.group = card.group;
 		this.artifact = card.artifact;
@@ -229,45 +353,93 @@ public class ProductCard extends BaseCard {
 		return this;
 	}
 
+	/**
+	 * Set the group of the product and update the product key.
+	 *
+	 * @param group The group of the product
+	 * @return This card
+	 */
 	public ProductCard setGroup( String group ) {
 		this.group = group;
 		updateKey();
 		return this;
 	}
 
+	/**
+	 * Set the artifact of the product and update the product key.
+	 *
+	 * @param artifact The artifact of the product
+	 * @return This card
+	 */
 	public ProductCard setArtifact( String artifact ) {
 		this.artifact = artifact;
 		updateKey();
 		return this;
 	}
 
+	/**
+	 * Set the version of the product and update the release.
+	 *
+	 * @param version The version of the product
+	 * @return This card
+	 */
 	public ProductCard setVersion( String version ) {
 		this.version = version;
 		updateRelease();
 		return this;
 	}
 
+	/**
+	 * Set the timestamp of the product release and update the release.
+	 *
+	 * @param timestamp The timestamp of the product release
+	 * @return This card
+	 */
 	public ProductCard setTimestamp( String timestamp ) {
 		this.timestamp = timestamp;
 		updateRelease();
 		return this;
 	}
 
+	/**
+	 * Set the packaging of the product.
+	 *
+	 * @param packaging The packaging of the product
+	 * @return This card
+	 */
 	public ProductCard setPackaging( String packaging ) {
 		this.packaging = packaging;
 		return this;
 	}
 
+	/**
+	 * Set the version of the packaging.
+	 *
+	 * @param version The version of the packaging
+	 * @return This card
+	 */
 	public ProductCard setPackagingVersion( String version ) {
 		this.packagingVersion = version;
 		return this;
 	}
 
+	/**
+	 * Set the icons of the product. The icons list is unmodifiable.
+	 *
+	 * @param icons The icons of the product, or null for no icons
+	 * @return This card
+	 */
 	public ProductCard setIcons( List<String> icons ) {
 		this.icons = Collections.unmodifiableList( icons == null ? List.of() : icons );
 		return this;
 	}
 
+	/**
+	 * Get the uris of the resources needed by the product on the current
+	 * platform.
+	 *
+	 * @return The uris of the product resources
+	 */
 	@JsonIgnore
 	public String[] getResourceUris() {
 		return getPlatformResourceUris();
@@ -323,22 +495,48 @@ public class ProductCard extends BaseCard {
 		return resources.toArray( new String[ 0 ] );
 	}
 
+	/**
+	 * Return the product key.
+	 *
+	 * @return The product key of this card
+	 */
 	@Override
 	public String toString() {
 		return getProductKey();
 	}
 
+	/**
+	 * The hash code is derived from the product key.
+	 *
+	 * @return The hash code of the product key
+	 */
 	@Override
 	public int hashCode() {
 		return getProductKey().hashCode();
 	}
 
+	/**
+	 * Two cards are equal if their product keys are equal.
+	 *
+	 * @param object The object to compare with
+	 * @return {@code true} if the specified object is a card with the same product key
+	 */
 	@Override
 	public boolean equals( Object object ) {
 		if( !(object instanceof ProductCard that) ) return false;
 		return this.getProductKey().equals( that.getProductKey() );
 	}
 
+	/**
+	 * Deeply compare this card to the specified object.
+	 * <p>
+	 * Unlike {@link #equals(Object)}, this method compares the full content
+	 * of the card, not just the product key.
+	 * </p>
+	 *
+	 * @param object The object to compare with
+	 * @return {@code true} if the specified object is a card with the same content
+	 */
 	public boolean deepEquals( Object object ) {
 		if( !(object instanceof ProductCard that) ) return false;
 
