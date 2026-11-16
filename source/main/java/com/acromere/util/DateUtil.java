@@ -6,13 +6,26 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * A class to parse and format dates and durations, and to obtain the
+ * current year in a given time zone.
+ */
 @SuppressWarnings( "WeakerAccess" )
 public class DateUtil {
 
+	/**
+	 * The default date format used when parsing and formatting dates.
+	 */
 	public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+	/**
+	 * The default time zone used when parsing and formatting dates.
+	 */
 	public static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone( "UTC" );
 
+	/**
+	 * The default system time zone.
+	 */
 	public static final TimeZone LOCAL_TIME_ZONE = TimeZone.getDefault();
 
 	/**
@@ -124,7 +137,7 @@ public class DateUtil {
 	 *
 	 * @param date The date to format
 	 * @param format The date format
-	 * @param timeZone The timezone
+	 * @param timeZone The name of the time zone
 	 * @return The formatted date string
 	 */
 	public static String format( Date date, String format, String timeZone ) {
@@ -132,11 +145,13 @@ public class DateUtil {
 	}
 
 	/**
-	 * Format a date with the given format and time zone.
+	 * Format a date with the given format and time zone. If the time zone is
+	 * not the default UTC time zone, the short display name of the time zone
+	 * is appended to the formatted date.
 	 *
 	 * @param date The date to format
 	 * @param format The date format
-	 * @param zone The timezone
+	 * @param zone The time zone
 	 * @return The formatted date string
 	 */
 	public static String format( Date date, String format, TimeZone zone ) {

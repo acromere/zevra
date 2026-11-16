@@ -9,8 +9,14 @@ import java.util.Set;
  */
 public class TestUtil {
 
+	/**
+	 * The class names of the known JUnit test runners.
+	 */
 	private static final Set<String> runners;
 
+	/**
+	 * The cached result of the {@link #isTest()} method.
+	 */
 	private static Boolean test;
 
 	static {
@@ -25,12 +31,14 @@ public class TestUtil {
 	}
 
 	/**
-	 * Check if any thread is running in the JUnit test framework. This is done by
-	 * searching the thread stack for the class {@code junit.framework.TestSuite}
-	 * If the TestSuite class is found the method will return true. The result is
-	 * cached for faster performance after the first call.
+	 * Check if any thread is running in a JUnit test framework. This is done
+	 * by searching the stack traces of all threads for known JUnit test
+	 * runner classes, such as {@code org.junit.runner.JUnitCore} and
+	 * {@code junit.framework.TestSuite}. If one of the runner classes is
+	 * found, the method will return true. The result is cached for faster
+	 * performance after the first call.
 	 *
-	 * @return If any thread is being run by JUnit
+	 * @return true if any thread is being run by a JUnit test framework
 	 */
 	public static boolean isTest() {
 		if( test != null ) return test;

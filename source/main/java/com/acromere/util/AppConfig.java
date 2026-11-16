@@ -16,22 +16,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class to read the application configuration file at
- * <code>{appHome}/lib/app/{appName}.cfg</code>.
+ * A class to read and update the application configuration file at
+ * <code>{appHome}/lib/app/{appName}.cfg</code>. The configuration file is
+ * stored as a list of lines, and the JVM heap size options under the
+ * <code>[JavaOptions]</code> header can be loaded, modified, and saved back
+ * to the file.
  */
 @Getter
 @Setter
 @CustomLog
 public class AppConfig {
 
+	/**
+	 * The supported units for the JVM heap size, from smallest to largest.
+	 */
 	public static final List<String> HEAP_UNITS = List.of( "B", "K", "M", "G" );
 
+	/**
+	 * The header line that precedes the JVM options in the configuration
+	 * file.
+	 */
 	public static final String JAVA_OPTIONS_HEADER = "[JavaOptions]";
 
+	/**
+	 * The prefix of each JVM option line in the configuration file.
+	 */
 	public static final String JAVA_OPTIONS = "java-options";
 
+	/**
+	 * The JVM option for the maximum heap size.
+	 */
 	public static final String MX = "-Xmx";
 
+	/**
+	 * The JVM option for the minimum heap size.
+	 */
 	public static final String MS = "-Xms";
 
 	@Setter( AccessLevel.NONE )
@@ -76,10 +95,25 @@ public class AppConfig {
 		this.path = path;
 	}
 
+	/**
+	 * Creates a new configuration for the given file path.
+	 *
+	 * @param path The path to the application configuration file
+	 * @return The new configuration
+	 */
 	public static AppConfig of( Path path ) {
 		return new AppConfig( path );
 	}
 
+	/**
+	 * Writes the current configuration lines back to the configuration file,
+	 * applying any changes to the JVM heap size options. If the file cannot
+	 * be written, the error is logged and not propagated.
+	 *
+	 * @return This configuration
+	 * @throws IOException If the configuration file cannot be written for
+	 *                     reasons other than access being denied
+	 */
 	public AppConfig save() throws IOException {
 		List<String> updatedLines = save( this.lines );
 
@@ -152,6 +186,15 @@ public class AppConfig {
 		return 3;
 	}
 
+	/**
+	 * Reads the configuration file and updates the JVM heap size options
+	 * from the <code>java-options</code> lines.
+	 *
+	 * @return This configuration
+	 * @throws FileNotFoundException If the configuration file does not exist
+	 * @throws IOException If the configuration file does not exist as a
+	 *                     readable regular file
+	 */
 	public AppConfig load() throws IOException {
 		if( !Files.exists( path ) ) throw new FileNotFoundException( "Application configuration file does not exist: " + path );
 		if( !Files.isRegularFile( path ) ) throw new IOException( "Application configuration file is not a regular file: " + path );

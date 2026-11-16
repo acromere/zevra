@@ -24,14 +24,29 @@ public final class TextUtil {
 	 */
 	public static final String EMPTY = "";
 
+	/**
+	 * Left alignment for the justify methods.
+	 */
 	public static final int LEFT = -1;
 
+	/**
+	 * Center alignment for the justify methods.
+	 */
 	public static final int CENTER = 0;
 
+	/**
+	 * Right alignment for the justify methods.
+	 */
 	public static final int RIGHT = 1;
 
+	/**
+	 * The default character set encoding.
+	 */
 	public static final String ENCODING = "UTF-8";
 
+	/**
+	 * The default character set.
+	 */
 	public static final Charset CHARSET = Charset.forName( TextUtil.ENCODING );
 
 	private static final char DEFAULT_PAD_CHAR = ' ';
@@ -378,6 +393,15 @@ public final class TextUtil {
 		return toPrintableString( data, 0, data.length );
 	}
 
+	/**
+	 * Converts the specified range of a byte array to a printable string
+	 * representation.
+	 *
+	 * @param data the byte array to convert
+	 * @param offset the starting offset of the range (inclusive)
+	 * @param length the length of the range
+	 * @return the printable string representation of the byte array, or null if the input is null
+	 */
 	public static String toPrintableString( byte[] data, int offset, int length ) {
 		if( data == null ) return null;
 		StringBuilder builder = new StringBuilder();
@@ -415,10 +439,11 @@ public final class TextUtil {
 	}
 
 	/**
-	 * Convert an array of bytes to a HEX encoded string.
+	 * Convert an array of bytes to a hex encoded string with lowercase
+	 * characters.
 	 *
 	 * @param bytes The bytes to convert to hex.
-	 * @return A hex encoded string of the byte array.
+	 * @return A lowercase hex encoded string of the byte array.
 	 */
 	public static String toHexEncodedString( byte[] bytes ) {
 		int value;
@@ -444,10 +469,12 @@ public final class TextUtil {
 	}
 
 	/**
-	 * Decode a hex string to a string.
+	 * Decode a hex string to a string. Each character is encoded as a
+	 * four-character hex value, as done by {@link #hexEncode( String )}.
 	 *
 	 * @param string The hex encoded string to decode
 	 * @return The decoded string
+	 * @throws IllegalArgumentException if the string length is not a multiple of four
 	 */
 	public static String hexDecode( String string ) {
 		char[] value = secureHexDecode( string );
@@ -541,6 +568,7 @@ public final class TextUtil {
 	 *
 	 * @param string The hex encoded string to decode
 	 * @return The decoded characters
+	 * @throws IllegalArgumentException if the string length is not a multiple of four
 	 */
 	public static char[] secureHexDecode( String string ) {
 		if( string == null ) return null;
@@ -698,7 +726,8 @@ public final class TextUtil {
 	}
 
 	/**
-	 * Pads a string with the default padding character up to the specified width.
+	 * Creates a string of the specified width filled with the default
+	 * padding character.
 	 *
 	 * @param width The desired width of the padded string.
 	 * @return The padded string.

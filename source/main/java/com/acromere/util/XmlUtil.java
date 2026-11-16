@@ -26,8 +26,14 @@ import java.nio.charset.StandardCharsets;
 @SuppressWarnings( "WeakerAccess" )
 public class XmlUtil {
 
+	/**
+	 * The XSLT output property key that controls the amount of indentation.
+	 */
 	private static final String INDENT_AMOUNT = "{http://xml.apache.org/xslt}indent-amount";
 
+	/**
+	 * The default number of spaces used as an indent.
+	 */
 	private static final int DEFAULT_INDENT = 2;
 
 	/**
@@ -187,9 +193,13 @@ public class XmlUtil {
 	}
 
 	/**
-	 * Format a DOM node to a string.
+	 * Format a DOM node to a string. If an error occurs while saving the
+	 * node, the error is logged and the string written so far is returned,
+	 * which is typically the empty string.
 	 *
 	 * @param node The DOM node
+	 * @return The formatted string, or the empty string if no content could
+	 * be written
 	 */
 	public static String toString( Node node ) {
 		StringWriter output = new StringWriter();

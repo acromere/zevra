@@ -39,8 +39,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @CustomLog
 public class XmlDescriptor {
 
+	/**
+	 * The cached list of attribute names for the node at each path.
+	 */
 	private final Map<String, List<String>> attrNames = new ConcurrentHashMap<>();
 
+	/**
+	 * The cached list of child node names for the node at each path.
+	 */
 	private final Map<String, List<String>> names = new ConcurrentHashMap<>();
 
 	/**
@@ -49,6 +55,9 @@ public class XmlDescriptor {
 	@Getter
 	private Node node;
 
+	/**
+	 * The cached list of paths with non-empty values.
+	 */
 	private List<String> paths;
 
 	/**
@@ -106,6 +115,7 @@ public class XmlDescriptor {
 	 *
 	 * @param input The InputStream from which to load the XML content
 	 * @throws IOException If an I/O error occurs
+	 * @throws NullPointerException if the input stream is null
 	 */
 	public XmlDescriptor( InputStream input ) throws IOException {
 		if( input == null ) throw new NullPointerException( "Input stream cannot be null." );
@@ -187,7 +197,9 @@ public class XmlDescriptor {
 	 *
 	 * @param node The node to use as the root node
 	 * @param path The value path
-	 * @return The value at the specified path
+	 * @return The value at the specified path, or null if the path does not
+	 * have a non-empty value
+	 * @throws RuntimeException if the path is not a valid XPath expression
 	 */
 	public static String getValue( Node node, String path ) {
 		if( node == null || TextUtil.isEmpty( path ) ) return null;
@@ -212,7 +224,9 @@ public class XmlDescriptor {
 	 *
 	 * @param node The node to use as the root node
 	 * @param path The value path
-	 * @return The value at the specified path
+	 * @param defaultValue The value to use if the value at the path is empty
+	 * @return The value at the specified path, or the default value if the
+	 * value is empty
 	 */
 	public static String getValue( Node node, String path, String defaultValue ) {
 		String value = getValue( node, path );
@@ -299,7 +313,7 @@ public class XmlDescriptor {
 	 *     &lt;max&gt;8&lt;/max&gt;
 	 *   &lt;/threads&gt;
 	 * &lt;/config&gt;</pre>
-	 * calling <code>getAttributeNames("/config/threads")</code> returns a
+	 * calling <code>getNames( "/config/threads" )</code> returns a
 	 * List&lt;String&gt; with "min" and "max".
 	 *
 	 * @param path The path of the node for which to retrieve child node names
@@ -316,17 +330,17 @@ public class XmlDescriptor {
 
 	/**
 	 * Get the paths of non-empty values for the entire descriptor. For example,
-	 * give the XML document
+	 * given the XML document
 	 * <pre>
 	 * &lt;config&gt;
 	 *   &lt;threads&gt;
-	 *     &lt;min/min&gt;
+	 *     &lt;min&gt;&lt;/min&gt;
 	 *     &lt;max&gt;8&lt;/max&gt;
 	 *   &lt;/threads&gt;
 	 * &lt;/config&gt;</pre>
 	 * calling <code>getPaths()</code> returns a List&lt;String&gt; with only
-	 * "/config/thread/max". Because the path "/config/thread/min" does not have
-	 * a non-empty value, it is not returned in the list.
+	 * "/config/threads/max". Because the path "/config/threads/min" does not
+	 * have a non-empty value, it is not returned in the list.
 	 *
 	 * @return The list of paths with non-empty values
 	 */
@@ -384,10 +398,11 @@ public class XmlDescriptor {
 	 *     &lt;max&gt;8&lt;/max&gt;
 	 *   &lt;/threads&gt;
 	 * &lt;/config&gt;</pre>
-	 * calling &lt;getValue("/config/threads/min", "3" )&gt; would return "3" but
-	 * calling &lt;getValue("/config/threads/max", "5" )&gt; would return "8".
+	 * calling &lt;getValue( "/config/threads/min", "3" )&gt; would return "3"
+	 * but calling &lt;getValue( "/config/threads/max", "5" )&gt; would return "8".
 	 *
 	 * @param path The path of the value
+	 * @param defaultValue The value to use if the value at the path is empty
 	 * @return The string value
 	 */
 	public String getValue( String path, String defaultValue ) {

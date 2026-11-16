@@ -7,7 +7,8 @@ import java.util.*;
 
 /**
  * The Parameters class is used to convert command line parameters into an object.
- * * <h2>Single Value Parameters</h2>
+ *
+ * <h2>Single Value Parameters</h2>
  * Single value parameters start with &quot;-&quot; and may be followed by an
  * optional value. If the parameter is not followed by a value but instead is
  * followed by another parameter, the value for the parameter is set to
@@ -67,17 +68,32 @@ public class Parameters {
 
 	private static final String EQUALS = "=";
 
+	/**
+	 * The original commands as they were passed to the parser.
+	 */
 	@Getter
 	private final List<String> originalCommands;
 
+	/**
+	 * The commands with any file names resolved to their absolute form.
+	 */
 	@Getter
 	private final List<String> resolvedCommands;
 
+	/**
+	 * The parameter flags, including their leading dashes.
+	 */
 	@Getter
 	private final Set<String> flags;
 
+	/**
+	 * The parameter values, keyed by the flag without its leading dashes.
+	 */
 	private final Map<String, List<String>> values;
 
+	/**
+	 * The file names, resolved to their absolute form.
+	 */
 	@Getter
 	private final List<String> uris;
 
@@ -89,30 +105,95 @@ public class Parameters {
 		this.uris = uris;
 	}
 
+	/**
+	 * Create an empty set of parameters.
+	 *
+	 * @return A new, empty Parameters object
+	 */
 	public static Parameters create() {
 		return parse();
 	}
 
+	/**
+	 * Parse a set of command line parameters.
+	 *
+	 * @param commands The command line parameters to parse
+	 * @return The parsed parameters
+	 * @see #parse( List, Set )
+	 */
 	public static Parameters parse( String... commands ) {
 		return parse( commands, (Set<String>)null );
 	}
 
+	/**
+	 * Parse a set of command line parameters.
+	 *
+	 * @param commands The command line parameters to parse
+	 * @return The parsed parameters
+	 * @see #parse( List, Set )
+	 */
 	public static Parameters parse( List<String> commands ) {
 		return parse( commands.toArray( new String[ 0 ] ) );
 	}
 
+	/**
+	 * Parse a set of command line parameters, validating them against the
+	 * given valid commands.
+	 *
+	 * @param commands The command line parameters to parse
+	 * @param validCommands The valid commands to validate against
+	 * @return The parsed parameters
+	 * @see #parse( List, Set )
+	 */
 	public static Parameters parse( String[] commands, String... validCommands ) {
 		return parse( commands, new HashSet<>( Arrays.asList( validCommands ) ) );
 	}
 
+	/**
+	 * Parse a set of command line parameters, validating them against the
+	 * given valid commands.
+	 *
+	 * @param commands The command line parameters to parse
+	 * @param validCommands The valid commands to validate against
+	 * @return The parsed parameters
+	 * @see #parse( List, Set )
+	 */
 	public static Parameters parse( List<String> commands, String... validCommands ) {
 		return parse( commands.toArray( new String[ 0 ] ), validCommands );
 	}
 
+	/**
+	 * Parse a set of command line parameters, validating them against the
+	 * given valid commands.
+	 *
+	 * @param commands The command line parameters to parse
+	 * @param validCommands The valid commands to validate against, or null
+	 * @return The parsed parameters
+	 * @see #parse( List, Set )
+	 */
 	public static Parameters parse( String[] commands, Set<String> validCommands ) {
 		return parse( Arrays.asList( commands ), validCommands );
 	}
 
+	/**
+	 * Parse a set of command line parameters.
+	 *
+	 * <p>
+	 * Parameters start with a single &quot;-&quot; for a single value or a
+	 * double &quot;--&quot; for multiple values, as described in the class
+	 * description. A bare &quot;--&quot; terminator causes all subsequent
+	 * commands to be treated as file names. When valid commands are
+	 * provided, an unknown parameter causes an
+	 * {@link InvalidParameterException}, and a null command causes an
+	 * {@link IllegalArgumentException}.
+	 * </p>
+	 *
+	 * @param commands The command line parameters to parse
+	 * @param validCommands The valid commands to validate against, or null
+	 * @return The parsed parameters
+	 * @throws IllegalArgumentException If a command is null
+	 * @throws InvalidParameterException If a parameter is not in the valid commands
+	 */
 	public static Parameters parse( List<String> commands, Set<String> validCommands ) {
 		Set<String> flags = new HashSet<>();
 		Map<String, List<String>> values = new HashMap<>();
@@ -187,10 +268,29 @@ public class Parameters {
 		return flag;
 	}
 
+	/**
+	 * Get the number of parameters.
+	 *
+	 * @return The number of parameters
+	 */
 	public int size() {
 		return values.size();
 	}
 
+	/**
+	 * Add the parameters, values, and URIs from another Parameters object
+	 * to this one.
+	 *
+	 * <p>
+	 * Values for a parameter that is already set to a value are appended,
+	 * while values for a parameter that is already set to
+	 * <code>true</code> are ignored. URIs that are already present are
+	 * not added again.
+	 * </p>
+	 *
+	 * @param parameters The parameters to add, or null to do nothing
+	 * @return This Parameters object, for chaining
+	 */
 	public Parameters add( Parameters parameters ) {
 		if( parameters == null ) return this;
 
@@ -213,11 +313,25 @@ public class Parameters {
 		return this;
 	}
 
+	/**
+	 * Get the first value of a parameter.
+	 *
+	 * @param flag The parameter flag, with or without the leading dashes
+	 * @return The first value of the parameter, or null if the parameter is not set
+	 */
 	public String get( String flag ) {
 		List<String> values = this.values.get( removePrefix( flag ) );
 		return values == null ? null : values.getFirst();
 	}
 
+	/**
+	 * Get the first value of a parameter, or the default value if the
+	 * parameter is not set.
+	 *
+	 * @param flag The parameter flag, with or without the leading dashes
+	 * @param defaultValue The default value to return if the parameter is not set
+	 * @return The first value of the parameter, or the default value
+	 */
 	public String get( String flag, String defaultValue ) {
 		String value = get( flag );
 		return value != null ? value : defaultValue;
@@ -259,10 +373,23 @@ public class Parameters {
 		return get( flag ) != null;
 	}
 
+	/**
+	 * Check if any of the given parameters are set.
+	 *
+	 * @param flags The parameter flags to check
+	 * @return true if any of the given parameters are set
+	 * @see #anySet( Collection )
+	 */
 	public boolean anySet( String... flags ) {
 		return anySet( Set.of( flags ) );
 	}
 
+	/**
+	 * Check if any of the given parameters are set.
+	 *
+	 * @param flags The parameter flags to check
+	 * @return true if any of the given parameters are set
+	 */
 	public boolean anySet( Collection<String> flags ) {
 		for( String flag : flags ) {
 			if( isSet( flag ) ) return true;
@@ -270,6 +397,12 @@ public class Parameters {
 		return false;
 	}
 
+	/**
+	 * Get all the values of a parameter.
+	 *
+	 * @param flag The parameter flag, with or without the leading dashes
+	 * @return The values of the parameter, or an empty list if the parameter is not set
+	 */
 	public List<String> getValues( String flag ) {
 		List<String> list = getValuesFromMap( flag );
 		//		if( list == null ) {
@@ -284,6 +417,11 @@ public class Parameters {
 		return values.get( removePrefix( flag ) );
 	}
 
+	/**
+	 * Get a string representation of the original commands.
+	 *
+	 * @return The original commands, joined by spaces
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

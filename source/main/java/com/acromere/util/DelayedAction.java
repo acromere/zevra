@@ -53,42 +53,84 @@ public class DelayedAction {
 
 	private ActionTask task;
 
+	/**
+	 * Creates a new delayed action without an executor or action.
+	 */
 	public DelayedAction() {
 		this( null, null );
 	}
 
+	/**
+	 * Creates a new delayed action that runs the action on the given
+	 * executor, without a default action.
+	 *
+	 * @param executor The executor on which the action is run
+	 */
 	public DelayedAction( ExecutorService executor ) {
 		this( executor, null );
 	}
 
+	/**
+	 * Creates a new delayed action that runs the given action on the timer
+	 * thread.
+	 *
+	 * @param action The action to run after the delay
+	 */
 	public DelayedAction( Runnable action ) {
 		this( null, action );
 	}
 
+	/**
+	 * Creates a new delayed action that runs the given action on the given
+	 * executor if it is available, otherwise on the timer thread.
+	 *
+	 * @param executor The executor on which the action is run, or
+	 *                 {@code null} to run it on the timer thread
+	 * @param action The action to run after the delay
+	 */
 	public DelayedAction( ExecutorService executor, Runnable action ) {
 		this.executor = executor;
 		this.action = action;
 	}
 
-	// Called when the dirty time needs to be updated, commonly due to state being changed.
+	/**
+	 * Marks the action as needing to run because of a state change and
+	 * reschedules it. The action will not be triggered until the
+	 * {@link #minTriggerLimit} idle time has elapsed since the change.
+	 */
 	public void request() {
 		lastChangeTime.set( System.currentTimeMillis() );
 		if( lastDirtyTime.get() <= lastActionTime.get() ) lastDirtyTime.set( lastChangeTime.get() );
 		schedule();
 	}
 
+	/**
+	 * Schedules the action to run after the trigger limits have been
+	 * satisfied, if it has not already been scheduled to do so.
+	 */
 	public void schedule() {
 		doSchedule( false );
 	}
 
+	/**
+	 * Schedules the action to run as soon as possible, regardless of the
+	 * trigger limits.
+	 */
 	public void trigger() {
 		doSchedule( true );
 	}
 
+	/**
+	 * Updates the last action time to now, which prevents the action from
+	 * being triggered until a change is requested.
+	 */
 	public void reset() {
 		lastActionTime.set( System.currentTimeMillis() );
 	}
 
+	/**
+	 * Cancels any pending scheduled action.
+	 */
 	public void cancel() {
 		synchronized( scheduleLock ) {
 			if( task != null ) task.cancel();

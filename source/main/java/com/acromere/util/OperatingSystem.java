@@ -12,13 +12,33 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+/**
+ * A class to determine information about the operating system, such as
+ * its family, architecture, version, and user folders, as well as to
+ * start processes with elevated or reduced privileges.
+ *
+ * <p>
+ * The operating system information is derived from system properties
+ * when the class is loaded, and can be re-derived by calling
+ * {@link #reset()}.
+ * </p>
+ */
 @CustomLog
 public class OperatingSystem {
 
+	/**
+	 * The name of the system property that overrides the Java launcher name.
+	 */
 	public static final String CUSTOM_LAUNCHER_NAME = "java.launcher.name";
 
+	/**
+	 * The name of the system property that sets the path of the Java launcher.
+	 */
 	public static final String CUSTOM_LAUNCHER_PATH = "java.launcher.path";
 
+	/**
+	 * The name of the system property that sets the path of the JPackage application.
+	 */
 	public static final String JPACKAGE_APP_PATH = "jpackage.app-path";
 
 	static final String PROCESS_PRIVILEGE_KEY = OperatingSystem.class.getName() + ":process-privilege-key";
@@ -95,6 +115,12 @@ public class OperatingSystem {
 		reset();
 	}
 
+	/**
+	 * Get a summary of the known operating system properties as
+	 * <code>key=value</code> pairs.
+	 *
+	 * @return A summary string of the known properties
+	 */
 	public static String info() {
 		StringBuilder builder = new StringBuilder();
 		if( name != null ) builder.append( "name=" ).append( name );
@@ -106,6 +132,14 @@ public class OperatingSystem {
 		return builder.toString();
 	}
 
+	/**
+	 * Re-derive all operating system state from the system properties.
+	 *
+	 * <p>
+	 * This method also sets the <code>jdk.lang.Process.launchMechanism</code>
+	 * system property to <code>FORK</code>.
+	 * </p>
+	 */
 	public static void reset() {
 		userFolderCache.clear();
 
@@ -315,6 +349,11 @@ public class OperatingSystem {
 		elevatedProcess = false;
 	}
 
+	/**
+	 * Get the provider of the operating system.
+	 *
+	 * @return The provider, or <code>Unknown</code> if the family is unknown
+	 */
 	public static String getProvider() {
 		return switch( family ) {
 			case WINDOWS -> "Microsoft";
@@ -325,22 +364,47 @@ public class OperatingSystem {
 		};
 	}
 
+	/**
+	 * Check if the operating system is a POSIX system.
+	 *
+	 * @return true if the operating system is a POSIX system
+	 */
 	public static boolean isPosix() {
 		return family == Family.LINUX || family == Family.MACOSX || family == Family.UNIX;
 	}
 
+	/**
+	 * Check if the operating system is Linux.
+	 *
+	 * @return true if the operating system is Linux
+	 */
 	public static boolean isLinux() {
 		return family == Family.LINUX;
 	}
 
+	/**
+	 * Check if the operating system is Mac OS.
+	 *
+	 * @return true if the operating system is Mac OS
+	 */
 	public static boolean isMac() {
 		return family == Family.MACOSX;
 	}
 
+	/**
+	 * Check if the operating system is a Unix variant, including Linux and Mac OS.
+	 *
+	 * @return true if the operating system is a Unix variant
+	 */
 	public static boolean isUnix() {
 		return family == Family.LINUX || family == Family.MACOSX || family == Family.UNIX;
 	}
 
+	/**
+	 * Check if the operating system is Windows.
+	 *
+	 * @return true if the operating system is Windows
+	 */
 	public static boolean isWindows() {
 		return family == Family.WINDOWS;
 	}
@@ -354,22 +418,59 @@ public class OperatingSystem {
 		return isAdminUser() || isElevatedProcess();
 	}
 
+	/**
+	 * Check if elevating a process is supported on the current operating system.
+	 *
+	 * @return true if elevating a process is supported
+	 */
 	@SuppressWarnings( "unused" )
 	public static boolean isElevateProcessSupported() {
 		return OperatingSystem.isMac() || OperatingSystem.isUnix() || OperatingSystem.isWindows();
 	}
 
+	/**
+	 * Check if reducing a process is supported on the current operating system.
+	 *
+	 * @return true if reducing a process is supported
+	 */
 	@SuppressWarnings( "unused" )
 	public static boolean isReduceProcessSupported() {
 		return OperatingSystem.isMac() || OperatingSystem.isUnix();
 	}
 
+	/**
+	 * Start a process with elevated privileges.
+	 *
+	 * <p>
+	 * If the current process is not already elevated, the builder is
+	 * modified to elevate the process before it is started.
+	 * </p>
+	 *
+	 * @param title The name of the program requesting elevated privileges
+	 * @param builder The process builder
+	 * @return The started process
+	 * @throws IOException If an I/O error occurs
+	 * @see #elevateProcessBuilder( String, ProcessBuilder )
+	 */
 	@SuppressWarnings( "unused" )
 	public static Process startProcessElevated( String title, ProcessBuilder builder ) throws IOException {
 		if( !OperatingSystem.isProcessElevated() ) elevateProcessBuilder( title, builder );
 		return builder.start();
 	}
 
+	/**
+	 * Start a process with reduced privileges.
+	 *
+	 * <p>
+	 * If the current process is elevated, the builder is modified to
+	 * reduce the process before it is started.
+	 * </p>
+	 *
+	 * @param builder The process builder
+	 * @return The started process
+	 * @throws IOException If an I/O error occurs
+	 * @see #reduceProcessBuilder( ProcessBuilder )
+	 */
 	@SuppressWarnings( "unused" )
 	public static Process startProcessReduced( ProcessBuilder builder ) throws IOException {
 		if( OperatingSystem.isProcessElevated() ) reduceProcessBuilder( builder );
@@ -421,6 +522,21 @@ public class OperatingSystem {
 		return builder;
 	}
 
+	/**
+	 * Get the name of the Java launcher executable.
+	 *
+	 * <p>
+	 * If the JPackage application path is set, the name of that application
+	 * is used; otherwise the name is taken from the
+	 * {@value #CUSTOM_LAUNCHER_NAME} system property if it is set;
+	 * otherwise it is <code>javaw</code> on Windows and <code>java</code>
+	 * on all other systems. The executable suffix for the current operating
+	 * system is appended.
+	 * </p>
+	 *
+	 * @return The name of the Java launcher executable
+	 * @see #getExeSuffix()
+	 */
 	public static String getJavaLauncherName() {
 		String launcherName;
 
@@ -487,6 +603,20 @@ public class OperatingSystem {
 		return memory;
 	}
 
+	/**
+	 * Get a standard user folder for the operating system.
+	 *
+	 * <p>
+	 * On Linux, the folder is determined by invoking the
+	 * <code>xdg-user-dir</code> command, with the <code>PHOTOS</code>
+	 * folder mapped to <code>PICTURES</code>. On all other systems, the
+	 * folder is a sub-folder of the user home folder. The results are
+	 * cached until the cache is cleared by {@link #reset()}.
+	 * </p>
+	 *
+	 * @param folder The user folder to get
+	 * @return The path of the user folder
+	 */
 	public static Path getUserFolder( UserFolder folder ) {
 		if( userFolderCache.containsKey( folder ) ) return userFolderCache.get( folder );
 
@@ -548,14 +678,38 @@ public class OperatingSystem {
 		};
 	}
 
+	/**
+	 * Resolve the path to a native library for the current platform and
+	 * architecture.
+	 *
+	 * <p>
+	 * The path is composed of the platform folder, the architecture
+	 * folder, and the mapped library name, for example
+	 * <code>linux/x86_64/libfoo.so</code>.
+	 * </p>
+	 *
+	 * @param libname The base name of the native library
+	 * @return The platform-specific path of the native library
+	 */
 	public static String resolveNativeLibPath( String libname ) {
 		return String.format( "%s/%s/%s", getPlatformFolder(), getArchitectureFolder(), mapLibraryName( libname ) );
 	}
 
+	/**
+	 * Get the executable file suffix for the current operating system.
+	 *
+	 * @return <code>.exe</code> on Windows, the empty string otherwise
+	 */
 	public static String getExeSuffix() {
 		return isWindows() ? ".exe" : "";
 	}
 
+	/**
+	 * Get a string representation of the operating system, composed of
+	 * the name, architecture, and version.
+	 *
+	 * @return A string of the form <code>name arch version</code>
+	 */
 	@SuppressWarnings( "unused" )
 	public static String asString() {
 		return getName() + " " + getArch() + " " + getVersion();
@@ -715,6 +869,9 @@ public class OperatingSystem {
 		}
 	}
 
+	/**
+	 * The architectures of the operating system.
+	 */
 	public enum Arch {
 		X86,
 		X64,
@@ -722,6 +879,9 @@ public class OperatingSystem {
 		UNKNOWN
 	}
 
+	/**
+	 * The families of operating systems.
+	 */
 	public enum Family {
 		LINUX,
 		// When MACOSX was changed to just MACOS, it broke some things
@@ -732,6 +892,9 @@ public class OperatingSystem {
 		UNKNOWN
 	}
 
+	/**
+	 * The standard user folders of the operating system.
+	 */
 	public enum UserFolder {
 		DESKTOP,
 		DOCUMENTS,

@@ -20,9 +20,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.*;
 
+/**
+ * A class to work with files and folders, including saving and loading
+ * text, copying and moving, zipping and unzipping, calculating sizes, and
+ * managing temporary files.
+ */
 @CustomLog
 public class FileUtil {
 
+	/**
+	 * The system temporary folder.
+	 */
 	public static final Path TEMP_FOLDER = Paths.get( System.getProperty( "java.io.tmpdir" ) );
 
 	private static final long FILE_COPY_BUFFER_SIZE = SizeUnitBase2.MiB.getSize() * 25;
@@ -151,10 +159,24 @@ public class FileUtil {
 		return text.toString();
 	}
 
+	/**
+	 * Returns the extension of the file name of the given path.
+	 *
+	 * @param path The path from which to get the extension
+	 * @return The extension, or an empty string if there is none
+	 * @see #getExtension( String )
+	 */
 	public static String getExtension( Path path ) {
 		return path == null ? null : getExtension( path.getFileName().toString() );
 	}
 
+	/**
+	 * Returns the extension of a file name, that is the part of the name
+	 * after the last period.
+	 *
+	 * @param name The file name from which to get the extension
+	 * @return The extension, or an empty string if there is none
+	 */
 	public static String getExtension( String name ) {
 		if( name == null ) return null;
 		int index = name.lastIndexOf( '.' );
@@ -162,10 +184,23 @@ public class FileUtil {
 		return name.substring( index + 1 );
 	}
 
+	/**
+	 * Returns a path with the extension removed from the file name.
+	 *
+	 * @param path The path from which to remove the extension
+	 * @return The path without the extension
+	 * @see #removeExtension( String )
+	 */
 	public static Path removeExtension( Path path ) {
 		return path == null ? null : Paths.get( removeExtension( path.toString() ) );
 	}
 
+	/**
+	 * Returns a file name with the extension removed.
+	 *
+	 * @param name The file name from which to remove the extension
+	 * @return The file name without the extension
+	 */
 	public static String removeExtension( String name ) {
 		if( name == null ) return null;
 		int index = name.lastIndexOf( '.' );
@@ -173,60 +208,193 @@ public class FileUtil {
 		return name.substring( 0, index );
 	}
 
+	/**
+	 * Save a string to a file using UTF-8 encoding.
+	 *
+	 * @param data The string to save
+	 * @param target The file to save to
+	 * @throws IOException If an I/O error occurs
+	 * @see #save( String, Path, Charset )
+	 */
 	public static void save( String data, Path target ) throws IOException {
 		save( data, target, StandardCharsets.UTF_8 );
 	}
 
+	/**
+	 * Save a string to a file using the given encoding name.
+	 *
+	 * @param data The string to save
+	 * @param target The file to save to
+	 * @param encoding The name of the encoding to use
+	 * @throws IOException If an I/O error occurs
+	 * @see #save( String, Path, Charset )
+	 */
 	public static void save( String data, Path target, String encoding ) throws IOException {
 		save( data, target, Charset.forName( encoding ) );
 	}
 
+	/**
+	 * Save a string to a file using the given encoding.
+	 *
+	 * @param data The string to save
+	 * @param target The file to save to
+	 * @param encoding The encoding to use
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static void save( String data, Path target, Charset encoding ) throws IOException {
 		try( OutputStream output = new FileOutputStream( target.toFile() ) ) {
 			IoUtil.write( data, output, encoding );
 		}
 	}
 
+	/**
+	 * Load a file into a string using UTF-8 encoding.
+	 *
+	 * @param source The file to load
+	 * @return The file contents as a string
+	 * @throws IOException If an I/O error occurs
+	 * @see #load( Path, Charset )
+	 */
 	public static String load( Path source ) throws IOException {
 		return load( source, StandardCharsets.UTF_8 );
 	}
 
+	/**
+	 * Load a file into a string using the given encoding name.
+	 *
+	 * @param source The file to load
+	 * @param encoding The name of the encoding to use
+	 * @return The file contents as a string
+	 * @throws IOException If an I/O error occurs
+	 * @see #load( Path, Charset )
+	 */
 	public static String load( Path source, String encoding ) throws IOException {
 		return load( source, Charset.forName( encoding ) );
 	}
 
+	/**
+	 * Load a file into a string using the given encoding.
+	 *
+	 * @param source The file to load
+	 * @param encoding The encoding to use
+	 * @return The file contents as a string
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static String load( Path source, Charset encoding ) throws IOException {
 		try( FileInputStream input = new FileInputStream( source.toString() ) ) {
 			return IoUtil.toString( input, encoding );
 		}
 	}
 
+	/**
+	 * Copy a file or folder to the target, not including the root folder
+	 * of a folder source.
+	 *
+	 * @param source The file or folder to copy
+	 * @param target The file or folder to copy to
+	 * @return true if the copy succeeded, false otherwise
+	 * @throws IOException If an I/O error occurs
+	 * @see #copy( Path, Path, boolean, LongConsumer )
+	 */
 	public static boolean copy( Path source, Path target ) throws IOException {
 		return copy( source, target, false );
 	}
 
+	/**
+	 * Copy a file or folder to the target, not including the root folder
+	 * of a folder source, reporting progress to the given callback.
+	 *
+	 * @param source The file or folder to copy
+	 * @param target The file or folder to copy to
+	 * @param progressCallback The callback to report the number of bytes copied to, or null
+	 * @return true if the copy succeeded, false otherwise
+	 * @throws IOException If an I/O error occurs
+	 * @see #copy( Path, Path, boolean, LongConsumer )
+	 */
 	public static boolean copy( Path source, Path target, LongConsumer progressCallback ) throws IOException {
 		return copy( source, target, false, progressCallback );
 	}
 
+	/**
+	 * Copy a file or folder to the target.
+	 *
+	 * @param source The file or folder to copy
+	 * @param target The file or folder to copy to
+	 * @param includeRootFolder If the root folder of a folder source should be included in the target
+	 * @return true if the copy succeeded, false otherwise
+	 * @throws IOException If an I/O error occurs
+	 * @see #copy( Path, Path, boolean, LongConsumer )
+	 */
 	public static boolean copy( Path source, Path target, boolean includeRootFolder ) throws IOException {
 		return copy( source, target, includeRootFolder, null );
 	}
 
+	/**
+	 * Copy a file or folder to the target.
+	 *
+	 * <p>
+	 * A file source is copied to a file target, to a file with the same name
+	 * inside a folder target, or to a new file target. A folder source is
+	 * copied to a folder target; if <code>includeRootFolder</code> is true,
+	 * the root folder of the source is included in the target.
+	 * </p>
+	 *
+	 * @param source The file or folder to copy
+	 * @param target The file or folder to copy to
+	 * @param includeRootFolder If the root folder of a folder source should be included in the target
+	 * @param progressCallback The callback to report the number of bytes copied to, or null
+	 * @return true if the copy succeeded, false otherwise
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static boolean copy( Path source, Path target, boolean includeRootFolder, LongConsumer progressCallback ) throws IOException {
 		return copy( source.toFile(), target.toFile(), includeRootFolder, progressCallback );
 	}
 
+	/**
+	 * Copy the contents of a file to an output stream.
+	 *
+	 * @param file The file to copy
+	 * @param target The output stream to copy to
+	 * @return The number of bytes copied
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static long copy( Path file, OutputStream target ) throws IOException {
 		try( FileInputStream source = new FileInputStream( file.toFile() ) ) {
 			return IoUtil.copy( source, target );
 		}
 	}
 
+	/**
+	 * Copy a file or folder to the target.
+	 *
+	 * @param source The file or folder to copy
+	 * @param target The file or folder to copy to
+	 * @param includeRootFolder If the root folder of a folder source should be included in the target
+	 * @return true if the copy succeeded, false otherwise
+	 * @throws IOException If an I/O error occurs
+	 * @see #copy( File, File, boolean, LongConsumer )
+	 */
 	public static boolean copy( File source, File target, boolean includeRootFolder ) throws IOException {
 		return copy( source, target, includeRootFolder, null );
 	}
 
+	/**
+	 * Copy a file or folder to the target.
+	 *
+	 * <p>
+	 * A file source is copied to a file target, to a file with the same name
+	 * inside a folder target, or to a new file target. A folder source is
+	 * copied to a folder target; if <code>includeRootFolder</code> is true,
+	 * the root folder of the source is included in the target.
+	 * </p>
+	 *
+	 * @param source The file or folder to copy
+	 * @param target The file or folder to copy to
+	 * @param includeRootFolder If the root folder of a folder source should be included in the target
+	 * @param progressCallback The callback to report the number of bytes copied to, or null
+	 * @return true if the copy succeeded, false otherwise
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static boolean copy( File source, File target, boolean includeRootFolder, LongConsumer progressCallback ) throws IOException {
 		// Copy file sources to file targets
 		if( source.isFile() && target.isFile() ) {
@@ -312,6 +480,20 @@ public class FileUtil {
 		}
 	}
 
+	/**
+	 * Move a file or folder to the target path.
+	 *
+	 * <p>
+	 * An atomic move is attempted first; if that fails, the source is
+	 * copied to the target and deleted instead, and this method returns
+	 * true only if that fallback succeeded.
+	 * </p>
+	 *
+	 * @param source The file or folder to move
+	 * @param target The new location
+	 * @return true if the copy-and-delete fallback succeeded, false otherwise
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static boolean move( Path source, Path target ) throws IOException {
 		try {
 			Files.move( source, target, StandardCopyOption.ATOMIC_MOVE );
@@ -321,14 +503,43 @@ public class FileUtil {
 		return false;
 	}
 
+	/**
+	 * Zip the contents of a file or folder into a zip file.
+	 *
+	 * @param source The file or folder to zip
+	 * @param target The zip file to write
+	 * @throws IOException If an I/O error occurs
+	 * @see #zip( Path, Path, LongConsumer )
+	 */
 	public static void zip( Path source, Path target ) throws IOException {
 		zip( source, target, null );
 	}
 
+	/**
+	 * Unzip a zip file into a target folder.
+	 *
+	 * @param source The zip file to unzip
+	 * @param target The folder to unzip into
+	 * @throws IOException If an I/O error occurs
+	 * @see #unzip( Path, Path, LongConsumer )
+	 */
 	public static void unzip( Path source, Path target ) throws IOException {
 		unzip( source, target, null );
 	}
 
+	/**
+	 * Zip the contents of a file or folder into a zip file.
+	 *
+	 * <p>
+	 * Entries are stored relative to the source, with folders given a
+	 * trailing slash.
+	 * </p>
+	 *
+	 * @param source The file or folder to zip
+	 * @param target The zip file to write
+	 * @param progressCallback The callback to report the total number of bytes added to, or null
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static void zip( Path source, Path target, LongConsumer progressCallback ) throws IOException {
 		final AtomicLong total = new AtomicLong( 0 );
 		final AtomicLong last = new AtomicLong( 0 );
@@ -358,6 +569,19 @@ public class FileUtil {
 		}
 	}
 
+	/**
+	 * Unzip a zip file into a target folder.
+	 *
+	 * <p>
+	 * Entry paths are sanitized, and an entry that would resolve outside
+	 * of the target folder causes an {@link IOException}.
+	 * </p>
+	 *
+	 * @param source The zip file to unzip
+	 * @param target The folder to unzip into
+	 * @param progressCallback The callback to report the number of bytes read from each entry to, or null
+	 * @throws IOException If an I/O error occurs, or an entry path escapes the target folder
+	 */
 	public static void unzip( Path source, Path target, LongConsumer progressCallback ) throws IOException {
 		Files.createDirectories( target );
 		Path normalizedTarget = target.toAbsolutePath().normalize();
@@ -385,6 +609,14 @@ public class FileUtil {
 		}
 	}
 
+	/**
+	 * Get the total size of a file, or of all the files in a folder,
+	 * including any nested folders.
+	 *
+	 * @param source The file or folder to calculate the size of
+	 * @return The total size in bytes
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static long getDeepSize( Path source ) throws IOException {
 		List<Path> paths = listPaths( source );
 
@@ -396,6 +628,13 @@ public class FileUtil {
 		return total;
 	}
 
+	/**
+	 * Get the total uncompressed size of the entries in a zip file.
+	 *
+	 * @param source The zip file to calculate the size of
+	 * @return The total uncompressed size in bytes
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static long getUncompressedSize( Path source ) throws IOException {
 		try( ZipFile zipFile = new ZipFile( source.toFile() ) ) {
 			Iterator<? extends ZipEntry> entries = zipFile.entries().asIterator();
@@ -410,6 +649,18 @@ public class FileUtil {
 		}
 	}
 
+	/**
+	 * Get the total uncompressed size of a file or folder, recursing
+	 * into nested folders and expanding any zip files found.
+	 *
+	 * <p>
+	 * Files that are not valid zip files contribute their on-disk size.
+	 * </p>
+	 *
+	 * @param source The file or folder to calculate the size of
+	 * @return The total uncompressed size in bytes
+	 * @throws IOException If an I/O error occurs
+	 */
 	@SuppressWarnings( "unused" )
 	public static long getDeepUncompressedSize( Path source ) throws IOException {
 		List<Path> paths = listPaths( source );
@@ -430,12 +681,28 @@ public class FileUtil {
 		return total;
 	}
 
+	/**
+	 * List the given path and all of its nested paths.
+	 *
+	 * @param file The file or folder to list
+	 * @return A list of all paths, starting with the given path
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static List<Path> listPaths( Path file ) throws IOException {
 		try( Stream<Path> paths = Files.walk( file ) ) {
 			return paths.collect( Collectors.toList() );
 		}
 	}
 
+	/**
+	 * Delete a file or folder, recursively, including all nested files
+	 * and folders.
+	 *
+	 * @param path The path to delete
+	 * @return true if the path no longer exists, including if it did not
+	 * exist in the first place
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static boolean delete( Path path ) throws IOException {
 		if( !Files.exists( path ) ) return true;
 
@@ -461,6 +728,13 @@ public class FileUtil {
 		return !Files.exists( path );
 	}
 
+	/**
+	 * Register a file or folder for deletion when the JVM exits,
+	 * recursively, including all nested files and folders.
+	 *
+	 * @param path The path to register for deletion
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static void deleteOnExit( Path path ) throws IOException {
 		if( !Files.exists( path ) ) return;
 
@@ -486,14 +760,38 @@ public class FileUtil {
 		);
 	}
 
+	/**
+	 * Get the system temporary folder.
+	 *
+	 * @return The system temporary folder
+	 */
 	public static Path getTempFolder() {
 		return TEMP_FOLDER;
 	}
 
+	/**
+	 * Create a temporary file in the default temporary-file directory.
+	 *
+	 * @param prefix The prefix of the file name
+	 * @param suffix The suffix of the file name
+	 * @param attributes The attributes of the file to create
+	 * @return The path to the newly created file
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static Path createTempFile( String prefix, String suffix, FileAttribute<?>... attributes ) throws IOException {
 		return Files.createTempFile( prefix, suffix, attributes );
 	}
 
+	/**
+	 * Create a temporary file in the given parent folder.
+	 *
+	 * @param parent The parent folder in which to create the file
+	 * @param prefix The prefix of the file name
+	 * @param suffix The suffix of the file name
+	 * @param attributes The attributes of the file to create
+	 * @return The path to the newly created file
+	 * @throws IOException If an I/O error occurs
+	 */
 	public static Path createTempFile( Path parent, String prefix, String suffix, FileAttribute<?>... attributes ) throws IOException {
 		return Files.createTempFile( parent, prefix, suffix, attributes );
 	}
@@ -624,6 +922,21 @@ public class FileUtil {
 		return path;
 	}
 
+	/**
+	 * Get a name that does not collide with the given existing names.
+	 *
+	 * <p>
+	 * If the name is not already in use, it is returned unchanged;
+	 * otherwise a numeric index is appended to the base name before
+	 * the extension, for example <code>a.txt</code> becomes
+	 * <code>a(1).txt</code>. The index is one greater than the highest
+	 * index already present among the existing names.
+	 * </p>
+	 *
+	 * @param existingNames The names that are already in use
+	 * @param name The name to index
+	 * @return The name, or a new name with an appended index
+	 */
 	public static String getNextIndexedName( List<String> existingNames, String name ) {
 		String extension = FileUtil.getExtension( name );
 		String base = FileUtil.removeExtension( name );
@@ -650,6 +963,21 @@ public class FileUtil {
 		return base + (extension.isEmpty() ? "" : "." + extension);
 	}
 
+	/**
+	 * Wait until the given path exists.
+	 *
+	 * <p>
+	 * The parent folder of the path is watched for entry creation events,
+	 * so the parent folder must already exist.
+	 * </p>
+	 *
+	 * @param path The path to wait for
+	 * @param duration The maximum time to wait
+	 * @param unit The unit of the duration
+	 * @throws IOException If the parent folder does not exist, or an I/O error occurs
+	 * @throws TimeoutException If the path did not appear within the given duration
+	 * @throws InterruptedException If the wait is interrupted
+	 */
 	public static void waitToExist( Path path, long duration, TimeUnit unit ) throws IOException, TimeoutException, InterruptedException {
 		if( Files.exists( path ) ) return;
 		if( !Files.exists( path.getParent() ) ) throw new IOException( "Cannot wait for path without parent: " + path );

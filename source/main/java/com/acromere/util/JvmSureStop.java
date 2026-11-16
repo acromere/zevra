@@ -27,16 +27,33 @@ public class JvmSureStop extends Thread {
 
 	private final int delay;
 
+	/**
+	 * Creates a new shutdown hook that waits the default amount of time for
+	 * the JVM to exit cleanly.
+	 */
 	public JvmSureStop() {
 		this( DEFAULT_WAIT_DELAY );
 	}
 
+	/**
+	 * Creates a new shutdown hook that waits the given amount of time for
+	 * the JVM to exit cleanly before halting it.
+	 *
+	 * @param delay The amount of time in milliseconds to wait for the JVM
+	 *              to exit cleanly
+	 */
 	public JvmSureStop( int delay ) {
 		super( "JVM Sure Stop" );
 		this.delay = delay;
 		setDaemon( true );
 	}
 
+	/**
+	 * Waits for the given amount of time for the JVM to exit cleanly. If the
+	 * JVM has not exited, the running non-daemon threads and their stack
+	 * traces are logged and the JVM is halted. In a test environment this
+	 * method does nothing.
+	 */
 	@Override
 	public void run() {
 		try {

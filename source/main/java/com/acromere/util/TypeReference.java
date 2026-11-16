@@ -20,8 +20,14 @@ import java.lang.reflect.Type;
 @Getter
 public abstract class TypeReference<T> implements Comparable<TypeReference<T>> {
 
+	/**
+	 * The referenced type, which may be parameterized.
+	 */
 	private final Type type;
 
+	/**
+	 * The base class of the referenced type.
+	 */
 	private final Class<T> typeClass;
 
 	/**
@@ -29,6 +35,9 @@ public abstract class TypeReference<T> implements Comparable<TypeReference<T>> {
 	 * subclass is defined to reference the parameterized type at
 	 * runtime. The TypeReference must have the parameterized type in it, the
 	 * diamond operator cannot be used.
+	 *
+	 * @throws IllegalArgumentException if the TypeReference subclass is
+	 * created without parameterized type information
 	 */
 	@SuppressWarnings( "unchecked" )
 	protected TypeReference() {
@@ -66,22 +75,25 @@ public abstract class TypeReference<T> implements Comparable<TypeReference<T>> {
 	}
 
 	/**
-	 * Compares this TypeReference object with the specified TypeReference object
-	 * for order. The comparison is based on the string representation of the
-	 * reference class.
+	 * Compares this TypeReference object with the specified TypeReference
+	 * object for order. The comparison is based on the full type name of the
+	 * referenced type, so a parameterized type is compared with its type
+	 * arguments included.
 	 *
 	 * @param that The TypeReference object to be compared.
-	 * @return A negative integer, zero, or a positive integer as this TypeReference object
-	 * is less than, equal to, or greater than the specified TypeReference object.
+	 * @return A negative integer, zero, or a positive integer as this
+	 * TypeReference object is less than, equal to, or greater than the
+	 * specified TypeReference object.
 	 */
 	public int compareTo( TypeReference<T> that ) {
 		return this.getType().getTypeName().compareTo( that.getType().getTypeName() );
 	}
 
 	/**
-	 * Returns the string representation of the reference class.
+	 * Returns the fully qualified name of the base class of the referenced
+	 * type. Type arguments of parameterized types are not included.
 	 *
-	 * @return The string representation of the reference class.
+	 * @return The fully qualified name of the base class.
 	 */
 	@Override
 	public String toString() {
