@@ -22,21 +22,38 @@ import java.util.concurrent.TimeoutException;
  */
 public class EventWatcher<T extends Event> implements EventHandler<T> {
 
+	/**
+	 * The default timeout, in milliseconds, used when waiting for events.
+	 */
 	public static final long DEFAULT_WAIT_TIMEOUT = 5000;
 
 	private final Queue<T> events = new ConcurrentLinkedQueue<>();
 
+	/**
+	 * The maximum time, in milliseconds, to wait for an event.
+	 */
 	@Getter
 	private final long timeout;
 
+	/**
+	 * Whether captured events are printed to standard output.
+	 */
 	@Getter
 	@Setter
 	private boolean printEventCapture;
 
+	/**
+	 * Creates a new watcher that waits the default amount of time for events.
+	 */
 	public EventWatcher() {
 		this( DEFAULT_WAIT_TIMEOUT );
 	}
 
+	/**
+	 * Creates a new watcher that waits the specified amount of time for events.
+	 *
+	 * @param timeout The maximum time, in milliseconds, to wait for an event
+	 */
 	public EventWatcher( long timeout ) {
 		this.timeout = timeout;
 	}
