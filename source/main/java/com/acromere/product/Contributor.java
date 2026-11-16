@@ -19,12 +19,26 @@ import java.util.List;
 @JsonIgnoreProperties( ignoreUnknown = true )
 public class Contributor extends Person implements Serializable {
 
+	/**
+	 * The name of the organization the contributor belongs to.
+	 */
 	private String organization;
 
+	/**
+	 * The url of the organization the contributor belongs to.
+	 */
 	private String organizationUrl;
 
+	/**
+	 * The roles the contributor has.
+	 */
 	private List<String> roles = new ArrayList<>();
 
+	/**
+	 * Return the contributor name and roles.
+	 *
+	 * @return A string of the form "Contributor{name=name roles=roles}"
+	 */
 	@Override
 	public String toString() {
 		return "Contributor{" + "name='" + getName() + " roles=" + roles + '}';

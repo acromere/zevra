@@ -7,12 +7,37 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+/**
+ * A class loader for a product's classes, resources, and native libraries.
+ *
+ * <p>This loader loads classes from the product's urls first and then
+ * delegates to a parent class loader, and does the same for resources. It
+ * also locates native libraries packaged with the product so that a module
+ * can ship the native code it needs.</p>
+ *
+ * @see URLClassLoader
+ */
 public class ProductClassLoader extends URLClassLoader {
 
+	/**
+	 * The class loader to delegate to when a class or resource is not found
+	 * in the product's urls.
+	 */
 	private final ClassLoader parent;
 
+	/**
+	 * The codebase of the product, used to locate native libraries.
+	 */
 	private final URI codebase;
 
+	/**
+	 * Create a class loader for the product.
+	 *
+	 * @param urls The urls of the product's classes and resources
+	 * @param parent The class loader to delegate to, or null
+	 * @param codebase The codebase of the product, used to locate native
+	 *     libraries
+	 */
 	public ProductClassLoader( URL[] urls, ClassLoader parent, URI codebase ) {
 		super( urls, null );
 		this.parent = parent;
@@ -52,6 +77,13 @@ public class ProductClassLoader extends URLClassLoader {
 		return type;
 	}
 
+	/**
+	 * Get the url of the resource with the specified name, searching the
+	 * product's urls first and then the parent class loader.
+	 *
+	 * @param name The name of the resource
+	 * @return The url of the resource, or null if it is not found
+	 */
 	public URL getResource( String name ) {
 		URL url = super.findResource( name );
 		if( url == null ) url = parent.getResource( name );
