@@ -3,18 +3,33 @@ package com.acromere.log;
 import java.util.Map;
 import java.util.logging.Level;
 
+/**
+ * Interface representing the data associated with a log statement.
+ * <p>
+ * Instances of this interface are passed to {@link com.acromere.log.provider.LoggerWrapper LoggerWrapper}
+ * implementations to provide all information needed to render a log statement.
+ * The data includes the log level, timestamp, message, arguments, and contextual metadata.
+ */
 public interface LogData {
 
+	/** Metadata key for the associated {@link Throwable} cause. */
 	String CAUSE = "cause";
 
+	/** Metadata key indicating whether this log statement was forced. */
 	String FORCED = "forced";
 
+	/** Metadata key for the Java module name. */
 	String MODULE_NAME = "module-name";
 
+	/** Metadata key for the logger class name. */
 	String CLASS_NAME = "class-name";
 
+	/** Metadata key for the logger method name. */
 	String METHOD_NAME = "method-name";
 
+	/**
+	 * Returns the log level for this log statement.
+	 */
 	Level getLevel();
 
 	/** Returns a nanosecond timestamp for the current log statement. */
@@ -60,6 +75,11 @@ public interface LogData {
 	//	 */
 	//	TemplateContext getTemplateContext();
 
+	/**
+	 * Returns the message template or literal message for this log statement.
+	 * If the statement was logged with format arguments, this returns the template
+	 * containing format specifiers. Otherwise, it returns the literal message.
+	 */
 	String getMessage();
 
 	/**

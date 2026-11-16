@@ -10,6 +10,20 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
+/**
+ * Abstract base class for logging contexts.
+ * <p>
+ * A logging context encapsulates all state for a single log statement, including
+ * the log level, timestamp, message, arguments, and contextual metadata. It
+ * implements both {@link LogApi} for the fluent interface and {@link LogData}
+ * for accessing the accumulated log data.
+ * <p>
+ * Subclasses must implement {@link #api()}, {@link #getLogger()}, and {@link #noOp()}
+ * to provide logger-specific behavior.
+ *
+ * @param <LOGGER> the logger type
+ * @param <API> the specific API type
+ */
 public abstract class LogContext<LOGGER extends AbstractLogger<API>, API extends LogApi<API>> implements LogApi<API>, LogData {
 
 	private final Level level;

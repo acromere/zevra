@@ -1,15 +1,27 @@
 package com.acromere.log;
 
 /**
- * The LogApi interface is patterned after the very nice Fluent Logger from
- * Google. The only reason the Fluent Logger was not used directly was because
- * the libraries were not Java module compatible and therefore caused problems
- * when loading.
+ * The core fluent logging API interface.
+ * <p>
+ * This interface is patterned after Google's Fluent Logger. It provides a fluent
+ * interface for building and emitting log statements with contextual metadata,
+ * lazy evaluation, and formatted messages.
+ * <p>
+ * Usage example:
+ * <pre>{@code
+ * logger.atInfo().with("user", user).with("action", "login").log("User logged in");
+ * }</pre>
  *
- * @param <API>
+ * @param <API> the specific API type for fluent method chaining
  */
 public interface LogApi<API extends LogApi<API>> {
 
+	/**
+	 * Associates a cause (exception) with this log statement.
+	 *
+	 * @param cause the exception to associate with the log statement
+	 * @return this API instance for fluent chaining
+	 */
 	API withCause( Throwable cause );
 
 	//API every(int n);
@@ -18,20 +30,52 @@ public interface LogApi<API extends LogApi<API>> {
 
 	//API withStackTrace( StackSize size);
 
+	/**
+	 * Adds contextual metadata to this log statement.
+	 *
+	 * @param key the metadata key
+	 * @param value the metadata value
+	 * @param <T> the value type
+	 * @return this API instance for fluent chaining
+	 */
 	<T> API with( Object key, T value );
 
 	//API withInjectedLogSite(LogSite logSite);
 
 	//API withInjectedLogSite( String internalClassName, String methodName, int encodedLineNumber, String sourceFileName);
 
+	/**
+	 * Returns whether this log statement is enabled and will be emitted.
+	 */
 	boolean isEnabled();
 
+	/**
+	 * Returns whether this log statement has a literal message (no formatting).
+	 */
 	boolean isLiteral();
 
+	/**
+	 * Emits a log statement with no message.
+	 */
 	void log();
 
+	/**
+	 * Emits a log statement with the specified message.
+	 *
+	 * @param message the log message
+	 */
 	void log( String message );
 
+	/**
+	 * Emits a log statement with a formatted message.
+	 * <p>
+	 * The message supports format specifiers such as {@code %s} (string),
+	 * {@code %d} (decimal integer), {@code %f} (floating point), and others.
+	 * Arguments are substituted in order.
+	 *
+	 * @param message the message template
+	 * @param p1 the first argument
+	 */
 	void log( String message, Object p1 );
 
 	/** Logs a message with formatted arguments (see {@link #log(String, Object)} for details). */
@@ -330,8 +374,20 @@ public interface LogApi<API extends LogApi<API>> {
 	/** Logs a message with formatted arguments (see {@link #log(String, Object)} for details). */
 	void log( String message, double p1, double p2 );
 
+	/**
+	 * Emits a log statement with a formatted message and varargs.
+	 *
+	 * @param message the message template
+	 * @param args the format arguments
+	 */
 	void logVarargs( String message, Object... args );
 
+	/**
+	 * A no-op implementation of the LogApi interface that discards all log statements.
+	 * Used for optimization when log statements are not enabled for a given level.
+	 *
+	 * @param <API> the specific API type
+	 */
 	public static class NoOp<API extends LogApi<API>> implements LogApi<API> {
 
 		@SuppressWarnings( "unchecked" )
