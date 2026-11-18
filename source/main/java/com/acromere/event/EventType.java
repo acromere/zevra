@@ -14,30 +14,64 @@ import lombok.Getter;
  */
 public final class EventType<T extends Event> {
 
+	/**
+	 * The root event type, which is the parent of all event types.
+	 */
 	public static final EventType<Event> ROOT = new EventType<>( null, "EVENT" );
 
 	private final EventType<? super T> parent;
 
+	/**
+	 * The name of this event type.
+	 */
 	@Getter
 	private final String name;
 
+	/**
+	 * Creates a new event type with the specified name,
+	 * parented to the root event type.
+	 *
+	 * @param name The name of the event type
+	 */
 	public EventType( final String name ) {
 		this( ROOT, name );
 	}
 
+	/**
+	 * Creates a new event type with the specified parent and the
+	 * same name as the parent.
+	 *
+	 * @param parent The parent event type
+	 */
 	public EventType( final EventType<? super T> parent ) {
 		this( parent, parent.getName() );
 	}
 
+	/**
+	 * Creates a new event type with the specified parent and name.
+	 *
+	 * @param parent The parent event type
+	 * @param name The name of the event type
+	 */
 	public EventType( final EventType<? super T> parent, final String name ) {
 		this.parent = parent;
 		this.name = name;
 	}
 
+	/**
+	 * Returns the parent of this event type.
+	 *
+	 * @return The parent event type, or null if this is the root event type
+	 */
 	public EventType<? super T> getParentEventType() {
 		return parent;
 	}
 
+	/**
+	 * Returns the name of this event type.
+	 *
+	 * @return The name of this event type
+	 */
 	@Override
 	public String toString() {
 		return name;

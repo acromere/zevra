@@ -14,6 +14,11 @@ import java.util.EventListener;
 @FunctionalInterface
 public interface EventHandler<T extends Event> extends EventListener {
 
+	/**
+	 * Handles the given event.
+	 *
+	 * @param event The event to handle
+	 */
 	void handle( T event );
 
 }

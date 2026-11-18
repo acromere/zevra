@@ -10,12 +10,12 @@
  * <p>
  * Example:
  * <pre>
- *   EventHub hub = new EventHub();
- *   hub.register(EventType.class, event -> {
- *       System.out.println("Received event: " + event);
- *   });
- *   hub.dispatch(new MyEvent());
+ * EventHub hub = new EventHub();
+ * EventType&lt;MyEvent&gt; type = new EventType&lt;&gt;( "MY_EVENT" );
+ * hub.register( type, event -&gt; {
+ *     System.out.println( "Received event: " + event );
+ * } );
+ * hub.dispatch( new MyEvent( source, type ) );
  * </pre>
- * </p>
  */
 package com.acromere.event;

@@ -36,6 +36,9 @@ public class EventHub {
 
 	private EventHub parent = ROOT;
 
+	/**
+	 * Creates a new event hub.
+	 */
 	public EventHub() {
 		this.peers = new CopyOnWriteArraySet<>();
 		this.eventTypeHandlers = new WeakHashMap<>();
