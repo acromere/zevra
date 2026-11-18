@@ -2,9 +2,10 @@
  * Source-level annotations for code documentation and static analysis.
  *
  * <p>This package provides reusable annotations intended primarily for
- * source-level use. Annotations in this package are typically retained
- * only at compile time and are consumed by tools such as static analyzers,
- * code generators, or documentation generators.</p>
+ * source-level use. Annotations in this package are retained only at the
+ * source level and are discarded by the compiler, and are consumed by tools
+ * such as static analyzers, code generators, or documentation generators
+ * that operate on source code.</p>
  *
  * <p>Key annotations in this package include:</p>
  * <ul>
