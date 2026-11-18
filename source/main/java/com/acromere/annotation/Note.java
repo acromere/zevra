@@ -20,18 +20,19 @@ import java.lang.annotation.*;
 public @interface Note {
 
 	/**
-	 * This method is intended to be called only by the FX thread.
+	 * This field or method is intended to be used only on the FX thread.
 	 */
 	String FX_THREAD = "fx-thread";
 
 	/**
-	 * This method is intended to be called only by a task thread.
+	 * This field or method is intended to be used only on a task thread.
 	 */
 	String TASK_THREAD = "task-thread";
 
 	/**
-	 * Indicates that any thread may safely access this method and assumptions
-	 * about thread-safe execution will be managed by the method implementation.
+	 * Indicates that any thread may safely access this field or method and
+	 * assumptions about thread-safe execution will be managed by the
+	 * implementation.
 	 */
 	String ANY_THREAD = "any-thread";
 
