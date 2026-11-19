@@ -23,12 +23,23 @@ public class FuzzySearch implements Search {
 	 */
 	private static final int DEFAULT_CUTOFF = 80;
 
+	/**
+	 * The Levenshtein distance cutoff value (0-100).
+	 */
 	private final int cutoff;
 
+	/**
+	 * Create a fuzzy search with the default cutoff.
+	 */
 	public FuzzySearch() {
 		this( DEFAULT_CUTOFF );
 	}
 
+	/**
+	 * Create a fuzzy search with the specified cutoff.
+	 *
+	 * @param cutoff The Levenshtein distance cutoff value (0-100)
+	 */
 	public FuzzySearch( int cutoff ) {
 		this.cutoff = cutoff;
 	}

@@ -8,16 +8,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * A term source that indexes plain text content.
+ *
+ * <p>The text is read line by line and each line is split into terms with
+ * {@link Terms#split(String, java.util.function.BiFunction)}. The term
+ * context is the line the term was found on and the term coordinates are the
+ * line index and the character index of the term in the line.</p>
+ */
 public class TextTermSource implements TermSource {
 
 	private final Document document;
 
 	private final String text;
 
+	/**
+	 * Create a text term source for the content of the document.
+	 *
+	 * @param document The document to index
+	 */
 	public TextTermSource( Document document ) {
 		this( document, null );
 	}
 
+	/**
+	 * Create a text term source for the specified text.
+	 *
+	 * @param document The document the text belongs to
+	 * @param text     The text to index
+	 */
 	public TextTermSource( Document document, String text ) {
 		this.document = document;
 		this.text = text;

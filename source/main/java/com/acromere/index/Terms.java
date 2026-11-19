@@ -4,12 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
+/**
+ * Utility methods for splitting text into terms. A term is a sequence of
+ * letters and digits.
+ */
 public class Terms {
 
+	/**
+	 * Split the text into a list of terms.
+	 *
+	 * @param text The text to split
+	 * @return A list of the terms in the text
+	 */
 	public static List<String> split( String text ) {
 		return split( text, text::substring );
 	}
 
+	/**
+	 * Split the text into terms. For each term, the consumer is called with
+	 * the start and end indexes of the term in the text.
+	 *
+	 * @param text     The text to split
+	 * @param consumer A function applied to the start and end indexes of
+	 *                 each term
+	 * @param <T>      The type of term the consumer returns
+	 * @return A list of the terms in the text
+	 */
 	public static <T> List<T> split( String text, BiFunction<Integer, Integer, T> consumer ) {
 		List<T> terms = new ArrayList<>();
 
