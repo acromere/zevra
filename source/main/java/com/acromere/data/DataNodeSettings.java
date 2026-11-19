@@ -14,9 +14,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The NodeSettings class links data {@link DataNode} properties to the {@link
- * Settings} interface. In particular, this allows any property on a data node
- * to be treated as a setting.
+ * The DataNodeSettings class links data {@link DataNode} properties to the
+ * {@link Settings} interface. In particular, this allows any property on a
+ * data node to be treated as a setting. Values are read from and written to
+ * the data node, and a {@link SettingsEvent#CHANGED} event is fired when a
+ * value on the node changes.
  */
 public class DataNodeSettings implements Settings {
 
@@ -24,6 +26,11 @@ public class DataNodeSettings implements Settings {
 
 	private final EventHub eventHub;
 
+	/**
+	 * Create a new settings object for the specified data node.
+	 *
+	 * @param node The data node the settings are linked to
+	 */
 	public DataNodeSettings( DataNode node ) {
 		this.node = node;
 		this.eventHub = new EventHub();
