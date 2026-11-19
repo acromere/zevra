@@ -46,8 +46,9 @@ public class EventHub {
 	}
 
 	/**
-	 * Dispatches the event to all registered handlers of the event's type 
-	 * and all parent event types.
+	 * Dispatches the event to all registered handlers of the event's type
+	 * and all parent event types. The event is then dispatched to all
+	 * registered peer hubs and, for non-root hubs, to the parent hub.
 	 *
 	 * @param event The event to dispatch
 	 * @return The same event object
@@ -131,6 +132,7 @@ public class EventHub {
 	/**
 	 * Registers a handler for a specific event type.
 	 *
+	 * @param <T> The type of event handled by the handler
 	 * @param type The event type to register the handler for
 	 * @param handler The handler to register
 	 * @return This hub
@@ -142,6 +144,7 @@ public class EventHub {
 	/**
 	 * Registers a handler for a specific event type with a specific owner.
 	 *
+	 * @param <T> The type of event handled by the handler
 	 * @param owner  The owner of the registration
 	 * @param type   The event type to register the handler for
 	 * @param handler The handler to register
@@ -157,6 +160,7 @@ public class EventHub {
 	/**
 	 * Unregisters a handler for a specific event type.
 	 *
+	 * @param <T> The type of event handled by the handler
 	 * @param type The event type to unregister the handler from
 	 * @param handler The handler to unregister
 	 * @return This hub
@@ -168,10 +172,11 @@ public class EventHub {
 	/**
 	 * Unregisters a handler for a specific event type with a specific owner.
 	 *
+	 * @param <T> The type of event handled by the handler
 	 * @param owner  The owner of the registration
 	 * @param type   The event type to unregister the handler from
- * @param handler   The handler to unregister
- * @return This hub
+	 * @param handler   The handler to unregister
+	 * @return This hub
 	 */
 	public <T extends Event> EventHub unregister( Object owner, EventType<? super T> type, EventHandler<? super T> handler ) {
 		Map<EventType<? extends Event>, Set<EventHandler<? extends Event>>> typeHandlers = eventTypeHandlers.get( owner );
@@ -221,6 +226,7 @@ public class EventHub {
 	/**
 	 * Returns the prior event of a specific class, if any.
 	 *
+	 * @param <T> The type of event to be returned
 	 * @param type The event class
 	 * @return The prior event, or null if none exists
 	 */

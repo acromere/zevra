@@ -72,7 +72,8 @@ public class EventWatcher<T extends Event> implements EventHandler<T> {
 	}
 
 	/**
-	 * Waits for an event of a specific type to occur, or until the specified timeout is reached.
+	 * Waits for an event of a specific type to occur, or until the configured
+	 * timeout is reached.
 	 *
 	 * @param type The event type to wait for
 	 * @throws InterruptedException If the thread is interrupted while waiting
@@ -83,12 +84,13 @@ public class EventWatcher<T extends Event> implements EventHandler<T> {
 	}
 
 	/**
-	 * Waits for the next occurrence of an event of a specific type, or until the specified timeout is reached.
-	 * This method always waits for at least one event, even if one has already occurred.
+	 * Waits for the next occurrence of an event of a specific type, or until
+	 * the configured timeout is reached. This method always waits for at least
+	 * one event, even if one has already occurred.
 	 *
 	 * @param type The event type to wait for
- * @throws InterruptedException If the thread is interrupted while waiting
- * @throws TimeoutException If the timeout is exceeded before the event occurs
+	 * @throws InterruptedException If the thread is interrupted while waiting
+	 * @throws TimeoutException If the timeout is exceeded before the event occurs
 	 */
 	@SuppressWarnings( "unused" )
 	public void waitForNextEvent( EventType<T> type ) throws InterruptedException, TimeoutException {
@@ -103,7 +105,8 @@ public class EventWatcher<T extends Event> implements EventHandler<T> {
 	 *
 	 * @param type The event type to wait for
 	 * @param timeout How long, in milliseconds, to wait for the event
-	 * @throws InterruptedException If the timeout is exceeded
+	 * @throws InterruptedException If the thread is interrupted while waiting
+	 * @throws TimeoutException If the timeout is exceeded before the event occurs
 	 */
 	public synchronized void waitForEvent( EventType<T> type, long timeout ) throws InterruptedException, TimeoutException {
 		boolean shouldWait = timeout > 0;
@@ -128,7 +131,8 @@ public class EventWatcher<T extends Event> implements EventHandler<T> {
 	 *
 	 * @param type The event class to wait for
 	 * @param timeout How long, in milliseconds, to wait for the event
-	 * @throws InterruptedException If the timeout is exceeded
+	 * @throws InterruptedException If the thread is interrupted while waiting
+	 * @throws TimeoutException If the timeout is exceeded before the event occurs
 	 */
 	public synchronized void waitForNextEvent( EventType<T> type, long timeout ) throws InterruptedException, TimeoutException {
 		findNext( type );
