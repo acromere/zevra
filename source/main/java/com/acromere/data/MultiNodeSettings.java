@@ -25,10 +25,20 @@ public class MultiNodeSettings implements Settings {
 
 	private final EventHub eventHub;
 
+	/**
+	 * Create a new multi-node settings object for the specified nodes.
+	 *
+	 * @param nodes The data nodes the settings are linked to
+	 */
 	public MultiNodeSettings( DataNode... nodes ) {
 		this( Arrays.asList( nodes ) );
 	}
 
+	/**
+	 * Create a new multi-node settings object for the specified nodes.
+	 *
+	 * @param nodes The data nodes the settings are linked to
+	 */
 	public MultiNodeSettings( Collection<? extends DataNode> nodes ) {
 		this.nodes = new HashSet<>( nodes );
 		this.eventHub = new EventHub();

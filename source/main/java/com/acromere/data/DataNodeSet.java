@@ -19,17 +19,17 @@ import java.util.stream.Stream;
  * Organization model that allows an arbitrary number of Person nodes. Both
  * Organization and Person should extend from {@link DataNode} or {@link IdDataNode}.
  * <pre>
- *   public class Organization extends IdNode {
+ *   public class Organization extends IdDataNode {
  *     ...
  *   }
- *   public class Person extends IdNode {
+ *   public class Person extends IdDataNode {
  *     ...
  *   }
  * </pre>
  * When adding the ability to get, add and remove Person objects to the
  * Organization class, the following pattern is typically used:
  * <pre>
- *   public class Organization extends IdNode {
+ *   public class Organization extends IdDataNode {
  *     ...
  *     public Set<Person> getPersons() {
  *       return getValues( PERSONS );
@@ -46,7 +46,7 @@ import java.util.stream.Stream;
  * If a {@link List} is desired then a {@link Comparator<E>} must be supplied
  * to sort the elements by some attribute in the {@link DataNode}s. The
  * {@link DataNodeComparator} class is helpful to easily create a comparator based
- * on know value keys.
+ * on known value keys.
  *
  * @param <E> The type of {@link DataNode}s in the {@link DataNodeSet}
  */
@@ -65,6 +65,12 @@ class DataNodeSet<E extends DataNode> extends DataNode implements Set<E> {
 
 	private DataNode priorParent;
 
+	/**
+	 * Create a new node set for the specified value key. The key is the value
+	 * key under which the set is stored in the parent node.
+	 *
+	 * @param key The value key of the node set
+	 */
 	DataNodeSet( String key ) {
 		this.key = key;
 		setAllKeysModify();
@@ -97,6 +103,11 @@ class DataNodeSet<E extends DataNode> extends DataNode implements Set<E> {
 		return getSetValues().isEmpty();
 	}
 
+	/**
+	 * Determine if the node set is empty.
+	 *
+	 * @return true if the node set is empty
+	 */
 	boolean isNodeSetEmpty() {
 		return super.isEmpty();
 	}
@@ -234,6 +245,12 @@ class DataNodeSet<E extends DataNode> extends DataNode implements Set<E> {
 		return getSetValues().parallelStream();
 	}
 
+	/**
+	 * Determine if the given value is allowed to be modified in the set.
+	 *
+	 * @param value The value to check
+	 * @return true if the value is allowed to be modified
+	 */
 	public boolean modifyAllowed( Object value ) {
 		if( !(value instanceof DataNode) ) return super.modifyAllowed( value );
 		Function<DataNode, Boolean> filter = getSetModifyFilter();
@@ -255,6 +272,11 @@ class DataNodeSet<E extends DataNode> extends DataNode implements Set<E> {
 		return getValue( NODE_SET_MODIFY_FILTER );
 	}
 
+	/**
+	 * Set the filter applied when modifying values in the set.
+	 *
+	 * @param filter The filter to apply to values, null to allow all values
+	 */
 	void setSetModifyFilter( Function<DataNode, Boolean> filter ) {
 		setValue( NODE_SET_MODIFY_FILTER, filter );
 	}

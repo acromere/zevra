@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
  * dirty) flag, {@link DataNodeEvent events} and {@link Txn transactions}. It is
  * expected that this class be inherited and that subclasses will be configured
  * to represent specific data types. For example, consider this Person type:
- * <p>
  * <pre>
  * public class Person extends Node {
  *
@@ -52,14 +51,14 @@ import java.util.stream.Collectors;
  * </pre>
  * <p>
  * This class defines a Person type with a primary key of &quot;id&quot; and a
- * natural key of &quot;name&quot;. Both primary keys and natural keys are use
+ * natural key of &quot;name&quot;. Both primary keys and natural keys are used
  * in the calculation of {@link #hashCode()} and {@link #equals(Object)}. It is
  * good practice to always define a single value primary key. It is not
  * required to define a natural key.
  *
  * <h2>The Modified Flag</h2>
  * The modified flag allows users of the data type to know if an instance has
- * been modified since {@link #setModified(boolean) setModifed(false)} was last
+ * been modified since {@link #setModified(boolean) setModified(false)} was last
  * called. Note that
  * only {@link #addModifyingKeys(String...) modifying values} can affect the
  * modified flag. Using the Person class
@@ -91,7 +90,7 @@ import java.util.stream.Collectors;
  *
  * <h2>Value Events</h2>
  * Event handlers can also be registered for changes to specific values. This is
- * to handle the case where lambdas are registered for changes the value.
+ * to handle the case where lambdas are registered for changes to the value.
  * Example:
  * <pre>
  *   person.register( "name", e -&gt; displayPersonName( e.getNewValue() ) );
@@ -101,7 +100,6 @@ import java.util.stream.Collectors;
  * Multiple changes to a data node can be grouped together using {@link Txn
  * transactions}. Using the {@link Txn} class to create and commit a transaction
  * is fairly simple:
- * <p>
  * <pre>
  *   Txn.create();
  *   person.setName( "Bar" );
@@ -179,6 +177,10 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	 */
 	private Set<String> excludedModifyingKeySet;
 
+	/**
+	 * If true, all value keys are modifying keys, except those excluded with
+	 * {@link #addExcludedModifyingKeys(String...)}.
+	 */
 	private boolean allKeysModify;
 
 	/**
@@ -197,7 +199,10 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	@Getter
 	private boolean modified;
 
-	// The node self modified flag.
+	/**
+	 * The node self-modified flag. This is true if the node itself has been
+	 * modified, as opposed to a child node being modified.
+	 */
 	private boolean selfModified;
 
 	/**
@@ -212,6 +217,11 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	 */
 	private Set<DataNode> modifiedChildren;
 
+	/**
+	 * The comparator used by {@link #compareTo(DataNode)}, or null if not yet
+	 * set. When null, the {@link #getNaturalComparator() natural key comparator}
+	 * is used.
+	 */
 	private Comparator<DataNode> comparator;
 
 	/**
@@ -245,6 +255,10 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		Txn.run( () -> Txn.submit( new SetSelfModifiedOperation( this, selfModified, newValue ) ) );
 	}
 
+	/**
+	 * Set the flag that all value keys are modifying keys. This is used by
+	 * {@link DataNodeSet} to allow all values to modify the set.
+	 */
 	void setAllKeysModify() {
 		this.allKeysModify = true;
 	}
@@ -421,6 +435,8 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	 * only fill in missing values and resources from the specified node.
 	 *
 	 * @param node The node from which to copy values and resources
+	 * @param <T>  The node type
+	 * @return This node
 	 */
 	public <T extends DataNode> T copyFrom( DataNode node ) {
 		return copyFrom( node, false );
@@ -434,6 +450,8 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	 *
 	 * @param node The node from which to copy values and resources
 	 * @param overwrite Should the new values overwrite existing values?
+	 * @param <T>  The node type
+	 * @return This node
 	 */
 	@SuppressWarnings( "unchecked" )
 	public <T extends DataNode> T copyFrom( DataNode node, boolean overwrite ) {
@@ -537,10 +555,28 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		return builder.toString();
 	}
 
+	/**
+	 * Check if this node is equal to the specified object based on the
+	 * specified value keys. Two nodes are equal if they are of the same class
+	 * and have the same values for all the specified keys.
+	 *
+	 * @param object The object to compare with
+	 * @param keys   The value keys to compare
+	 * @return True if the nodes are equal, false otherwise
+	 */
 	public boolean equals( Object object, String... keys ) {
 		return equals( object, Set.of( keys ) );
 	}
 
+	/**
+	 * Check if this node is equal to the specified object based on the
+	 * specified value keys. Two nodes are equal if they are of the same class
+	 * and have the same values for all the specified keys.
+	 *
+	 * @param object The object to compare with
+	 * @param keys   The value keys to compare
+	 * @return True if the nodes are equal, false otherwise
+	 */
 	public boolean equals( Object object, Set<String> keys ) {
 		if( object == null || this.getClass() != object.getClass() ) return false;
 
@@ -597,10 +633,21 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		return DataNodeComparator.of( getNaturalKey() );
 	}
 
+	/**
+	 * Get the list of value keys that specify the primary key.
+	 *
+	 * @return The list of primary key value keys
+	 */
 	protected List<String> getPrimaryKey() {
 		return primaryKeySet == null ? List.of() : Collections.unmodifiableList( primaryKeySet );
 	}
 
+	/**
+	 * Check if the value key is part of the primary key.
+	 *
+	 * @param key The value key
+	 * @return True if the value key is part of the primary key, false otherwise
+	 */
 	protected boolean isPrimaryKey( String key ) {
 		return getPrimaryKey().contains( key );
 	}
@@ -616,12 +663,17 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		hashEqualsKeyList = null;
 	}
 
+	/**
+	 * Get the list of value keys that specify the natural key.
+	 *
+	 * @return The list of natural key value keys
+	 */
 	protected List<String> getNaturalKey() {
 		return naturalKeySet == null ? List.of() : Collections.unmodifiableList( naturalKeySet );
 	}
 
 	/**
-	 * Define the primary key for this type. This method is usually called from
+	 * Define the natural key for this type. This method is usually called from
 	 * the class constructor.
 	 *
 	 * @param keys The value keys to use as the natural key
@@ -631,6 +683,11 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		hashEqualsKeyList = null;
 	}
 
+	/**
+	 * Get the set of value keys that are marked read-only.
+	 *
+	 * @return The set of read-only value keys
+	 */
 	protected Set<String> getReadOnlyKeys() {
 		return readOnlySet == null ? Set.of() : Collections.unmodifiableSet( readOnlySet );
 	}
@@ -655,6 +712,11 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		return getReadOnlyKeys().contains( key );
 	}
 
+	/**
+	 * Get the value keys that are currently modifying keys.
+	 *
+	 * @return The set of modifying value keys
+	 */
 	public Set<String> getModifyingKeys() {
 		return getValueKeys().stream().filter( this::isModifyingKey ).collect( Collectors.toSet() );
 	}
@@ -680,6 +742,13 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		if( includedModifyingKeySet.isEmpty() ) includedModifyingKeySet = null;
 	}
 
+	/**
+	 * Add value keys that are not allowed to change the modified flag if the
+	 * value is changed. Excluded keys take precedence over included modifying
+	 * keys.
+	 *
+	 * @param keys The value keys
+	 */
 	public void addExcludedModifyingKeys( String... keys ) {
 		if( excludedModifyingKeySet == null ) excludedModifyingKeySet = new CopyOnWriteArraySet<>();
 		excludedModifyingKeySet.addAll( Set.of( keys ) );
@@ -760,38 +829,93 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		return (Collection<T>)getValues().stream().filter( clazz::isInstance ).collect( Collectors.toUnmodifiableSet() );
 	}
 
+	/**
+	 * Get the node values stored at the specified key as an unmodifiable set.
+	 *
+	 * @param key The value key
+	 * @param <T> The node type
+	 * @return The set of node values at the key, or an empty set if none
+	 */
 	protected <T extends DataNode> Set<T> getValues( String key ) {
 		return exists( key ) ? Collections.unmodifiableSet( getValue( key ) ) : Set.of();
 	}
 
+	/**
+	 * Get the node values stored at the specified key as a list sorted with
+	 * the specified comparator.
+	 *
+	 * @param key        The value key
+	 * @param comparator The comparator used to sort the values
+	 * @param <T>        The node type
+	 * @return The sorted list of node values at the key, or an empty list if none
+	 */
 	protected <T extends DataNode> List<T> getValueList( String key, Comparator<T> comparator ) {
 		List<T> list = new ArrayList<>( getValues( key ) );
 		list.sort( comparator );
 		return list;
 	}
 
+	/**
+	 * Add a node value to the set of values at the specified key. A new
+	 * {@link DataNodeSet} is created for the key if one does not already exist.
+	 *
+	 * @param key   The value key
+	 * @param value The node value to add
+	 * @param <T>   The node type
+	 */
 	protected <T extends DataNode> void addToSet( String key, T value ) {
 		if( value == null ) return;
 		getValue( key, () -> doSetValue( key, null, new DataNodeSet<>( key ) ) ).add( value );
 	}
 
+	/**
+	 * Remove a node value from the set of values at the specified key. The set
+	 * is removed from the node when it becomes empty.
+	 *
+	 * @param key   The value key
+	 * @param value The node value to remove
+	 * @param <T>   The node type
+	 */
 	protected <T extends DataNode> void removeFromSet( String key, T value ) {
 		DataNodeSet<T> set = getValue( key );
 		if( set == null ) return;
 		if( set.remove( value ) && set.isNodeSetEmpty() ) doSetValue( key, set, null );
 	}
 
+	/**
+	 * Add node values to the set of values at the specified key. A new
+	 * {@link DataNodeSet} is created for the key if one does not already exist.
+	 *
+	 * @param key    The value key
+	 * @param values The node values to add
+	 * @param <T>    The node type
+	 */
 	protected <T extends DataNode> void addToSet( String key, Collection<T> values ) {
 		if( values.isEmpty() ) return;
 		getValue( key, () -> doSetValue( key, null, new DataNodeSet<>( key ) ) ).addAll( values );
 	}
 
+	/**
+	 * Remove node values from the set of values at the specified key. The set
+	 * is removed from the node when it becomes empty.
+	 *
+	 * @param key    The value key
+	 * @param values The node values to remove
+	 * @param <T>    The node type
+	 */
 	protected <T extends DataNode> void removeFromSet( String key, Collection<T> values ) {
 		DataNodeSet<T> set = getValue( key );
 		if( set == null ) return;
 		if( set.removeAll( values ) && set.isNodeSetEmpty() ) doSetValue( key, set, null );
 	}
 
+	/**
+	 * Remove all values from the set of values at the specified key. The set
+	 * is removed from the node.
+	 *
+	 * @param key The value key
+	 * @param <T> The node type
+	 */
 	protected <T extends DataNode> void clearSet( String key ) {
 		DataNodeSet<T> set = getValue( key );
 		if( set == null ) return;
@@ -799,6 +923,13 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		doSetValue( key, set, null );
 	}
 
+	/**
+	 * Set the filter applied when modifying values in the node set at the
+	 * specified key.
+	 *
+	 * @param key    The value key
+	 * @param filter The filter to apply to values, null to allow all values
+	 */
 	protected void setSetModifyFilter( String key, Function<DataNode, Boolean> filter ) {
 		getValue( key, () -> doSetValue( key, null, new DataNodeSet<>( key ) ) ).setSetModifyFilter( filter );
 	}
@@ -837,10 +968,22 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		return setValue( key, function.apply( key, value ) );
 	}
 
+	/**
+	 * Check if a value is set at the specific key.
+	 *
+	 * @param key The value key
+	 * @return True if a value is set at the key, false otherwise
+	 */
 	public boolean isSet( String key ) {
 		return values != null && values.containsKey( key );
 	}
 
+	/**
+	 * Check if a value is not set at the specific key.
+	 *
+	 * @param key The value key
+	 * @return True if a value is not set at the key, false otherwise
+	 */
 	public boolean isNotSet( String key ) {
 		return values == null || !values.containsKey( key );
 	}
@@ -891,11 +1034,24 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	 *
 	 * @param key The value key
 	 * @param newValue The value
+	 * @param <T> The value type
+	 * @return The new value
 	 */
 	public <T> T setValue( String key, T newValue ) {
 		return setValue( null, key, newValue );
 	}
 
+	/**
+	 * Set the value at the specific key with the specified set key. The set key
+	 * identifies the key of the set the value belongs to and is included in
+	 * {@link DataNodeEvent} events fired for the value.
+	 *
+	 * @param setKey   The set key of the value, or null if the value is not in a set
+	 * @param key      The value key
+	 * @param newValue The value
+	 * @param <T>      The value type
+	 * @return The new value
+	 */
 	<T> T setValue( String setKey, String key, T newValue ) {
 		if( key == null ) throw new NullPointerException( "Value key cannot be null" );
 		if( isReadOnlyKey( key ) ) throw new IllegalStateException( "Attempt to set read-only value: " + key );
@@ -905,6 +1061,13 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		return newValue;
 	}
 
+	/**
+	 * Get a map of the values of the specified keys. Keys with null values are
+	 * omitted from the map.
+	 *
+	 * @param keys The value keys
+	 * @return A map of the key values
+	 */
 	protected Map<String, Object> asMap( String... keys ) {
 		return Arrays.stream( keys ).filter( k -> values.get( k ) != null ).collect( Collectors.toMap( k -> k, k -> values.get( k ) ) );
 	}
@@ -916,42 +1079,97 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		Txn.run( () -> getValueKeys().stream().sorted().forEach( k -> setValue( k, null ) ) );
 	}
 
+	/**
+	 * Check if the node has no values.
+	 *
+	 * @return True if the node has no values, false otherwise
+	 */
 	public boolean isEmpty() {
 		return values == null || values.isEmpty();
 	}
 
+	/**
+	 * Get the number of values in the node.
+	 *
+	 * @return The number of values
+	 */
 	public int size() {
 		return values == null ? 0 : values.size();
 	}
 
+	/**
+	 * Check if the node has a value at the specific key.
+	 *
+	 * @param key The value key
+	 * @return True if the node has a value at the key, false otherwise
+	 */
 	protected boolean hasKey( String key ) {
 		return values != null && values.containsKey( key );
 	}
 
+	/**
+	 * Get the collection ID of this node. The collection ID is used to identify
+	 * the node when it is stored as a value in another node.
+	 *
+	 * @return The collection ID
+	 */
 	String getCollectionId() {
 		return collectionId;
 	}
 
+	/**
+	 * Set the collection ID of this node.
+	 *
+	 * @param id The collection ID, cannot be null
+	 */
 	void setCollectionId( String id ) {
 		this.collectionId = Objects.requireNonNull( id );
 	}
 
+	/**
+	 * Check if the node itself is modified, as opposed to being modified by a
+	 * value change or a child node change.
+	 *
+	 * @return True if the node itself is modified, false otherwise
+	 */
 	protected boolean isModifiedBySelf() {
 		return selfModified;
 	}
 
+	/**
+	 * Check if the node is modified by a value change.
+	 *
+	 * @return True if the node is modified by a value change, false otherwise
+	 */
 	protected boolean isModifiedByValue() {
 		return getModifiedValueCount() > 0;
 	}
 
+	/**
+	 * Check if the node is modified by a child node change.
+	 *
+	 * @return True if the node is modified by a child node change, false otherwise
+	 */
 	protected boolean isModifiedByChild() {
 		return getModifiedChildCount() > 0;
 	}
 
+	/**
+	 * Get the number of values modified since the modified flag was last
+	 * cleared.
+	 *
+	 * @return The number of modified values
+	 */
 	protected int getModifiedValueCount() {
 		return modifiedValues == null ? 0 : modifiedValues.size();
 	}
 
+	/**
+	 * Get the number of child nodes modified since the modified flag was last
+	 * cleared.
+	 *
+	 * @return The number of modified child nodes
+	 */
 	protected int getModifiedChildCount() {
 		return modifiedChildren == null ? 0 : modifiedChildren.size();
 	}
@@ -959,7 +1177,11 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 	/**
 	 * Gets the number of parents in the tree between this node and the specified
 	 * node inclusive. If the specified node is this node, then it returns 0. If
-	 * The specified node is not a parent of this node, then it returns -1.
+	 * the specified node is not a parent of this node, then it returns -1.
+	 *
+	 * @param target The target node
+	 * @return The number of parents between this node and the target node, or -1
+	 * if the target node is not a parent of this node
 	 */
 	int distanceTo( DataNode target ) {
 		if( this == target ) return 0;
@@ -987,11 +1209,25 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		return (T)parent;
 	}
 
+	/**
+	 * Get the parent node of this node or null if the node does not have a
+	 * parent. Unlike {@link #getParent()}, this method does not resolve a
+	 * {@link DataNodeSet} parent to its own parent.
+	 *
+	 * @param <T> The parent type
+	 * @return The parent node or null
+	 */
 	@SuppressWarnings( "unchecked" )
 	<T extends DataNode> T getTrueParent() {
 		return (T)parent;
 	}
 
+	/**
+	 * Set the parent node of this node. This method does not fire events and is
+	 * only intended for use by the {@link DataNode} class and its subclasses.
+	 *
+	 * @param parent The new parent node
+	 */
 	@SuppressWarnings( "StatementWithEmptyBody" )
 	void doSetParent( DataNode parent ) {
 		checkForCircularReference( parent );
@@ -1008,10 +1244,23 @@ public class DataNode implements TxnEventTarget, Cloneable, Comparable<DataNode>
 		}
 	}
 
+	/**
+	 * Get the path of nodes from the root of the tree to this node, inclusive.
+	 *
+	 * @return The node path
+	 */
 	List<DataNode> getNodePath() {
 		return getNodePath( null );
 	}
 
+	/**
+	 * Get the path of nodes from the specified stop node to this node,
+	 * inclusive. If the stop node is null, the path starts at the root of the
+	 * tree.
+	 *
+	 * @param stop The node at which the path starts, or null to start at the root
+	 * @return The node path
+	 */
 	@SuppressWarnings( "SameParameterValue" )
 	List<DataNode> getNodePath( DataNode stop ) {
 		List<DataNode> path = new ArrayList<>();
