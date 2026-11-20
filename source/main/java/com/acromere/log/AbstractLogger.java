@@ -20,75 +20,140 @@ public abstract class AbstractLogger<API extends LogApi<API>> {
 
 	private final LoggerWrapper provider;
 
+	/**
+	 * Creates an abstract logger backed by the given provider.
+	 *
+	 * @param provider the logger wrapper providing the logging backend
+	 */
 	protected AbstractLogger( LoggerWrapper provider ) {
 		this.provider = Objects.requireNonNull( provider );
 	}
 
+	/**
+	 * Creates a logging context for the given log level.
+	 *
+	 * @param level the log level for the log statement
+	 * @return the fluent API for building the log statement, or a no-op API if the level is not loggable
+	 */
 	public abstract API at( Level level );
 
 	// Java Logging convenience methods ------------------------------------------
 
-	/** A convenience method for at({@link Level#SEVERE}). */
+	/**
+	 * A convenience method for at({@link Level#SEVERE}).
+	 *
+	 * @return the fluent API for the log statement
+	 */
 	public final API atSevere() {
 		return at( Level.SEVERE );
 	}
 
-	/** A convenience method for at({@link Level#SEVERE}). */
+	/**
+	 * A convenience method for at({@link Level#SEVERE}).
+	 *
+	 * @return the fluent API for the log statement
+	 */
 	public final API atError() {
 		return at( Level.SEVERE );
 	}
 
-	/** A convenience method for at({@link Level#SEVERE}). */
+	/**
+	 * A convenience method for at({@link Level#SEVERE}).
+	 *
+	 * @param cause the exception to associate with the log statement
+	 * @return the fluent API for the log statement
+	 */
 	public final API atError( Throwable cause ) {
 		return at( Level.SEVERE ).withCause( cause );
 	}
 
-	/** A convenience method for at({@link Level#WARNING}). */
+	/**
+	 * A convenience method for at({@link Level#WARNING}).
+	 *
+	 * @return the fluent API for the log statement
+	 */
 	public final API atWarning() {
 		return at( Level.WARNING );
 	}
 
-	/** A convenience method for at({@link Level#WARNING}). */
+	/**
+	 * A convenience method for at({@link Level#WARNING}).
+	 *
+	 * @return the fluent API for the log statement
+	 */
 	public final API atWarn() {
 		return at( Level.WARNING );
 	}
 
-	/** A convenience method for at({@link Level#WARNING}). */
+	/**
+	 * A convenience method for at({@link Level#WARNING}).
+	 *
+	 * @param cause the exception to associate with the log statement
+	 * @return the fluent API for the log statement
+	 */
 	public final API atWarn( Throwable cause ) {
 		return at( Level.WARNING ).withCause( cause );
 	}
 
-	/** A convenience method for at({@link Level#INFO}). */
+	/**
+	 * A convenience method for at({@link Level#INFO}).
+	 *
+	 * @return the fluent API for the log statement
+	 */
 	public final API atInfo() {
 		return at( Level.INFO );
 	}
 
-	/** A convenience method for at({@link Level#CONFIG}). */
+	/**
+	 * A convenience method for at({@link Level#CONFIG}).
+	 *
+	 * @return the fluent API for the log statement
+	 */
 	public final API atConfig() {
 		return at( Level.CONFIG );
 	}
 
-	/** A convenience method for at({@link Level#FINE}). */
+	/**
+	 * A convenience method for at({@link Level#FINE}).
+	 *
+	 * @return the fluent API for the log statement
+	 */
 	public final API atFine() {
 		return at( Level.FINE );
 	}
 
-	/** A convenience method for at({@link Level#FINE}). */
+	/**
+	 * A convenience method for at({@link Level#FINE}).
+	 *
+	 * @return the fluent API for the log statement
+	 */
 	public final API atDebug() {
 		return at( Level.FINE );
 	}
 
-	/** A convenience method for at({@link Level#FINER}). */
+	/**
+	 * A convenience method for at({@link Level#FINER}).
+	 *
+	 * @return the fluent API for the log statement
+	 */
 	public final API atFiner() {
 		return at( Level.FINER );
 	}
 
-	/** A convenience method for at({@link Level#FINER}). */
+	/**
+	 * A convenience method for at({@link Level#FINER}).
+	 *
+	 * @return the fluent API for the log statement
+	 */
 	public final API atTrace() {
 		return at( Level.FINER );
 	}
 
-	/** A convenience method for at({@link Level#FINEST}). */
+	/**
+	 * A convenience method for at({@link Level#FINEST}).
+	 *
+	 * @return the fluent API for the log statement
+	 */
 	@SuppressWarnings( "unused" )
 	public final API atFinest() {
 		return at( Level.FINEST );
@@ -103,6 +168,8 @@ public abstract class AbstractLogger<API extends LogApi<API>> {
 
 	/**
 	 * Returns the name of this logger.
+	 *
+	 * @return the logger name
 	 */
 	protected String getName() {
 		return provider.getLoggerName();
@@ -110,7 +177,10 @@ public abstract class AbstractLogger<API extends LogApi<API>> {
 
 	/**
 	 * Returns whether the given level is enabled for this logger. Users wishing to guard code with a
-	 * check for "loggability" should use {@code logger.atLevel().isEnabled()} instead.
+	 * check for "loggability" should use {@code logger.at(level).isEnabled()} instead.
+	 *
+	 * @param level the log level to check
+	 * @return {@code true} if the level is enabled for this logger
 	 */
 	protected final boolean isLoggable( Level level ) {
 		return provider.isLoggable( level );

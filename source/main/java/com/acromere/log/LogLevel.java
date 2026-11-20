@@ -59,10 +59,23 @@ public class LogLevel extends Level {
 	 */
 	public static final LogLevel ALL = new LogLevel( "ALL", Level.ALL.intValue() );
 
+	/**
+	 * Creates a log level with the given name and value.
+	 *
+	 * @param name  the level name
+	 * @param value the level value
+	 */
 	protected LogLevel( String name, int value ) {
 		super( name, value );
 	}
 
+	/**
+	 * Creates a log level with the given name, value, and resource bundle.
+	 *
+	 * @param name               the level name
+	 * @param value              the level value
+	 * @param resourceBundleName the resource bundle name, or {@code null}
+	 */
 	protected LogLevel( String name, int value, String resourceBundleName ) {
 		super( name, value, resourceBundleName );
 	}
