@@ -25,6 +25,11 @@ public class JavaLoggingLoggerWrapper implements LoggerWrapper {
 	 */
 	private final Logger logger;
 
+	/**
+	 * Creates a logger wrapper around the given Java logger.
+	 *
+	 * @param logger the Java logger to wrap
+	 */
 	public JavaLoggingLoggerWrapper( java.util.logging.Logger logger ) {
 		this.logger = logger;
 	}

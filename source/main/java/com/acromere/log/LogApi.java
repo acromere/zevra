@@ -46,11 +46,15 @@ public interface LogApi<API extends LogApi<API>> {
 
 	/**
 	 * Returns whether this log statement is enabled and will be emitted.
+	 *
+	 * @return {@code true} if the log statement is enabled and will be emitted
 	 */
 	boolean isEnabled();
 
 	/**
 	 * Returns whether this log statement has a literal message (no formatting).
+	 *
+	 * @return {@code true} if the log statement has a literal message
 	 */
 	boolean isLiteral();
 

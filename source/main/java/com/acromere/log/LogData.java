@@ -29,14 +29,22 @@ public interface LogData {
 
 	/**
 	 * Returns the log level for this log statement.
+	 *
+	 * @return the log level for this log statement
 	 */
 	Level getLevel();
 
-	/** Returns a nanosecond timestamp for the current log statement. */
+	/**
+	 * Returns a nanosecond timestamp for the current log statement.
+	 *
+	 * @return a nanosecond timestamp for the current log statement
+	 */
 	long getTimestampNanos();
 
 	/**
 	 * Returns the logger name or {@code null} if not given.
+	 *
+	 * @return the logger name, or {@code null} if not given
 	 */
 	String getLoggerName();
 
@@ -44,7 +52,8 @@ public interface LogData {
 	 * Returns whether this log statement should be emitted regardless of its log level or any other
 	 * properties.
 	 * <p>
-	 * This allows extensions of {@code LogContext} or {@code LoggingBackend} which implement
+	 * This allows extensions of {@code LogContext} or
+	 * {@link com.acromere.log.provider.LoggerWrapper LoggerWrapper} which implement
 	 * additional filtering or rate-limiting fluent methods to easily check whether a log statement
 	 * was forced. Forced log statements should behave exactly as if none of the filtering or
 	 * rate-limiting occurred, including argument validity checks.
@@ -65,6 +74,8 @@ public interface LogData {
 	 * Checking for forced log statements before checking the validity of arguments provides a
 	 * last-resort means to mitigate cases in which syntactically incorrect log statements are only
 	 * discovered when they are enabled.
+	 *
+	 * @return {@code true} if this log statement was forced
 	 */
 	boolean wasForced();
 
@@ -79,6 +90,8 @@ public interface LogData {
 	 * Returns the message template or literal message for this log statement.
 	 * If the statement was logged with format arguments, this returns the template
 	 * containing format specifiers. Otherwise, it returns the literal message.
+	 *
+	 * @return the message template or literal message for this log statement
 	 */
 	String getMessage();
 
@@ -86,6 +99,7 @@ public interface LogData {
 	 * Returns the arguments to be formatted with the message. Arguments exist when a {@code log()}
 	 * method with a format message and separate arguments was invoked.
 	 *
+	 * @return the arguments to be formatted with the message
 	 * @throws IllegalStateException if no arguments are available (ie, when there is no template
 	 * context).
 	 */
@@ -94,6 +108,8 @@ public interface LogData {
 	/**
 	 * Returns any additional metadata for this log statement. If no additional metadata is present,
 	 * the immutable empty metadata instance is returned.
+	 *
+	 * @return the additional metadata, or the immutable empty map if none is present
 	 */
 	Map<Object, Object> getMetadata();
 

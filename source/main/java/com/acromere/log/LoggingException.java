@@ -6,7 +6,7 @@ package com.acromere.log;
  * <p>
  * This exception is primarily used when a logger provider chooses to
  * propagate an error rather than handle it silently. See
- * {@link com.acromere.log.provider.LoggerWrapper#handleError(LoggerWrapper, RuntimeException) handleError}
+ * {@link com.acromere.log.provider.LoggerWrapper#handleError(LogData, RuntimeException) handleError}
  * for details on when this is appropriate.
  */
 public class LoggingException extends RuntimeException {
