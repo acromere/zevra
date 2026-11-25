@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A POJO that represents a person that contributes to a cause.
+ * A POJO that represents a person that contributes to a product.
+ *
+ * @see Maintainer
+ * @see ProductCard
  */
 @Setter
 @Getter
