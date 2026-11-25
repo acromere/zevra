@@ -10,6 +10,12 @@ import com.acromere.log.provider.LoggerWrapper;
  */
 public class JavaLoggingProvider extends AbstractLoggingProvider {
 
+	/**
+	 * Creates a logger wrapper for the given logger name.
+	 *
+	 * @param name the logger name
+	 * @return a new {@link JavaLoggingLoggerWrapper} wrapping the Java logger with the given name
+	 */
 	@Override
 	public LoggerWrapper getLoggerWrapper( String name ) {
 		return new JavaLoggingLoggerWrapper( java.util.logging.Logger.getLogger( name ) );
