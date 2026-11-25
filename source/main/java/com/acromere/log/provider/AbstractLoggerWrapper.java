@@ -11,11 +11,17 @@ import java.util.logging.Level;
  */
 public abstract class AbstractLoggerWrapper implements LoggerWrapper {
 
+	/**
+	 * Returns {@code null} as the default logger name.
+	 */
 	@Override
 	public String getLoggerName() {
 		return null;
 	}
 
+	/**
+	 * Returns {@code false} by default, indicating that logging is disabled.
+	 */
 	@Override
 	public boolean isLoggable( Level level ) {
 		return false;

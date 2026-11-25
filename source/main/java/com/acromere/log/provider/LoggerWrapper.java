@@ -5,15 +5,27 @@ import com.acromere.log.LoggingException;
 
 import java.util.logging.Level;
 
+/**
+ * Interface for a logger backed by a specific logging implementation.
+ * <p>
+ * A logger wrapper provides a common API for logging statements across
+ * different logging backends. Wrappers are created by a {@link LoggingProvider}
+ * and used by the Zevra logging system to output log data.
+ */
 public interface LoggerWrapper {
 
 	/**
 	 * Get the logger name or {@code null} if not given.
+	 *
+	 * @return the logger name, or {@code null} if not given
 	 */
 	String getLoggerName();
 
 	/**
 	 * Returns whether logging is enabled for the given level for this provider.
+	 *
+	 * @param level the log level to check
+	 * @return {@code true} if logging is enabled for the given level
 	 */
 	boolean isLoggable( Level level );
 
@@ -48,10 +60,10 @@ public interface LoggerWrapper {
 	 * testing or debugging) it must wrap it in {@link LoggingException} to avoid
 	 * it being re-caught.
 	 *
-	 * @param error the exception throw when {@code badData} was initially logged.
+	 * @param error the exception thrown when {@code data} was initially logged.
 	 * @param data the original {@code LogData} instance which caused an error. It is not expected
 	 * that simply trying to log this again will succeed and error handlers must be careful in
-	 * how they handle this instance, it's arguments and metadata.
+	 * how they handle this instance, its arguments and metadata.
 	 * @throws LoggingException to indicate an error which should be propagated into user code.
 	 */
 	void handleError( LogData data, RuntimeException error );
