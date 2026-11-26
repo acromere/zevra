@@ -16,6 +16,8 @@ public class Logging {
 
 	/**
 	 * Returns the current {@link LoggingProvider} instance.
+	 *
+	 * @return the current logging provider
 	 */
 	public static LoggingProvider getLoggingProvider() {
 		return provider;

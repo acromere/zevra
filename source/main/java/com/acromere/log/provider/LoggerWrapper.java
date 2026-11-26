@@ -8,9 +8,16 @@ import java.util.logging.Level;
 /**
  * Interface for a logger backed by a specific logging implementation.
  * <p>
- * A logger wrapper provides a common API for logging statements across
- * different logging backends. Wrappers are created by a {@link LoggingProvider}
- * and used by the Zevra logging system to output log data.
+ * A logger wrapper adapts the Zevra logging API to an underlying logging
+ * framework. It renders {@link LogData} instances into the underlying
+ * framework's log records, reports whether a log level is enabled, and
+ * handles errors that occur during logging.
+ * <p>
+ * Wrapper instances are created by {@link LoggingProvider} implementations
+ * and used by {@link com.acromere.log.AbstractLogger} subclasses.
+ *
+ * @see LoggingProvider
+ * @see AbstractLoggerWrapper
  */
 public interface LoggerWrapper {
 
