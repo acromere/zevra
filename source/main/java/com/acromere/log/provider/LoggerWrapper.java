@@ -67,10 +67,10 @@ public interface LoggerWrapper {
 	 * testing or debugging) it must wrap it in {@link LoggingException} to avoid
 	 * it being re-caught.
 	 *
-	 * @param error the exception throw when {@code badData} was initially logged.
+	 * @param error the exception thrown when {@code data} was initially logged.
 	 * @param data the original {@code LogData} instance which caused an error. It is not expected
 	 * that simply trying to log this again will succeed and error handlers must be careful in
-	 * how they handle this instance, it's arguments and metadata.
+	 * how they handle this instance, its arguments and metadata.
 	 * @throws LoggingException to indicate an error which should be propagated into user code.
 	 */
 	void handleError( LogData data, RuntimeException error );
