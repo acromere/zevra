@@ -5,15 +5,34 @@ import com.acromere.log.LoggingException;
 
 import java.util.logging.Level;
 
+/**
+ * Interface for a logger backed by a specific logging implementation.
+ * <p>
+ * A logger wrapper adapts the Zevra logging API to an underlying logging
+ * framework. It renders {@link LogData} instances into the underlying
+ * framework's log records, reports whether a log level is enabled, and
+ * handles errors that occur during logging.
+ * <p>
+ * Wrapper instances are created by {@link LoggingProvider} implementations
+ * and used by {@link com.acromere.log.AbstractLogger} subclasses.
+ *
+ * @see LoggingProvider
+ * @see AbstractLoggerWrapper
+ */
 public interface LoggerWrapper {
 
 	/**
 	 * Get the logger name or {@code null} if not given.
+	 *
+	 * @return the logger name, or {@code null} if not given
 	 */
 	String getLoggerName();
 
 	/**
 	 * Returns whether logging is enabled for the given level for this provider.
+	 *
+	 * @param level the log level to check
+	 * @return {@code true} if logging is enabled for the given level
 	 */
 	boolean isLoggable( Level level );
 

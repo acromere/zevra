@@ -38,6 +38,12 @@ public final class Logger extends AbstractLogger<Logger.Api> {
 		return (isLoggable || isForced) ? new Context( level, isForced ) : NO_OP;
 	}
 
+	/**
+	 * The fluent API type for this logger.
+	 * <p>
+	 * Extends {@link LogApi} with no additional methods; it serves as the
+	 * concrete type for fluent method chaining.
+	 */
 	public interface Api extends LogApi<Api> {}
 
 	private static final class NoOp extends LogApi.NoOp<Api> implements Api {}

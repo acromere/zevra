@@ -108,10 +108,20 @@ public abstract class LogContext<LOGGER extends AbstractLogger<API>, API extends
 		return metadata != null && Boolean.TRUE.equals( metadata.get( LogData.FORCED ) );
 	}
 
+	/**
+	 * Returns the arguments to be formatted with the message.
+	 *
+	 * @return the message parameters, or an empty array if none are present
+	 */
 	public Object[] getMessageParameters() {
 		return messageParameters == null ? new Object[ 0 ] : messageParameters;
 	}
 
+	/**
+	 * Returns any additional metadata for this log statement.
+	 *
+	 * @return the metadata, or the immutable empty map if none is present
+	 */
 	public Map<Object, Object> getMetadata() {
 		return metadata == null ? Map.of() : metadata;
 	}
