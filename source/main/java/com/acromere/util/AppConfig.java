@@ -192,8 +192,8 @@ public class AppConfig {
 	 *
 	 * @return This configuration
 	 * @throws FileNotFoundException If the configuration file does not exist
-	 * @throws IOException If the configuration file does not exist as a
-	 *                     readable regular file
+	 * @throws IOException If the configuration file is not a readable regular
+	 *                     file
 	 */
 	public AppConfig load() throws IOException {
 		if( !Files.exists( path ) ) throw new FileNotFoundException( "Application configuration file does not exist: " + path );

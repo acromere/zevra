@@ -65,7 +65,7 @@ public class IoUtil {
 	 * @param progressCallback The callback to report the number of bytes copied to, or null
 	 * @return The number of bytes copied
 	 * @throws IOException If an I/O error occurs
-	 * @see #copy( InputStream, OutputStream, byte[], LongConsumer )
+	 * @see #copy( InputStream, OutputStream, int, LongConsumer )
 	 */
 	public static long copy( InputStream input, OutputStream output, LongConsumer progressCallback ) throws IOException {
 		return copy( input, output, DEFAULT_BUFFER_SIZE, progressCallback );
@@ -147,7 +147,7 @@ public class IoUtil {
 	 * @param writer The writer to copy to
 	 * @return The number of characters copied
 	 * @throws IOException If an I/O error occurs
-	 * @see #copy( Reader, Writer, char[], LongConsumer )
+	 * @see #copy( Reader, Writer, int )
 	 */
 	public static long copy( Reader reader, Writer writer ) throws IOException {
 		return copy( reader, writer, new char[ DEFAULT_BUFFER_SIZE ] );

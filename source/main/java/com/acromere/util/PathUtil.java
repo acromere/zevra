@@ -69,7 +69,7 @@ public class PathUtil {
 	 * Get the name (last element) in the path.
 	 *
 	 * @param path The path
-	 * @return The name
+	 * @return The name, or null if the path is null
 	 */
 	public static String getName( String path ) {
 		if( path == null ) return null;
@@ -97,7 +97,7 @@ public class PathUtil {
 	 *
 	 * @param root The root path to start with
 	 * @param path The path to resolve against the root
-	 * @return The new resolved path
+	 * @return The new resolved path, or null if either root or path is null
 	 */
 	public static String resolve( String root, String path ) {
 		if( root == null || path == null ) return null;
@@ -134,7 +134,8 @@ public class PathUtil {
 	 * references, and cleaning trailing separators.
 	 *
 	 * @param path The path to normalize
-	 * @return The normalized path, or null if the input is null
+	 * @return The normalized path, or null if the input is null or the path
+	 * resolves above the root path
 	 */
 	public static String normalize( String path ) {
 		if( path == null ) return null;
@@ -221,7 +222,8 @@ public class PathUtil {
 	 * Split a given path into an array of individual names.
 	 *
 	 * @param path The path to split
-	 * @return An array of individual names in the path
+	 * @return An array of individual names in the path, or null if the path is
+	 * null
 	 */
 	public static String[] split( String path ) {
 		return parseNames( path );
@@ -310,11 +312,11 @@ public class PathUtil {
 	}
 
 	/**
-	 * Normalize a given path by removing redundant separators, resolving parent
-	 * references, and cleaning trailing separators.
+	 * Resolve the parent references in a given path.
 	 *
-	 * @param path The path to normalize
-	 * @return The normalized path, or null if the input is null
+	 * @param path The path to resolve parent references in
+	 * @return The path with the parent references resolved, or null if the
+	 * input is null or the path resolves above the root path
 	 */
 	private static String normalizeParents( String path ) {
 		if( path == null ) return null;

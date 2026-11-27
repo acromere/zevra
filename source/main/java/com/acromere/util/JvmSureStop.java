@@ -10,7 +10,7 @@ import java.util.Map;
  * given a specific amount of time. There are times when misbehaving threads
  * cause the program not to exit cleanly. This hook waits for the program to
  * terminate for a specific amount of time. Once that time expires, this hook
- * prints the list of running non-daemon threads and forces the program to stop
+ * logs the list of running non-daemon threads and forces the program to stop
  * by calling Runtime.halt(). Unfortunately, this also causes other shutdown
  * hooks to not execute if they have not started.
  *

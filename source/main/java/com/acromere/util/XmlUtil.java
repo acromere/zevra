@@ -93,7 +93,9 @@ public class XmlUtil {
 	 *
 	 * @param node The DOM node to query
 	 * @param path The XPath path expression
-	 * @return The first DOM node that matches the path expression
+	 * @return The first DOM node that matches the path expression, or null if
+	 * the node is null, the path is empty, or the path expression cannot be
+	 * evaluated (the error is logged)
 	 */
 	public static Node query( Node node, String path ) {
 		if( node == null || TextUtil.isEmpty( path ) ) return null;
@@ -217,7 +219,8 @@ public class XmlUtil {
 	 * is generated as forward slash separated strings. Example: /root/node/leaf
 	 *
 	 * @param node The DOM node for which to get the path
-	 * @return The path of the DOM node
+	 * @return The path of the DOM node, the empty string if the node is a
+	 * document node, or null if the node is null
 	 */
 	public static String getPath( Node node ) {
 		if( node == null ) return null;

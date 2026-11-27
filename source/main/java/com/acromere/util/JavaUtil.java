@@ -406,7 +406,7 @@ public final class JavaUtil {
 	}
 
 	/**
-	 * Logs the class loader of the given object at the FINEST level. If the
+	 * Logs the class loader of the given object at the FINER level. If the
 	 * object is a {@link Class}, its class loader is used; otherwise the
 	 * class loader of the object's class is used.
 	 *

@@ -158,8 +158,17 @@ public class ProcessCommands {
 	/**
 	 * Generates the command line representation for a specific module.
 	 *
-	 * @param javaLauncherPath The path to the Java launcher executable.
-	 * @param modulePath The path to the module.
+	 * <p>The command line consists of the launcher path (or the current
+	 * Java launcher path if <code>javaLauncherPath</code> is null), the
+	 * current JVM's VM arguments (excluding the <code>exit</code>,
+	 * <code>abort</code>, <code>--module-path</code>, and
+	 * <code>-Djdk.module.main</code> arguments), the module path if one is
+	 * given, and the main module and class in
+	 * <code>module/class</code> form.</p>
+	 *
+	 * @param javaLauncherPath The path to the Java launcher executable, or
+	 *                         null to use the current Java launcher path
+	 * @param modulePath The path to the module, or null to omit it
 	 * @param mainModule The main module.
 	 * @param mainClass The main class.
 	 * @return The command line represented as a list of strings.

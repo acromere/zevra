@@ -79,7 +79,8 @@ public class HashUtil {
 	 * Computes the hash of a file using the default hash strategy.
 	 *
 	 * @param path The path of the file to hash
-	 * @return The hex-encoded hash
+	 * @return The hex-encoded hash, or {@code null} if the file does not
+	 * exist, is not a regular file, or cannot be read
 	 */
 	public static String hash( Path path ) {
 		return hash( path.toFile(), DEFAULT_STRATEGY );
@@ -90,7 +91,8 @@ public class HashUtil {
 	 *
 	 * @param path The path of the file to hash
 	 * @param strategy The hash strategy to use
-	 * @return The hex-encoded hash
+	 * @return The hex-encoded hash, or {@code null} if the file does not
+	 * exist, is not a regular file, or cannot be read
 	 */
 	public static String hash( Path path, HashStrategy strategy ) {
 		return hash( path.toFile(), strategy );
@@ -100,7 +102,8 @@ public class HashUtil {
 	 * Computes the hash of a file using the default hash strategy.
 	 *
 	 * @param file The file to hash
-	 * @return The hex-encoded hash
+	 * @return The hex-encoded hash, or {@code null} if the file does not
+	 * exist, is not a regular file, or cannot be read
 	 */
 	public static String hash( File file ) {
 		return hash( file, DEFAULT_STRATEGY );
@@ -129,7 +132,8 @@ public class HashUtil {
 	 * Computes the hash of an input stream using the default hash strategy.
 	 *
 	 * @param input The stream to hash
-	 * @return The hex-encoded hash
+	 * @return The hex-encoded hash, or {@code null} if the stream is
+	 * {@code null} or an I/O error occurs
 	 */
 	public static String hash( InputStream input ) {
 		return hash( input, DEFAULT_STRATEGY );
@@ -143,6 +147,7 @@ public class HashUtil {
 	 * @param input The stream to hash
 	 * @param strategy The hash strategy to use
 	 * @return The hex-encoded hash, or {@code null} if the stream is {@code null}
+	 * or an I/O error occurs while reading it
 	 */
 	public static String hash( InputStream input, HashStrategy strategy ) {
 		if( input == null ) return null;
@@ -181,6 +186,8 @@ public class HashUtil {
 	 * input stream in 4096-byte chunks and feeds it to the underlying digest.
 	 *
 	 * @param digest The underlying message digest wrapper
+	 * @return The hex-encoded hash of the input stream, or {@code null} if the
+	 * stream is {@code null} or an I/O error occurs while reading it
 	 */
 	private record DigestStrategy(DigestWrapper digest) implements HashStrategy {
 
@@ -217,6 +224,7 @@ public class HashUtil {
 		 * Creates a wrapper for the given digest algorithm.
 		 *
 		 * @param algorithm The name of the digest algorithm, e.g. {@code "SHA-256"}
+		 * @throws NullPointerException If the algorithm is {@code null}
 		 */
 		public MessageDigestWrapper( String algorithm ) {
 			MessageDigest digest = null;

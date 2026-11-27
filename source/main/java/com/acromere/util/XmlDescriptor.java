@@ -66,9 +66,10 @@ public class XmlDescriptor {
 	public XmlDescriptor() {}
 
 	/**
-	 * Load an XML descriptor from a URI.
+	 * Load an XML descriptor from a URI. If the URI is null, the
+	 * descriptor is created empty.
 	 *
-	 * @param uri The URI of the XML content
+	 * @param uri The URI of the XML content, or null
 	 * @throws IOException If an I/O error occurs
 	 */
 	public XmlDescriptor( URI uri ) throws IOException {
@@ -81,9 +82,10 @@ public class XmlDescriptor {
 	}
 
 	/**
-	 * Load an XML descriptor from a URL.
+	 * Load an XML descriptor from a URL. If the URL is null, the
+	 * descriptor is created empty.
 	 *
-	 * @param url The URL of the XML content
+	 * @param url The URL of the XML content, or null
 	 * @throws IOException If an I/O error occurs
 	 */
 	public XmlDescriptor( URL url ) throws IOException {
@@ -96,9 +98,10 @@ public class XmlDescriptor {
 	}
 
 	/**
-	 * Load an XML descriptor from a Reader.
+	 * Load an XML descriptor from a Reader. If the Reader is null, the
+	 * descriptor is created empty.
 	 *
-	 * @param reader The Reader from which to load the XML content
+	 * @param reader The Reader from which to load the XML content, or null
 	 * @throws IOException If an I/O error occurs
 	 */
 	public XmlDescriptor( Reader reader ) throws IOException {
@@ -129,7 +132,7 @@ public class XmlDescriptor {
 	/**
 	 * Create a descriptor from an existing XML node, which includes XML documents.
 	 *
-	 * @param node The XML node to use as the root of the descriptor
+	 * @param node The XML node to use as the root of the descriptor, or null
 	 */
 	public XmlDescriptor( Node node ) {
 		if( node == null ) return;
@@ -137,11 +140,12 @@ public class XmlDescriptor {
 	}
 
 	/**
-	 * Using the specified node as the root, return the node at the give path.
+	 * Using the specified node as the root, return the node at the given path.
 	 *
 	 * @param node The node to use as the root node
 	 * @param path The node path
-	 * @return The node at the specified path
+	 * @return The node at the specified path, or null if the node or path is
+	 * null, the path is empty, or the path does not match a node
 	 */
 	public static Node getNode( Node node, String path ) {
 		if( node == null || TextUtil.isEmpty( path ) ) return null;
@@ -158,11 +162,12 @@ public class XmlDescriptor {
 	}
 
 	/**
-	 * Using the specified node as the root, return the nodes at the give path.
+	 * Using the specified node as the root, return the nodes at the given path.
 	 *
 	 * @param node The node to use as the root node
 	 * @param path The node path
-	 * @return The nodes at the specified path
+	 * @return The nodes at the specified path, or null if the node or path is
+	 * null or the path is empty
 	 */
 	public static Node[] getNodes( Node node, String path ) {
 		NodeList nodes = getNodeList( node, path );
@@ -239,7 +244,8 @@ public class XmlDescriptor {
 	 *
 	 * @param node The node from which to get values
 	 * @param path The xpath of the values
-	 * @return An array of values with the same path.
+	 * @return An array of values with the same path, or null if the node or
+	 * path is null or the path is empty
 	 */
 	public static String[] getValues( Node node, String path ) {
 		NodeList nodes = getNodeList( node, path );
@@ -265,7 +271,8 @@ public class XmlDescriptor {
 	 *
 	 * @param node The node
 	 * @param name The attribute name
-	 * @return The attribute value
+	 * @return The attribute value, or null if the node has no attribute with
+	 * the name
 	 */
 	public static String getAttribute( Node node, String name ) {
 		Node attribute = node.getAttributes().getNamedItem( name );
@@ -276,6 +283,8 @@ public class XmlDescriptor {
 	 * Get the parent XML document of this descriptor if this descriptor was
 	 * created from a node. If the descriptor node is the parent document, then it
 	 * is returned.
+	 *
+	 * @return The parent XML document of this descriptor's node
 	 */
 	public Document getDocument() {
 		return (node instanceof Document) ? (Document)node : node.getOwnerDocument();
@@ -283,7 +292,7 @@ public class XmlDescriptor {
 
 	/**
 	 * Get the attribute names for the node at the specified path. For example,
-	 * give the following XML document:
+	 * given the following XML document:
 	 * <pre>
 	 * &lt;config&gt;
 	 *   &lt;threads min=&quot;2&quot; max=&quot;8&quot;/&gt;
@@ -305,7 +314,7 @@ public class XmlDescriptor {
 
 	/**
 	 * Get the unique names of child nodes of the node at the specified path. For
-	 * example, give the XML document:
+	 * example, given the XML document:
 	 * <pre>
 	 * &lt;config&gt;
 	 *   &lt;threads&gt;
@@ -353,7 +362,7 @@ public class XmlDescriptor {
 	 * Get the first XML child node with the specified path in this descriptor.
 	 *
 	 * @param path The path of the child node
-	 * @return The XML child node
+	 * @return The XML child node, or null if the path does not match a node
 	 */
 	public Node getNode( String path ) {
 		return getNode( this.node, path );
