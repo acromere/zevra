@@ -34,6 +34,7 @@ public class TxnEvent extends Event {
 	 * that is creating it.
 	 *
 	 * @param source The event source/target
+	 * @param type   The event type
 	 */
 	public TxnEvent( TxnEventTarget source, EventType<? extends TxnEvent> type ) {
 		super( source, type );
