@@ -26,6 +26,9 @@ public abstract class BaseCard {
 	 */
 	private String internalId;
 
+	/**
+	 * Create a card and assign it a unique internal id.
+	 */
 	protected BaseCard() {
 		this.internalId = IdGenerator.getId();
 	}

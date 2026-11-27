@@ -24,15 +24,14 @@ import java.util.*;
  * This class represents the product information. The product information
  * includes group, name, version, etc.
  * <p>
- * Product information is stored
- * in two files, one that loads quickly (properties file), but does not support
- * hierarchical data, and one that supports hierarchical data (JSON file), but
- * loads much more slowly.
+ * Product information is stored in a JSON file, typically in a
+ * {@code META-INF/product.card} resource on the classpath. For a rebranded
+ * program packaged with jpackage, the information is loaded from a
+ * {@code lib/app/rebrand.card} file at the program home instead.
  * </p>
- * <p>
- * This class must load the product "info" very quickly. The full product "card"
- * can load more slowly.
- * </p>
+ *
+ * @see BaseCard
+ * @see Release
  */
 @Getter
 @Setter

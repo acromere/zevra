@@ -18,6 +18,8 @@
  *   <li>{@link com.acromere.product.ProductCard ProductCard} - The metadata
  *       descriptor for a product, including identity, version, maintainers,
  *       and configuration</li>
+ *   <li>{@link com.acromere.product.BaseCard BaseCard} - The base class for
+ *       all card types, which assigns each card a unique internal id</li>
  *   <li>{@link com.acromere.product.RepoCard RepoCard} /
  *       {@link com.acromere.product.CatalogCard CatalogCard} - Descriptors for
  *       product repositories and repository catalogs</li>

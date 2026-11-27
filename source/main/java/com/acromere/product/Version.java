@@ -9,33 +9,60 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * The Version class represents a version of an item using a delimited set of
- * numbers and letters. The version class can represent version patterns such as
+ * A delimited set of numbers and letters that represents the version of an
+ * item.
+ *
+ * <p>A version can represent version patterns such as
  * <a href="https://semver.org/">Semver</a> but is not restricted to those
- * patterns. Practically any string can be a version.
- * <p/>
- * The most important functionality of a version is the ability to compare two
- * versions. This class provides methods for creating, parsing and comparing
- * versions.
+ * patterns. Practically any string can be a version. The most important
+ * functionality of a version is the ability to compare two versions, and this
+ * class provides methods for creating, parsing, and comparing versions.</p>
+ *
+ * @see Release
  */
 @JsonInclude( JsonInclude.Include.NON_NULL )
 @JsonIgnoreProperties( ignoreUnknown = true )
 public class Version implements Comparable<Version> {
 
+	/**
+	 * The value of a version that is unknown.
+	 */
 	private static final String UNKNOWN = "unknown";
 
+	/**
+	 * The snapshot qualifier.
+	 */
 	private static final String SNAPSHOT = "snapshot";
 
+	/**
+	 * The milestone qualifier.
+	 */
 	private static final String MILESTONE = "milestone";
 
+	/**
+	 * The alpha qualifier.
+	 */
 	private static final String ALPHA = "alpha";
 
+	/**
+	 * The beta qualifier.
+	 */
 	private static final String BETA = "beta";
 
+	/**
+	 * The patch qualifier.
+	 */
 	private static final String PATCH = "patch";
 
+	/**
+	 * The update qualifier.
+	 */
 	private static final String UPDATE = "update";
 
+	/**
+	 * The expansions of qualifier abbreviations used to generate the
+	 * human-friendly form of a version.
+	 */
 	private static final Map<String, String> expansions = new ConcurrentHashMap<>();
 
 	static {
@@ -57,18 +84,34 @@ public class Version implements Comparable<Version> {
 		expansions.put( UNKNOWN, "UNKNOWN" );
 	}
 
+	/**
+	 * The human-friendly form of the version.
+	 */
 	private String human;
 
+	/**
+	 * The original string of the version.
+	 */
 	private String version;
 
+	/**
+	 * The canonical form of the version, used for equality and hashing.
+	 */
 	private String canonical;
 
+	/**
+	 * The parsed items of the version, in order of appearance.
+	 */
 	private ListItem items;
 
+	/**
+	 * The parts of the version string, used to generate the human-friendly
+	 * form of the version.
+	 */
 	private List<Part> parts;
 
 	/**
-	 * Create an empty version.
+	 * Create a version with an unknown value.
 	 */
 	public Version() {
 		this( UNKNOWN );
@@ -77,7 +120,7 @@ public class Version implements Comparable<Version> {
 	/**
 	 * Create a version from a String.
 	 *
-	 * @param version The version string
+	 * @param version The version string, or null for an unknown version
 	 */
 	public Version( String version ) {
 		parse( version == null ? UNKNOWN : version );
@@ -140,10 +183,11 @@ public class Version implements Comparable<Version> {
 	 * Compare this version to the specified version. The versions are compared
 	 * one level at a time until the two parts at a level mismatch or the versions
 	 * are found to be equal.
-	 * <p/>
-	 * This method returns -1 if the specified version is less than this version,
-	 * 1 if the specified version is greater than this version or 0 if the
-	 * versions are equal.
+	 * <p>
+	 * This method returns -1 if this version is less than the specified
+	 * version, 1 if this version is greater than the specified version, or 0
+	 * if the versions are equal.
+	 * </p>
 	 *
 	 * @param version The version to compare with
 	 * @return -1, 0 or 1
@@ -166,7 +210,11 @@ public class Version implements Comparable<Version> {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Two versions are equal if their canonical forms are equal.
+	 *
+	 * @param object The object to compare with
+	 * @return {@code true} if the specified object is a version with the same
+	 *     canonical form
 	 */
 	@Override
 	public boolean equals( Object object ) {
@@ -174,7 +222,9 @@ public class Version implements Comparable<Version> {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * The hash code is derived from the canonical form of the version.
+	 *
+	 * @return The hash code of the version
 	 */
 	@Override
 	public int hashCode() {
@@ -309,18 +359,51 @@ public class Version implements Comparable<Version> {
 		return builder.toString();
 	}
 
+	/**
+	 * A parsed item in the version item list.
+	 *
+	 * <p>Items are the components of a version in order of appearance. They
+	 * can be numeric, strings, or nested lists of items.</p>
+	 */
 	private interface Item {
 
+		/**
+		 * The type of an {@link IntegerItem}.
+		 */
 		int INTEGER_ITEM = 0;
 
+		/**
+		 * The type of a {@link StringItem}.
+		 */
 		int STRING_ITEM = 1;
 
+		/**
+		 * The type of a {@link ListItem}.
+		 */
 		int LIST_ITEM = 2;
 
+		/**
+		 * Compare this item to the specified item.
+		 *
+		 * @param item The item to compare with, or null
+		 * @return A negative integer, zero, or a positive integer as this
+		 *     item is less than, equal to, or greater than the specified item
+		 */
 		int compareTo( Item item );
 
+		/**
+		 * Get the type of this item.
+		 *
+		 * @return The type of this item
+		 */
 		int getType();
 
+		/**
+		 * Determines whether this item is considered null, meaning it has no
+		 * significance when comparing versions.
+		 *
+		 * @return {@code true} if this item is considered null
+		 */
 		boolean isNull();
 
 	}
@@ -475,6 +558,13 @@ public class Version implements Comparable<Version> {
 		}
 	}
 
+	/**
+	 * A list of {@link Item} items in the version item list.
+	 *
+	 * <p>A list item groups the items that appear between two delimiters in
+	 * the version string. List items are compared to other list items by
+	 * comparing their items in order.</p>
+	 */
 	private static class ListItem extends ArrayList<Item> implements Item {
 
 		@Serial
@@ -550,6 +640,10 @@ public class Version implements Comparable<Version> {
 
 	}
 
+	/**
+	 * A part of a version string, used to generate the human-friendly form
+	 * of the version.
+	 */
 	private static abstract class Part {
 
 		private final String value;
@@ -565,6 +659,10 @@ public class Version implements Comparable<Version> {
 
 	}
 
+	/**
+	 * A part of a version string that is a delimiter, such as a dot or a
+	 * dash.
+	 */
 	private static class DividePart extends Part {
 
 		private DividePart( String value ) {
@@ -573,6 +671,9 @@ public class Version implements Comparable<Version> {
 
 	}
 
+	/**
+	 * A part of a version string that is a number.
+	 */
 	private static class NumberPart extends Part {
 
 		private NumberPart( String value ) {
@@ -581,6 +682,9 @@ public class Version implements Comparable<Version> {
 
 	}
 
+	/**
+	 * A part of a version string that is a string, such as a qualifier.
+	 */
 	private static class StringPart extends Part {
 
 		private StringPart( String value ) {
