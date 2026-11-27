@@ -14,16 +14,22 @@ import java.util.stream.Stream;
  * value is present, the object is considered <i>empty</i> and
  * {@code isPresent()} returns {@code false}.
  *
+ * <p>In addition to a value, a {@code Result} may hold the {@code Exception}
+ * that caused an operation to fail. If an exception is present,
+ * {@link #isFailed() isFailed()} returns {@code true}; the exception can be
+ * retrieved with {@link #getException() getException()} or rethrown with
+ * {@link #tryException() tryException()}. A {@code Result} that holds
+ * neither a value nor an exception is empty and successful.
+ *
  * <p>Additional methods that depend on the presence or absence of a contained
  * value are provided, such as {@link #orElse(Object) orElse()}
  * (returns a default value if no value is present) and
  * {@link #ifPresent(Consumer) ifPresent()} (performs an
  * action if a value is present).
  *
- * <p>This is a <a href="{@docRoot}/java.base/java/lang/doc-files/ValueBased.html">value-based</a>
- * class. As such, programmers should treat instances that are
- * {@linkplain #equals(Object) equal} as interchangeable and should not
- * use instances for synchronization.
+ * <p>This is a value-based class. As such, programmers should treat
+ * instances that are {@linkplain #equals(Object) equal} as interchangeable
+ * and should not use instances for synchronization.
  *
  * @param <T> the type of the value
  * @since 0.8
@@ -86,7 +92,9 @@ public class Result<T> {
 	 *
 	 * @return the non-{@code null} value described by this {@code Result}
 	 * @throws NoSuchElementException if no value is present
-	 * @apiNote The preferred alternative to this method is {@link #orElseThrow()}.
+	 *
+	 * <p>Note: the preferred alternative to this method is
+	 * {@link #orElseThrow()}.
 	 */
 	public T get() {
 		if( value == null ) throw new NoSuchElementException( "No value present" );
@@ -136,6 +144,7 @@ public class Result<T> {
 	 * otherwise does nothing.
 	 *
 	 * @param action the action to be performed, if a value is present
+	 * @return this {@code Result}
 	 * @throws NullPointerException if value is present and the given action is
 	 * {@code null}
 	 */
@@ -178,6 +187,7 @@ public class Result<T> {
 	 *
 	 * @param action the action to be performed, if a value is present
 	 * @param emptyAction the empty-based action to be performed, if no value is present
+	 * @return this {@code Result}
 	 * @throws NullPointerException if a value is present and the given action
 	 * is {@code null}, or no value is present and the given empty-based
 	 * action is {@code null}.
@@ -225,22 +235,19 @@ public class Result<T> {
 	 * function to the value of this {@code Result}, if a value is
 	 * present, otherwise an empty {@code Result}
 	 * @throws NullPointerException if the mapping function is {@code null}
-	 * @apiNote This method supports post-processing on {@code Result} values, without
-	 * the need to explicitly check for a return status.  For example, the
-	 * following code traverses a stream of URIs, selects one that has not
-	 * yet been processed, and creates a path from that URI, returning
-	 * an {@code Result<Path>}:
+	 *
+	 * <p>Note: this method supports post-processing on {@code Result} values,
+	 * without the need to explicitly check for a return status. For example,
+	 * if {@code uris} is a {@code Result<URI>} describing a selected URI,
+	 * the following code creates a path from it, returning an
+	 * {@code Result<Path>}:
 	 *
 	 * <pre>{@code
-	 *     Result<Path> p =
-	 *         uris.stream().filter(uri -> !isProcessedYet(uri))
-	 *                       .findFirst()
-	 *                       .map(Paths::get);
+	 *     Result<Path> p = uris.map( Paths::get );
 	 * }</pre>
 	 * <p>
-	 * Here, {@code findFirst} returns an {@code Result<URI>}, and then
-	 * {@code map} returns an {@code Result<Path>} for the desired
-	 * URI if one exists.
+	 * Here, {@code map} returns an {@code Result<Path>} for the desired
+	 * URI if one is present.
 	 */
 	public <U> Result<U> map( Function<? super T, ? extends U> mapper ) {
 		Objects.requireNonNull( mapper );
@@ -291,7 +298,6 @@ public class Result<T> {
 	 * {@code Result} produced by the supplying function.
 	 * @throws NullPointerException if the supplying function is {@code null} or
 	 * produces a {@code null} result
-	 * @since 9
 	 */
 	public Result<T> or( Supplier<? extends Result<? extends T>> supplier ) {
 		Objects.requireNonNull( supplier );
@@ -308,8 +314,9 @@ public class Result<T> {
 	 * only that value, otherwise returns an empty {@code Stream}.
 	 *
 	 * @return the result value as a {@code Stream}
-	 * @apiNote This method can be used to transform a {@code Stream} of result
-	 * elements to a {@code Stream} of present value elements:
+	 *
+	 * <p>Note: this method can be used to transform a {@code Stream} of
+	 * result elements to a {@code Stream} of present value elements:
 	 * <pre>{@code
 	 *     Stream<Result<T>> os = ..
 	 *     Stream<T> s = os.flatMap(Result::stream)
@@ -354,7 +361,6 @@ public class Result<T> {
 	 *
 	 * @return the non-{@code null} value described by this {@code Result}
 	 * @throws NoSuchElementException if no value is present
-	 * @since 10
 	 */
 	public T orElseThrow() {
 		if( value == null ) throw new NoSuchElementException( "No value present" );
@@ -372,8 +378,9 @@ public class Result<T> {
 	 * @throws X if no value is present
 	 * @throws NullPointerException if no value is present and the exception
 	 * supplying function is {@code null}
-	 * @apiNote A method reference to the exception constructor with an empty argument
-	 * list can be used as the supplier. For example,
+	 *
+	 * <p>Note: a method reference to the exception constructor with an empty
+	 * argument list can be used as the supplier. For example,
 	 * {@code IllegalStateException::new}
 	 */
 	public <X extends Throwable> T orElseThrow( Supplier<? extends X> exceptionSupplier ) throws X {
@@ -385,13 +392,19 @@ public class Result<T> {
 	}
 
 	/**
-	 * If this {@code Result} is successful, applies the given function and
-	 * returns its {@code Result} value. Otherwise returns this {@code Result}.
+	 * Applies the given function to this {@code Result} and returns the
+	 * {@code Result} it produces. If the given function is {@code null},
+	 * returns an empty {@code Result}.
 	 *
-	 * @param <S> the return type of the given function
-	 * @param function the function to apply if successful
-	 * @return the {@code Result} returned by the function, or this {@code Result}
-	 * if unsuccessful
+	 * <p>The function receives this {@code Result} as its argument, whether
+	 * or not it is successful, and decides what to do with it.
+	 *
+	 * @param <S> the type of the value in the {@code Result} returned by the
+	 * given function
+	 * @param function the function to apply to this {@code Result}, which may
+	 * be {@code null}
+	 * @return the {@code Result} returned by the function, or an empty
+	 * {@code Result} if the given function is {@code null}
 	 */
 	@SuppressWarnings( "unchecked" )
 	public <S> Result<S> andThen( Function<Result<T>, Result<S>> function ) {
@@ -456,8 +469,9 @@ public class Result<T> {
 	 * may vary between implementations and versions.
 	 *
 	 * @return the string representation of this instance
-	 * @implSpec If a value is present the result must include its string representation
-	 * in the result.  Empty and present {@code Result}s must be unambiguously
+	 *
+	 * <p>If a value is present, the string includes the string representation
+	 * of the value. Empty and present {@code Result}s are unambiguously
 	 * differentiable.
 	 */
 	@Override
