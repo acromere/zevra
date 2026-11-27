@@ -485,22 +485,22 @@ public class FileUtil {
 	 *
 	 * <p>
 	 * An atomic move is attempted first; if that fails, the source is
-	 * copied to the target and deleted instead, and this method returns
-	 * true only if that fallback succeeded.
+	 * copied to the target and deleted instead.
 	 * </p>
 	 *
 	 * @param source The file or folder to move
 	 * @param target The new location
-	 * @return true if the copy-and-delete fallback succeeded, false otherwise
+	 * @return true if the move succeeded, either atomically or via the
+	 * copy-and-delete fallback, false otherwise
 	 * @throws IOException If an I/O error occurs
 	 */
 	public static boolean move( Path source, Path target ) throws IOException {
 		try {
 			Files.move( source, target, StandardCopyOption.ATOMIC_MOVE );
+			return true;
 		} catch( IOException exception ) {
-			if( copy( source, target ) && delete( source ) ) return true;
+			return copy( source, target ) && delete( source );
 		}
-		return false;
 	}
 
 	/**
