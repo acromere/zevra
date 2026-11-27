@@ -11,10 +11,22 @@ import java.util.List;
  */
 public class TxnOperationResult {
 
+	/**
+	 * The operation that produced this result.
+	 */
 	private final TxnOperation action;
 
+	/**
+	 * The events to be dispatched when the transaction commits
+	 * successfully.
+	 */
 	private final List<TxnEventWrapper> events = new ArrayList<>();
 
+	/**
+	 * Create a result for the given operation.
+	 *
+	 * @param action The operation that produces this result
+	 */
 	TxnOperationResult( TxnOperation action ) {
 		this.action = action;
 	}
@@ -47,6 +59,12 @@ public class TxnOperationResult {
 		this.events.addAll( operation.getResult().getEvents() );
 	}
 
+	/**
+	 * Get the events to be dispatched when the transaction commits
+	 * successfully.
+	 *
+	 * @return The list of events, in the order they were added
+	 */
 	List<TxnEventWrapper> getEvents() {
 		return events;
 	}
