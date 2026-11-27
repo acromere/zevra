@@ -1131,6 +1131,8 @@ public final class TextUtil {
 
 	/**
 	 * Splits the given text into multiple lines, with each line having a maximum width.
+	 * <p>
+	 * A token longer than the maximum width is placed on its own line.
 	 *
 	 * @param text  The input text to be split into lines.
 	 * @param width The maximum width of each line.
@@ -1145,20 +1147,24 @@ public final class TextUtil {
 
 		while( tokenizer.hasMoreTokens() ) {
 			String token = tokenizer.nextToken();
-			int lineLength = line.length();
-			int next = lineLength + token.length() + 1;
+			int next = line.length() + token.length() + ( line.isEmpty() ? 0 : 1 );
 
 			if( next <= width ) {
-				if( lineLength > 0 ) line.append( " " );
+				if( !line.isEmpty() ) line.append( " " );
+				line.append( token );
+			} else {
+				if( !line.isEmpty() ) {
+					if( !result.isEmpty() ) result.append( "\n" );
+					result.append( line );
+					line.setLength( 0 );
+				}
 				line.append( token );
 			}
+		}
 
-			if( next > width || !tokenizer.hasMoreTokens() ) {
-				if( !result.isEmpty() ) result.append( "\n" );
-				result.append( line );
-				line.delete( 0, line.length() );
-				line.append( token );
-			}
+		if( !line.isEmpty() ) {
+			if( !result.isEmpty() ) result.append( "\n" );
+			result.append( line );
 		}
 
 		return result.toString();

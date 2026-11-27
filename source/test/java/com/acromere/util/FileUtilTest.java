@@ -296,6 +296,22 @@ class FileUtilTest {
 	}
 
 	@Test
+	void testMove() throws Exception {
+		Path folder = FileUtil.createTempFolder( PREFIX, "move" );
+		try {
+			Path source = FileUtil.createTempFile( folder, PREFIX, "moveSource" );
+			Files.writeString( source, "move-test-content" );
+			Path target = folder.resolve( "moveTarget" );
+
+			assertThat( FileUtil.move( source, target ) ).isTrue();
+			assertThat( Files.exists( source ) ).isFalse();
+			assertThat( Files.readString( target ) ).isEqualTo( "move-test-content" );
+		} finally {
+			FileUtil.deleteOnExit( folder );
+		}
+	}
+
+	@Test
 	void testCopyFolderToFolderWithSourceFolder() throws Exception {
 		Path source0 = FileUtil.createTempFolder( PREFIX, "copyFolderToFolderParent0" );
 		Path source1 = FileUtil.createTempFolder( source0, PREFIX, "copyFolderToFolderParent1" );

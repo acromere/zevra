@@ -478,6 +478,15 @@ class TextUtilTest {
 	}
 
 	@Test
+	void testRelineWithOverflowingToken() throws Exception {
+		assertThat( TextUtil.reline( "hello world", 10 ) ).isEqualTo( "hello\nworld" );
+		assertThat( TextUtil.reline( "aaaa bbb", 3 ) ).isEqualTo( "aaaa\nbbb" );
+		assertThat( TextUtil.reline( "a b c d e", 3 ) ).isEqualTo( "a b\nc d\ne" );
+		assertThat( TextUtil.reline( "hello", 5 ) ).isEqualTo( "hello" );
+		assertThat( TextUtil.reline( "hi there", 10 ) ).isEqualTo( "hi there" );
+	}
+
+	@Test
 	void testArrayToString() {
 		Integer[] array = new Integer[ 5 ];
 
