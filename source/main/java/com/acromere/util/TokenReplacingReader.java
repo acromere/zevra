@@ -11,6 +11,9 @@ import java.util.Map;
 /**
  * Replaces tokens marked by ${tokenName} with values provided in a value map.
  * <p>
+ * This class is not thread-safe.
+ * </p>
+ * <p>
  * For example, using the reader with the following string:
  * <br/>
  * <code>&quot;Hello ${name}!&quot;</code>
@@ -69,6 +72,7 @@ public class TokenReplacingReader extends Reader {
 	 * @param source The reader to read the input from
 	 * @param values The map of token names to replacement values, or null
 	 * to treat every token as having no replacement value
+	 * @throws NullPointerException if the source reader is null
 	 */
 	public TokenReplacingReader( Reader source, Map<String, String> values ) {
 		this.source = new PushbackReader( source );
@@ -81,7 +85,8 @@ public class TokenReplacingReader extends Reader {
 	 * completes a token, the replacement value of the token is returned one
 	 * character at a time. Tokens without a replacement value are returned
 	 * unchanged, and tokens with an empty replacement value are removed
-	 * from the stream.
+	 * from the stream. This method blocks until a character of input is
+	 * available, the end of the stream is reached, or an I/O error occurs.
 	 *
 	 * @return The next character of input, or -1 if the end of the stream
 	 * has been reached
@@ -159,7 +164,9 @@ public class TokenReplacingReader extends Reader {
 
 	/**
 	 * Reads up to length characters from the stream into the specified
-	 * buffer, starting at the specified offset.
+	 * buffer, starting at the specified offset. This method blocks until
+	 * input data is available, the end of the stream is reached, or an I/O
+	 * error occurs.
 	 *
 	 * @param buffer The buffer to read the characters into
 	 * @param offset The offset in the buffer at which to start storing

@@ -14,13 +14,18 @@ public interface LogFlag {
 
 	/**
 	 * Valid values are:
-	 * <li>off</li>
+	 * <ul>
+	 * <li>none</li>
 	 * <li>error</li>
 	 * <li>warn</li>
 	 * <li>info</li>
+	 * <li>config</li>
 	 * <li>debug</li>
 	 * <li>trace</li>
 	 * <li>all</li>
+	 * </ul>
+	 *
+	 * <p>Unknown values are treated as {@link #NONE}.</p>
 	 */
 	String LOG_LEVEL = "--log-level";
 

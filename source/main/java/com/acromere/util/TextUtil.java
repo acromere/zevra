@@ -112,10 +112,14 @@ public final class TextUtil {
 
 	/**
 	 * Determines whether two strings are the same string object.
+	 * <p>
+	 * Two strings that are both empty (null or blank) are considered the same,
+	 * even if they are not the same object.
 	 *
 	 * @param string1 the first string
 	 * @param string2 the second string
-	 * @return {@code true} if the two strings are the same object, {@code false} otherwise
+	 * @return {@code true} if the two strings are the same object, or if both
+	 * strings are empty (null or blank), {@code false} otherwise
 	 */
 	public static boolean areSame( String string1, String string2 ) {
 		if( isEmpty( string1 ) && isEmpty( string2 ) ) return true;
@@ -300,11 +304,16 @@ public final class TextUtil {
 	/**
 	 * Converts a list of objects into a string representation with a specified
 	 * prefix and suffix.
+	 * <p>
+	 * If the suffix is {@code null}, the prefix is treated as a delimiter
+	 * between the elements of the list and is not added before the first
+	 * element.
 	 *
 	 * @param list the list of objects to be converted
 	 * @param prefix the prefix to be added before each object in the resulting string
 	 * @param suffix the suffix to be added after each object in the resulting string
-	 * @return the string representation of the list of objects with the specified prefix and suffix
+	 * @return the string representation of the list of objects with the specified
+	 * prefix and suffix, or null if the list is null
 	 */
 	public static String toString( List<?> list, String prefix, String suffix ) {
 		if( list == null ) return null;
@@ -363,8 +372,8 @@ public final class TextUtil {
 
 	/**
 	 * Returns a printable string representation of a character by converting char
-	 * values less than or equal to 32 or greater than or equal to 126 to the
-	 * integer value surrounded by brackets.
+	 * values less than 32 or greater than 126 to the integer value surrounded by
+	 * brackets.
 	 * <p>
 	 * Example: An escape char (27) would be returned as: [27]
 	 * <p>
@@ -739,7 +748,8 @@ public final class TextUtil {
 	/**
 	 * Creates a string consisting of a specified width of repeated characters.
 	 *
-	 * @param width The width of the resulting string. Must be a positive integer.
+	 * @param width The width of the resulting string. Non-positive values
+	 * produce an empty string.
 	 * @param chr The character to be repeated in the resulting string.
 	 * @return A string consisting of {@code width} times the character {@code chr}.
 	 */
@@ -979,7 +989,7 @@ public final class TextUtil {
 	 *
 	 * @param lines the list of strings to search
 	 * @param pattern the pattern to find
-	 * @return the first line that contains the pattern, or null if no line is found
+	 * @return the first line that matches the pattern, or null if no match is found
 	 */
 	public static String findLine( List<String> lines, String pattern ) {
 		return findLine( lines, pattern, 0 );
@@ -1070,11 +1080,13 @@ public final class TextUtil {
 	}
 
 	/**
-	 * Prepends the given text to each line of the content.
+	 * Prepends the given text to each line of the content and returns the
+	 * modified content.
 	 *
-	 * @param content the content to prepend the text to (not null)
-	 * @param text the text to be prepended (not null or empty)
-	 * @return a new string with the text prepended to each line of the content
+	 * @param content the content to prepend the text to (can be null)
+	 * @param text the text to be prepended to each line of the content
+	 * @return the modified content with the text prepended to each line, or
+	 * null if the content is null
 	 */
 	public static String prepend( String content, String text ) {
 		if( content == null ) return null;

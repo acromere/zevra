@@ -434,6 +434,12 @@ public class Parameters {
 		return builder.toString().trim();
 	}
 
+	/**
+	 * Returns a hash code value for this Parameters object, derived from the
+	 * resolved commands.
+	 *
+	 * @return A hash code value for this object
+	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
@@ -445,6 +451,15 @@ public class Parameters {
 		return code;
 	}
 
+	/**
+	 * Indicates whether some other object is equal to this Parameters object.
+	 * Two Parameters objects are equal if they have the same resolved
+	 * commands.
+	 *
+	 * @param object The object with which to compare for equality
+	 * @return {@code true} if the object is equal to this one, {@code false}
+	 * otherwise
+	 */
 	@Override
 	public boolean equals( Object object ) {
 		if( !(object instanceof Parameters that) ) return false;

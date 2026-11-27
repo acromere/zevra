@@ -58,7 +58,8 @@ public final class UriUtil {
 	 * Parses the name from the path of the given URI.
 	 *
 	 * @param uri the URI whose path's name needs to be parsed
-	 * @return the parsed name from the path of the given URI
+	 * @return the parsed name from the path of the given URI, or {@code "/"} if
+	 * the name is empty
 	 */
 	public static String parseName( URI uri ) {
 		String path = PathUtil.getName( uri.getPath() );
@@ -258,7 +259,8 @@ public final class UriUtil {
 	 * Get the parent URI taking into account opaque URI's.
 	 *
 	 * @param uri The URI from which to get the parent URI
-	 * @return The parent URI
+	 * @return The parent URI, or the URI itself if it is not in normalized form
+	 * or its path is the root path
 	 */
 	public static URI getParent( URI uri ) {
 		List<String> schemes = new ArrayList<>();
@@ -300,7 +302,8 @@ public final class UriUtil {
 	 * Parses the query from the given URI.
 	 *
 	 * @param uri the URI from which to parse the query
-	 * @return the query string, or null if the URI is null
+	 * @return the query string, or null if the URI is null or does not have a
+	 * query
 	 */
 	public static String parseQuery( URI uri ) {
 		if( uri == null ) return null;
@@ -311,7 +314,7 @@ public final class UriUtil {
 	 * Parses the given query string and returns a map of query parameters.
 	 *
 	 * @param query the query string to parse
-	 * @return a map of query parameters
+	 * @return a map of query parameters, or an empty map if the query is null
 	 */
 	public static Map<String, String> parseQuery( String query ) {
 		if( query == null ) return Map.of();

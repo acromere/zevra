@@ -163,7 +163,8 @@ public class FileUtil {
 	 * Returns the extension of the file name of the given path.
 	 *
 	 * @param path The path from which to get the extension
-	 * @return The extension, or an empty string if there is none
+	 * @return The extension, or an empty string if there is none, or null
+	 *         if the path is null
 	 * @see #getExtension( String )
 	 */
 	public static String getExtension( Path path ) {
@@ -175,7 +176,8 @@ public class FileUtil {
 	 * after the last period.
 	 *
 	 * @param name The file name from which to get the extension
-	 * @return The extension, or an empty string if there is none
+	 * @return The extension, or an empty string if there is none, or null if
+	 *         the name is null
 	 */
 	public static String getExtension( String name ) {
 		if( name == null ) return null;
@@ -188,7 +190,7 @@ public class FileUtil {
 	 * Returns a path with the extension removed from the file name.
 	 *
 	 * @param path The path from which to remove the extension
-	 * @return The path without the extension
+	 * @return The path without the extension, or null if the path is null
 	 * @see #removeExtension( String )
 	 */
 	public static Path removeExtension( Path path ) {
@@ -199,7 +201,7 @@ public class FileUtil {
 	 * Returns a file name with the extension removed.
 	 *
 	 * @param name The file name from which to remove the extension
-	 * @return The file name without the extension
+	 * @return The file name without the extension, or null if the name is null
 	 */
 	public static String removeExtension( String name ) {
 		if( name == null ) return null;
@@ -810,7 +812,7 @@ public class FileUtil {
 	/**
 	 * Create a temporary folder.
 	 *
-	 * @param path The temp folder path
+	 * @param path The parent folder in which to create the temporary folder
 	 * @param prefix The temp folder prefix
 	 * @return The temp folder Path object
 	 * @throws IOException If an I/O error occurs
@@ -823,7 +825,7 @@ public class FileUtil {
 	 * Create a temporary folder.
 	 *
 	 * @param prefix The temporary folder prefix
-	 * @param suffix The temporary folder
+	 * @param suffix The suffix of the folder name
 	 * @return A temporary folder path
 	 * @throws IOException If an error occurs
 	 */
@@ -841,7 +843,7 @@ public class FileUtil {
 	 *
 	 * @param parent The parent folder of the temporary folder
 	 * @param prefix The temporary folder prefix
-	 * @param suffix The temporary folder
+	 * @param suffix The suffix of the folder name
 	 * @return A temporary folder path
 	 * @throws IOException If an error occurs
 	 */
@@ -858,6 +860,8 @@ public class FileUtil {
 	 * Find the closest existing parent folder for the given file.
 	 *
 	 * @param file The file for which to find a valid parent folder
+	 * @return The closest existing parent folder, or null if the file is null
+	 *         or no existing parent folder is found
 	 */
 	public static Path findValidParent( String file ) {
 		if( file == null ) return null;
@@ -868,6 +872,8 @@ public class FileUtil {
 	 * Find the closest existing parent folder for the given file.
 	 *
 	 * @param file The file for which to find a valid parent folder
+	 * @return The closest existing parent folder, or null if the file is null
+	 *         or no existing parent folder is found
 	 */
 	public static Path findValidParent( File file ) {
 		if( file == null ) return null;
@@ -878,6 +884,8 @@ public class FileUtil {
 	 * Find the closest existing parent folder for the given path.
 	 *
 	 * @param path The path for which to find a valid parent
+	 * @return The closest existing parent folder, or null if the path is null
+	 *         or no existing parent folder is found
 	 */
 	public static Path findValidParent( Path path ) {
 		if( path == null ) return null;
@@ -888,6 +896,8 @@ public class FileUtil {
 	 * Find the closest existing folder for the given path.
 	 *
 	 * @param path The path for which to find a valid parent
+	 * @return The closest existing folder, or null if the path is null or no
+	 *         existing folder is found
 	 */
 	public static Path findValidFolder( String path ) {
 		if( path == null ) return null;
@@ -904,6 +914,8 @@ public class FileUtil {
 	 * Find the closest existing folder for the given file.
 	 *
 	 * @param file The file for which to find a valid parent
+	 * @return The closest existing folder, or null if the file is null or no
+	 *         existing folder is found
 	 */
 	public static Path findValidFolder( File file ) {
 		if( file == null ) return null;
@@ -914,6 +926,8 @@ public class FileUtil {
 	 * Find the closest existing folder for the given path.
 	 *
 	 * @param path The path for which to find a valid parent
+	 * @return The closest existing folder, or null if the path is null or no
+	 *         existing folder is found
 	 */
 	public static Path findValidFolder( Path path ) {
 		while( path != null && Files.notExists( path ) | !Files.isDirectory( path ) ) {
