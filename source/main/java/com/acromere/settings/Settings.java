@@ -55,9 +55,9 @@ import java.util.Set;
  * ensure that pending updates are made persistent.
  * <p>
  * Settings keys are always strings. There are four categories of supported
- * value types: simple (boolean, character, byte, short, integer, long, float
- * double, and string), Java beans, arrays, and collections. Arrays and
- * collections are expected to contain beans. All values are stored in a
+ * value types: simple (boolean, character, byte, short, integer, long,
+ * float, double, and string), Java beans, arrays, and collections. Arrays
+ * and collections are expected to contain beans. All values are stored in a
  * marshaled state using an implementation-specific strategy. Typical
  * strategies are JSON and XML.
  * <p>
@@ -70,6 +70,12 @@ import java.util.Set;
  */
 public interface Settings {
 
+	/**
+	 * Print the path, keys, and values of a settings node to the standard
+	 * output stream.
+	 *
+	 * @param settings The settings node to print
+	 */
 	@SuppressWarnings( "unused" )
 	static void print( Settings settings ) {
 		System.out.println( "settings( " + settings.getPath() + " ) {" );
@@ -184,6 +190,15 @@ public interface Settings {
 		return get( key, String.class, defaultValue );
 	}
 
+	/**
+	 * Get the value for the given key as a string, or the default value if
+	 * the setting value is null. Calling this method for non-simple values
+	 * is undefined.
+	 *
+	 * @param key The value key
+	 * @param defaultValue The default value if the setting value is null
+	 * @return The value as a string
+	 */
 	default String get( String key, Object defaultValue ) {
 		return get( key, String.class, String.valueOf( defaultValue ) );
 	}
@@ -205,6 +220,16 @@ public interface Settings {
 		return get( key, type, null );
 	}
 
+	/**
+	 * Get a value from the settings node of the given type, or the default
+	 * value if the setting value is null.
+	 *
+	 * @param key The key of the setting value
+	 * @param type The class type of the return value
+	 * @param defaultValue The default value if the setting value is null
+	 * @param <T> The class type of the return value
+	 * @return The setting value or the default value
+	 */
 	default <T> T get( String key, Class<T> type, T defaultValue ) {
 		return get( key, new TypeReference<>( type ) {}, defaultValue );
 	}
@@ -243,6 +268,7 @@ public interface Settings {
 	 *
 	 * @param key   The value key
 	 * @param value The value
+	 * @return This settings object
 	 */
 	Settings set( String key, Object value );
 
@@ -258,17 +284,22 @@ public interface Settings {
 	 * Remove a value from the settings node. This is the same as setting the value to null.
 	 *
 	 * @param key The value key
+	 * @return This settings object
 	 */
 	Settings remove( String key );
 
 	/**
 	 * Flush the settings values. For settings implementations that store values,
 	 * this method should be used to store the values promptly.
+	 *
+	 * @return This settings object
 	 */
 	Settings flush();
 
 	/**
 	 * Delete this settings node.
+	 *
+	 * @return This settings object
 	 */
 	Settings delete();
 
@@ -286,30 +317,98 @@ public interface Settings {
 	 */
 	void setDefaultValues( Map<?, ?> defaults );
 
+	/**
+	 * Load the default values for this settings node from a properties
+	 * file on the class path.
+	 *
+	 * @param source The class to load the default values resource from
+	 * @param path The path of the default values resource
+	 * @throws IOException If the default values could not be read
+	 */
 	void loadDefaultValues( Object source, String path ) throws IOException;
 
+	/**
+	 * Register an event handler for the given event type.
+	 *
+	 * @param type The event type
+	 * @param handler The event handler
+	 * @param <T> The type of event handled
+	 * @return The event hub
+	 */
 	<T extends Event> EventHub register( EventType<? super T> type, EventHandler<? super T> handler );
 
+	/**
+	 * Unregister an event handler for the given event type.
+	 *
+	 * @param type The event type
+	 * @param handler The event handler
+	 * @param <T> The type of event handled
+	 * @return The event hub
+	 */
 	<T extends Event> EventHub unregister( EventType<? super T> type, EventHandler<? super T> handler );
 
+	/**
+	 * Register a handler for changes to the value at the given key.
+	 *
+	 * @param key The value key
+	 * @param handler The event handler
+	 */
 	void register( String key, EventHandler<SettingsEvent> handler );
 
+	/**
+	 * Unregister a handler for changes to the value at the given key.
+	 *
+	 * @param key The value key
+	 * @param handler The event handler
+	 */
 	void unregister( String key, EventHandler<? extends SettingsEvent> handler );
 
+	/**
+	 * Bind a handler to the value at the given key. The handler is
+	 * invoked immediately with the current value, and is then registered
+	 * to be invoked whenever the value changes.
+	 *
+	 * @param key The value key
+	 * @param defaultValue The default value if the setting value is null
+	 * @param handler The event handler
+	 * @param <T> The type of the value
+	 */
 	default <T> void bind( String key, T defaultValue, EventHandler<SettingsEvent> handler ) {
 		handler.handle( new SettingsEvent( this, SettingsEvent.CHANGED, getPath(), key, get( key, defaultValue ) ) );
 		register( key, handler );
 	}
 
+	/**
+	 * Bind a handler to the value at the given key. The handler is
+	 * invoked immediately with the current value, and is then registered
+	 * to be invoked whenever the value changes.
+	 *
+	 * @param key The value key
+	 * @param type The class type of the value
+	 * @param defaultValue The default value if the setting value is null
+	 * @param handler The event handler
+	 * @param <T> The type of the value
+	 */
 	default <T> void bind( String key, Class<T> type, T defaultValue, EventHandler<SettingsEvent> handler ) {
 		handler.handle( new SettingsEvent( this, SettingsEvent.CHANGED, getPath(), key, get( key, type, defaultValue ) ) );
 		register( key, handler );
 	}
 
+	/**
+	 * Unbind a handler from the value at the given key.
+	 *
+	 * @param key The value key
+	 * @param handler The event handler
+	 */
 	default void unbind( String key, EventHandler<? extends SettingsEvent> handler ) {
 		unregister( key, handler );
 	}
 
+	/**
+	 * Get the event handlers registered on this settings node.
+	 *
+	 * @return The event handlers
+	 */
 	Map<EventType<? extends Event>, Collection<? extends EventHandler<? extends Event>>> getEventHandlers();
 
 }
